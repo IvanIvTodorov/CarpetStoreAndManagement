@@ -98,6 +98,17 @@ namespace CarpetStoreAndManagement.Services.Services
             await context.SaveChangesAsync();
         }
 
+        public async Task DecreaseProductQtyAsync(int productId)
+        {
+            var userProd = await context.UserProducts
+                     .Where(x =>x.ProductId == productId)
+                     .FirstOrDefaultAsync();
+
+            userProd.Quantity -= 1;
+
+            await context.SaveChangesAsync();
+        }
+
         public async Task<IEnumerable<ShowAllProductsViewModel>> GetAllProductsAsync()
         {
             var enteties = await context.Products
@@ -139,6 +150,17 @@ namespace CarpetStoreAndManagement.Services.Services
             return await context.Inventories.ToListAsync();
         }
 
+        public async Task IncreaseProductQtyAsync(int productId)
+        {
+            var userProd = await context.UserProducts
+                     .Where(x => x.ProductId == productId)
+                     .FirstOrDefaultAsync();
+
+            userProd.Quantity += 1;
+
+            await context.SaveChangesAsync();
+        }
+
         public async Task<ProductDetailsViewModel> ProductDetailsAsync(int productId)
         {
             var product = await context.Products
@@ -156,6 +178,16 @@ namespace CarpetStoreAndManagement.Services.Services
                 Name = product.Name,
                 Colors = product.ProductColors
             };
+        }
+
+        public async Task RemoveFromCartAsync(int productId, string userId)
+        {
+            var userProd = await context.UserProducts
+                    .Where(x => x.UserId == userId && x.ProductId == productId)
+                    .FirstOrDefaultAsync();
+
+            context.UserProducts.Remove(userProd);
+            await context.SaveChangesAsync();
         }
 
         public async Task RemoveProductAsync(int productId)

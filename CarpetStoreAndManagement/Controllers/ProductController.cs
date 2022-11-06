@@ -89,5 +89,28 @@ namespace CarpetStoreAndManagement.Controllers
 
             return RedirectToAction(nameof(All));
         }
+        [HttpPost]
+        public async Task<IActionResult> IncreaseQuantity(int productId)
+        {
+            await productService.IncreaseProductQtyAsync(productId);
+
+            return RedirectToAction(nameof(Cart));
+        }
+        [HttpPost]
+        public async Task<IActionResult> DecreaseQuantity(int productId)
+        {
+            await productService.DecreaseProductQtyAsync(productId);
+
+            return RedirectToAction(nameof(Cart));
+        }
+        [HttpPost]
+        public async Task<IActionResult> RemoveFromCart (int productId)
+        {
+            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+            await productService.RemoveFromCartAsync(productId, userId);
+
+            return RedirectToAction(nameof(Cart));
+        }
     }
 }

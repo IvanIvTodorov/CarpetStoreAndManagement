@@ -6,7 +6,7 @@ namespace CarpetStoreAndManagement.Data.Models.User
 {
     public class User : IdentityUser
     {
-        public ICollection<UserOrder> Userorders { get; set; } = new List<UserOrder>();
+        public ICollection<UserOrder> UserOrders { get; set; } = new List<UserOrder>();
         [Required]
         public decimal Budget { get; set; }
 

@@ -26,5 +26,9 @@ namespace CarpetStoreAndManagement.Services.Contracts
 
         Task<IEnumerable<ProductsInCartViewModel>> GetAllProductsInCartAsync(string userId);
 
+        Task DecreaseProductQtyAsync(int productId);
+        Task IncreaseProductQtyAsync(int productId);
+        Task RemoveFromCartAsync(int productId, string userId);
+
     }
 }
