@@ -23,20 +23,21 @@ namespace CarpetStoreAndManagement.Services.Services
 
         public async Task MakeOrderAsync(string userId)
         {
+            var product = await context.UserProducts
+                .Include(x => x.Product)
+                .Where(x => x.UserId == userId)
+                .ToListAsync();
+
             var order = new Order();
+            order.TotalPrice = product.Sum(x => x.Product.Price);
 
             await context.Orders.AddAsync(order);
             await context.SaveChangesAsync();
 
             var productOrder = new List<ProductOrder>();
             var userProduct = new List<UserProduct>();
-
-            var productIds = await context.UserProducts
-                .Where(x => x.UserId == userId)
-                .Select(x => x.ProductId)
-                .ToListAsync();
             
-            foreach (var id in productIds)
+            foreach (var id in product.Select(x => x.ProductId))
             {
                 var prodOrder = new ProductOrder()
                 {
@@ -46,7 +47,9 @@ namespace CarpetStoreAndManagement.Services.Services
 
                 productOrder.Add(prodOrder);
 
-                var userProd = await context.UserProducts.Where(x => x.UserId == userId && x.ProductId == id).FirstOrDefaultAsync();
+                var userProd = await context.UserProducts
+                    .Where(x => x.UserId == userId && x.ProductId == id)
+                    .FirstOrDefaultAsync();
 
                 userProduct.Add(userProd);
             }
