@@ -13,7 +13,7 @@
         <form asp-action="Add" method="post">
             <div class="mb-3">
                 <label asp-for="@Model.Name" class="form-label">Name</label>
-                <input asp-for="@Model.Name" class="form-control" aria-required="true" />
+                <input asp-for="@Model.Name" class="form-control" aria-required="true"/>
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="mb-3">
@@ -32,11 +32,6 @@
                 <span asp-validation-for="ImgUrl" class="text-danger"></span>
             </div>
             <div class="mb-3">
-                <label asp-for="@Model.Quantity" class="form-label">Quantity</label>
-                <input asp-for="@Model.Quantity" class="form-control" value="" />
-                <span asp-validation-for="Quantity" class="text-danger"></span>
-            </div>
-            <div class="mb-3">
                 <label asp-for="@Model.PrimaryColor" class="form-label">Primary Color</label>
                 <input asp-for="@Model.PrimaryColor" class="form-control" value="" />
                 <span asp-validation-for="PrimaryColor" class="text-danger"></span>
@@ -45,16 +40,6 @@
                 <label asp-for="@Model.SecondaryColor" class="form-label">Secondary Color</label>
                 <input asp-for="@Model.SecondaryColor" class="form-control" value="" />
                 <span asp-validation-for="SecondaryColor" class="text-danger"></span>
-            </div>
-            <div class="mb-3">
-                <label asp-for="@Model.InventoryId" class="form-label">Inventory</label>
-                <select asp-for="@Model.InventoryId" class="form-control">
-                    @foreach (var category in Model.Inventories)
-                    {
-                        <option value="@category.Id">@category.Name</option>
-                    }
-                </select>
-                <span asp-validation-for="InventoryId" class="text-danger"></span>
             </div>
             <div class="mb-3">
                 <input class="btn btn-primary" type="submit" value="Add" />

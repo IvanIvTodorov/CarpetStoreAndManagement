@@ -35,17 +35,15 @@
                                     <h4 class="media-heading"><strong>@product.Name</strong></h4>
                                 </div>
                             </td>
-                            <form asp-controller="Product" asp-action="IncreaseQuantity" asp-route-productId="@product.Id" method="post">
+                            <form asp-controller="Product" asp-action="IncreaseProductQuantityInCart" asp-route-productId="@product.Id" method="post">
                             <td>
                                 <div class="mb-3">
                                     <input class="btn btn-primary" type="submit" value="+" />
                                 </div>
                             </td>
                             </form>
-                            <td class="col-sm-1 col-md-1" style="text-align: center">
-                                <input type="number" class="form-control" value="@product.Quantity">
-                            </td>
-                            <form asp-controller="Product" asp-action="DecreaseQuantity" asp-route-productId="@product.Id" method="post">
+                            <td class="col-sm-1 col-md-1 text-center"><strong>@product.Quantity</strong></td>
+                            <form asp-controller="Product" asp-action="DecreaseProductQuantityInCart" asp-route-productId="@product.Id" method="post">
                             <td>
                                 <div class="mb-3">
                                     <input class="btn btn-primary" type="submit" value="-" />
@@ -83,7 +81,7 @@
                         <td>   </td>
                         <td>   </td>
                         <td>
-                            <form asp-controller="Order" asp-action="MakeOrder" asp-route-productId="" method="post">
+                            <form asp-controller="Order" asp-action="MakeOrder" method="post">
                                 <button type="submit" class="btn btn-success">
                                     Checkout <span class="glyphicon glyphicon-play"></span>
                                 </button>

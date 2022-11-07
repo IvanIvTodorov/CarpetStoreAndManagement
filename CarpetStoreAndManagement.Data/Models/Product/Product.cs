@@ -29,7 +29,7 @@ namespace CarpetStoreAndManagement.Data.Models.Product
         [Required]
         public string? ImgUrl { get; set; }
         [Required]
-        public double Quantity { get; set; }
+        public int Quantity { get; set; }
 
         public bool IsDeleted { get; set; }
 

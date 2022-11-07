@@ -21,15 +21,7 @@ namespace CarpetStoreAndManagement.ViewModels.ProductViewModels
         [Required]
         public string? ImgUrl { get; set; }
         [Required]
-        public double Quantity { get; set; }
-        [Required]
-        public int InventoryId { get; set; }
-        [Required]
         public string PrimaryColor { get; set; }
         public string SecondaryColor { get; set; }
-
-
-        public IEnumerable<Inventory> Inventories { get; set; } = new List<Inventory>();
-
     }
 }

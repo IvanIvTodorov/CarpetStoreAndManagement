@@ -39,8 +39,7 @@ namespace CarpetStoreAndManagement.Services.Services
                 ImgUrl = model.ImgUrl,
                 Name = model.Name,
                 Type = model.Type,
-                Price = model.Price,
-                Quantity = model.Quantity
+                Price = model.Price
             };
 
             await context.Products.AddAsync(product);
@@ -98,7 +97,7 @@ namespace CarpetStoreAndManagement.Services.Services
             await context.SaveChangesAsync();
         }
 
-        public async Task DecreaseProductQtyAsync(int productId)
+        public async Task DecreaseProductQtyInCartAsync(int productId)
         {
             var userProd = await context.UserProducts
                      .Where(x =>x.ProductId == productId)
@@ -145,12 +144,12 @@ namespace CarpetStoreAndManagement.Services.Services
                 });
         }
 
-        public async Task<IEnumerable<Inventory>> GetInventoriesAsync()
+        public async Task<IEnumerable<Product>> GetProductsAsync()
         {
-            return await context.Inventories.ToListAsync();
+            return await context.Products.ToListAsync();
         }
 
-        public async Task IncreaseProductQtyAsync(int productId)
+        public async Task IncreaseProductQtyInCartAsync(int productId)
         {
             var userProd = await context.UserProducts
                      .Where(x => x.ProductId == productId)
@@ -158,6 +157,39 @@ namespace CarpetStoreAndManagement.Services.Services
 
             userProd.Quantity += 1;
 
+            await context.SaveChangesAsync();
+        }
+
+        public async Task ProduceProduct(ProduceViewModel model, int productId)
+        {
+            var invent = new Inventory();
+
+            if (!context.Inventories.Any(x => x.Name == model.InventoryName))
+            {
+                invent.Name = model.InventoryName;
+
+                await context.Inventories.AddAsync(invent);
+                await context.SaveChangesAsync();
+            }
+
+            var product = await context.Products
+                .Where(x => x.Id == productId)
+                .FirstOrDefaultAsync();
+
+            product.Quantity += model.Quantity;
+
+            var inventory = await context.Inventories
+                 .Where(x => x.Name == model.InventoryName)
+                 .FirstOrDefaultAsync();
+
+
+            var inventoryProd = new InventoryProduct()
+            {
+                InventoryId = inventory.Id,
+                ProductId = product.Id
+            };
+
+            await context.InventoryProducts.AddAsync(inventoryProd);
             await context.SaveChangesAsync();
         }
 

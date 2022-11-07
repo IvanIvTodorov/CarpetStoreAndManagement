@@ -23,12 +23,10 @@ namespace CarpetStoreAndManagement.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Add()
+        public IActionResult Add()
         {
-            var model = new AddProductViewModel()
-            {
-                Inventories = await productService.GetInventoriesAsync()
-            };
+            var model = new AddProductViewModel();
+
             return View(model);
         }
 
@@ -90,16 +88,16 @@ namespace CarpetStoreAndManagement.Controllers
             return RedirectToAction(nameof(All));
         }
         [HttpPost]
-        public async Task<IActionResult> IncreaseQuantity(int productId)
+        public async Task<IActionResult> IncreaseProductQuantityInCart(int productId)
         {
-            await productService.IncreaseProductQtyAsync(productId);
+            await productService.IncreaseProductQtyInCartAsync(productId);
 
             return RedirectToAction(nameof(Cart));
         }
         [HttpPost]
-        public async Task<IActionResult> DecreaseQuantity(int productId)
+        public async Task<IActionResult> DecreaseProductQuantityInCart(int productId)
         {
-            await productService.DecreaseProductQtyAsync(productId);
+            await productService.DecreaseProductQtyInCartAsync(productId);
 
             return RedirectToAction(nameof(Cart));
         }
@@ -111,6 +109,30 @@ namespace CarpetStoreAndManagement.Controllers
             await productService.RemoveFromCartAsync(productId, userId);
 
             return RedirectToAction(nameof(Cart));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Produce()
+        {
+            var model = new ProduceViewModel()
+            {
+                Products = await productService.GetProductsAsync()
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Produce(ProduceViewModel model, int productId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return RedirectToAction(nameof(Produce));
+            };
+
+            await productService.ProduceProduct(model, productId);
+
+            return RedirectToAction(nameof(Produce));
         }
     }
 }

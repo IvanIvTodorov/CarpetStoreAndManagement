@@ -1,0 +1,75 @@
+﻿@using CarpetStoreAndManagement.ViewModels.ProductViewModels
+@model ProduceViewModel
+
+@{
+    ViewBag.Title = "Produce product";
+}
+
+
+<div class="container">
+    <div class="row">
+        <section class="content">
+            <div class="col-md-8 col-md-offset-2">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="table-container">
+                            <table class="table table-filter">
+                                <tbody>
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Name</th>
+                                        <th>Type</th>
+                                        <th>Quantity</th>
+                                        <th>Inventory</th>
+                                        <th></th>
+                                        <th> </th>
+                                    </tr>
+                                    @foreach (var product in Model.Products)
+                                    {
+                                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                        <form asp-action="Produce" asp-route-productId="@product.Id" method="post">
+                                        <tr>
+                                            <td>
+                                                <div class="media">
+                                                    <a class="thumbnail pull-left" href="#"> <img class="media-object" src="@product.ImgUrl" style="width: 72px; height: 72px;"> </a>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <h4 class="title">
+                                                    <span class="pull-left pagado">@product.Name</span>
+                                                </h4>
+                                            </td>
+                                            <td>
+                                                <h4 class="title">
+                                                    <span class="pull-left pagado">@product.Type</span>
+                                                </h4>
+                                            </td>
+                                            <td class="col-sm-2 col-md-2" style="text-align: center">
+                                                <input asp-for="@Model.Quantity" class="form-control" aria-required="true" />
+                                                <span asp-validation-for="Quantity" class="text-danger"></span>
+                                            </td>
+                                            <td class="col-sm-2 col-md-2" style="text-align: center">
+                                                <input asp-for="@Model.InventoryName" class="form-control" aria-required="true" />
+                                                <span asp-validation-for="InventoryName" class="text-danger"></span>
+                                            </td>
+                                            <td class="col-sm-1 col-md-1">
+                                                <button type="submit" class="btn btn-success">
+                                                    <span class="glyphicon glyphicon-remove"></span> Produce
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        </form>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+    @section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+    }
+

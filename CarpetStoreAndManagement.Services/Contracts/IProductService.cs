@@ -1,4 +1,5 @@
 ﻿using CarpetStoreAndManagement.Data.Models.Inventory;
+using CarpetStoreAndManagement.Data.Models.Product;
 using CarpetStoreAndManagement.ViewModels.ProductViewModels;
 using System;
 using System.Collections.Generic;
@@ -13,8 +14,7 @@ namespace CarpetStoreAndManagement.Services.Contracts
         Task<IEnumerable<ShowAllProductsViewModel>> GetAllProductsAsync();
 
         Task AddProductAsync(AddProductViewModel model);
-
-        Task<IEnumerable<Inventory>> GetInventoriesAsync();
+        Task<IEnumerable<Product>> GetProductsAsync();
 
         Task<ProductDetailsViewModel> ProductDetailsAsync(int productId);
 
@@ -26,9 +26,11 @@ namespace CarpetStoreAndManagement.Services.Contracts
 
         Task<IEnumerable<ProductsInCartViewModel>> GetAllProductsInCartAsync(string userId);
 
-        Task DecreaseProductQtyAsync(int productId);
-        Task IncreaseProductQtyAsync(int productId);
+        Task DecreaseProductQtyInCartAsync(int productId);
+        Task IncreaseProductQtyInCartAsync(int productId);
         Task RemoveFromCartAsync(int productId, string userId);
+
+        Task ProduceProduct(ProduceViewModel model, int productId);
 
     }
 }
