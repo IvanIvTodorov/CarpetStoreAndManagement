@@ -4,6 +4,7 @@ using CarpetStoreAndManagement.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarpetStoreAndManagement.Data.Migrations
 {
     [DbContext(typeof(CarpetStoreAndManagementDbContext))]
-    partial class CarpetStoreAndManagementDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221108181521_RawMaterialUpdate")]
+    partial class RawMaterialUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -73,15 +75,15 @@ namespace CarpetStoreAndManagement.Data.Migrations
 
             modelBuilder.Entity("CarpetStoreAndManagement.Data.Models.Inventory.InventoryRawMaterial", b =>
                 {
-                    b.Property<int>("InventoryId")
-                        .HasColumnType("int");
-
                     b.Property<int>("RawMaterialId")
                         .HasColumnType("int");
 
-                    b.HasKey("InventoryId", "RawMaterialId");
+                    b.Property<int>("InventoryId")
+                        .HasColumnType("int");
 
-                    b.HasIndex("RawMaterialId");
+                    b.HasKey("RawMaterialId", "InventoryId");
+
+                    b.HasIndex("InventoryId");
 
                     b.ToTable("InventoryRawMaterials");
                 });
@@ -536,7 +538,7 @@ namespace CarpetStoreAndManagement.Data.Migrations
             modelBuilder.Entity("CarpetStoreAndManagement.Data.Models.RawMaterial", b =>
                 {
                     b.HasOne("CarpetStoreAndManagement.Data.Models.Color", "Color")
-                        .WithMany()
+                        .WithMany("RawMaterials")
                         .HasForeignKey("ColorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -636,6 +638,8 @@ namespace CarpetStoreAndManagement.Data.Migrations
             modelBuilder.Entity("CarpetStoreAndManagement.Data.Models.Color", b =>
                 {
                     b.Navigation("ProductColors");
+
+                    b.Navigation("RawMaterials");
                 });
 
             modelBuilder.Entity("CarpetStoreAndManagement.Data.Models.Inventory.Inventory", b =>

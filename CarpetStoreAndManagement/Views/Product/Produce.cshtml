@@ -26,7 +26,6 @@
                                     </tr>
                                     @foreach (var product in Model.Products)
                                     {
-                                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                         <form asp-action="Produce" asp-route-productId="@product.Id" method="post">
                                         <tr>
                                             <td>

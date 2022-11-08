@@ -44,7 +44,7 @@ namespace CarpetStoreAndManagement.Data
 
 
             builder.Entity<InventoryRawMaterial>()
-                .HasKey(x => new { x.RawMaterialId, x.InventoryId });
+                .HasKey(x => new { x.InventoryId, x.RawMaterialId});
 
             builder.Entity<UserOrder>()
                 .HasKey(x => new { x.UserId, x.OrderId });
