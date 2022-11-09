@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CarpetStoreAndManagement.Data.Models.Inventory;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -14,5 +15,9 @@ namespace CarpetStoreAndManagement.ViewModels.RawMaterialViewModels
         [Required]
         [Range(1, int.MaxValue)]
         public int Quantity { get; set; }
+        [Required]
+        public string InventoryName { get; set; }
+
+        public IEnumerable<Inventory> Inventories { get; set; } = new List<Inventory>();
     }
 }

@@ -16,5 +16,7 @@ namespace CarpetStoreAndManagement.Data.Models.Inventory
 
         public Product.Product Product { get; set; }
 
+        public int Quantity { get; set; }
+
     }
 }

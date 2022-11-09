@@ -28,8 +28,6 @@ namespace CarpetStoreAndManagement.Data.Models.Product
         public decimal Price { get; set; }
         [Required]
         public string? ImgUrl { get; set; }
-        [Required]
-        public int Quantity { get; set; }
 
         public bool IsDeleted { get; set; }
 

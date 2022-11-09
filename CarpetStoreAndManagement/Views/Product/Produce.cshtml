@@ -5,6 +5,17 @@
     ViewBag.Title = "Produce product";
 }
 
+<form asp-controller="Inventory" asp-action="Add">
+    <label>
+        <p class="label-txt">Add inventory</p>
+        <input asp-for="@Model.InventoryName" type="text" class="input" value="">
+        <div class="line-box">
+            <div class="line"></div>
+        </div>
+    </label>
+    <button type="submit" class="btn btn-success">Add</button>
+</form>
+
 
 <div class="container">
     <div class="row">
@@ -22,7 +33,6 @@
                                         <th>Quantity</th>
                                         <th>Inventory</th>
                                         <th></th>
-                                        <th> </th>
                                     </tr>
                                     @foreach (var product in Model.Products)
                                     {
@@ -48,8 +58,12 @@
                                                 <span asp-validation-for="Quantity" class="text-danger"></span>
                                             </td>
                                             <td class="col-sm-2 col-md-2" style="text-align: center">
-                                                <input asp-for="@Model.InventoryName" class="form-control" aria-required="true" />
-                                                <span asp-validation-for="InventoryName" class="text-danger"></span>
+                                                <select asp-for="@Model.InventoryName" class="form-control">
+                                                        @foreach (var inventory in Model.Inventories)
+                                                        {
+                                                        <option value="@inventory.Name">@inventory.Name</option>
+                                                        }
+                                                </select>
                                             </td>
                                             <td class="col-sm-1 col-md-1">
                                                 <button type="submit" class="btn btn-success">

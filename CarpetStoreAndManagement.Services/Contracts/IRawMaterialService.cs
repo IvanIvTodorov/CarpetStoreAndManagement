@@ -10,8 +10,10 @@ namespace CarpetStoreAndManagement.Services.Contracts
     public interface IRawMaterialService
     {
 
-        Task AddProductAsync(AddRawMaterialViewModel model, string type);
+        Task AddRawMaterialAsync(AddRawMaterialViewModel model, string type);
         Task AddColorAsync(string name);
+
+        Task AddToInventoryAsync(int id, string name, int qty);
 
 
     }

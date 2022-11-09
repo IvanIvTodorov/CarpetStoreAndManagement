@@ -7,17 +7,23 @@ namespace CarpetStoreAndManagement.Controllers
     public class RawMaterialController : Controller
     {
         private readonly IRawMaterialService rawMaterialService;
+        private readonly IInventoryService inventoryService;
 
-        public RawMaterialController(IRawMaterialService rawMaterialService)
+        public RawMaterialController(IRawMaterialService rawMaterialService, IInventoryService inventoryService)
         {
             this.rawMaterialService = rawMaterialService;
+            this.inventoryService = inventoryService;
         }
 
         [HttpGet]
-        public IActionResult Show()
+        public async Task<IActionResult> Show()
         {
+            var model = new AddRawMaterialViewModel()
+            {
+                Inventories = await inventoryService.GetInventoriesAsync()
+            };
 
-            return View();
+            return View(model);
         }
 
         [HttpPost]
@@ -28,9 +34,9 @@ namespace CarpetStoreAndManagement.Controllers
                 return View(nameof(Show));
             }
 
-            await rawMaterialService.AddProductAsync(model, type);
+            await rawMaterialService.AddRawMaterialAsync(model, type);
 
-            return View(nameof(Show));
+            return RedirectToAction(nameof(Show));
         }
     }
 }

@@ -8,10 +8,12 @@ namespace CarpetStoreAndManagement.Controllers
     public class ProductController : Controller
     {
         private readonly IProductService productService;
+        private readonly IInventoryService inventoryService;
 
-        public ProductController(IProductService productService)
+        public ProductController(IProductService productService, IInventoryService inventoryService)
         {
             this.productService = productService;
+            this.inventoryService = inventoryService;
         }
 
         [HttpGet]
@@ -116,7 +118,8 @@ namespace CarpetStoreAndManagement.Controllers
         {
             var model = new ProduceViewModel()
             {
-                Products = await productService.GetProductsAsync()
+                Products = await productService.GetProductsAsync(),
+                Inventories = await inventoryService.GetInventoriesAsync()
             };
 
             return View(model);

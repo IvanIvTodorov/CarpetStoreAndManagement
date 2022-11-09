@@ -1,5 +1,6 @@
 ﻿using CarpetStoreAndManagement.Data;
 using CarpetStoreAndManagement.Data.Models;
+using CarpetStoreAndManagement.Data.Models.Inventory;
 using CarpetStoreAndManagement.Services.Contracts;
 using CarpetStoreAndManagement.ViewModels.RawMaterialViewModels;
 using Microsoft.EntityFrameworkCore;
@@ -34,7 +35,7 @@ namespace CarpetStoreAndManagement.Services.Services
             }
         }
 
-        public async Task AddProductAsync(AddRawMaterialViewModel model, string type)
+        public async Task AddRawMaterialAsync(AddRawMaterialViewModel model, string type)
         {
             await AddColorAsync(model.Color);
 
@@ -45,13 +46,29 @@ namespace CarpetStoreAndManagement.Services.Services
             var material = new RawMaterial()
             {
                 Type = type,
-                ColorId = color.Id,
-                Quantity = model.Quantity
+                ColorId = color.Id
             };
 
             await context.RawMaterials.AddAsync(material);
             await context.SaveChangesAsync();
 
+            await AddToInventoryAsync(material.Id, model.InventoryName, model.Quantity);
+        }
+
+        public async Task AddToInventoryAsync(int id, string name, int qty)
+        {
+            var inventory = await context.Inventories
+               .Where(x => x.Name == name)
+               .FirstOrDefaultAsync();
+
+            var inventoryRawMaterial = new InventoryRawMaterial()
+            {
+                InventoryId = inventory.Id,
+                RawMaterialId = id,
+                Quantity = qty
+            };
+
+            await context.InventoryRawMaterials.AddAsync(inventoryRawMaterial);
             await context.SaveChangesAsync();
         }
     }

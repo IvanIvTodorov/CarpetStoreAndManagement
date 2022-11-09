@@ -1,4 +1,5 @@
-﻿using CarpetStoreAndManagement.Data.Models.Product;
+﻿using CarpetStoreAndManagement.Data.Models.Inventory;
+using CarpetStoreAndManagement.Data.Models.Product;
 using System.ComponentModel.DataAnnotations;
 
 namespace CarpetStoreAndManagement.ViewModels.ProductViewModels
@@ -13,6 +14,8 @@ namespace CarpetStoreAndManagement.ViewModels.ProductViewModels
         [MaxLength(25)]
         [MinLength(3)] 
         public string InventoryName { get; set; }
+
+        public IEnumerable<Inventory> Inventories { get; set; } = new List<Inventory>();
 
         public IEnumerable<Product> Products { get; set; } = new List<Product>();
 

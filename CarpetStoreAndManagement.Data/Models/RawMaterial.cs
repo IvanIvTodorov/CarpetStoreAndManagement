@@ -18,7 +18,6 @@ namespace CarpetStoreAndManagement.Data.Models
         public string Type { get; set; }
         [Required]
         [Range(0, double.MaxValue)]
-        public int Quantity { get; set; }
         public int ColorId { get; set; }
 
         public Color Color { get; set; }

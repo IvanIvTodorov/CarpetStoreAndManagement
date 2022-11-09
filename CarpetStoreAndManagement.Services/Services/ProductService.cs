@@ -100,7 +100,7 @@ namespace CarpetStoreAndManagement.Services.Services
         public async Task DecreaseProductQtyInCartAsync(int productId)
         {
             var userProd = await context.UserProducts
-                     .Where(x =>x.ProductId == productId)
+                     .Where(x => x.ProductId == productId)
                      .FirstOrDefaultAsync();
 
             userProd.Quantity -= 1;
@@ -162,22 +162,6 @@ namespace CarpetStoreAndManagement.Services.Services
 
         public async Task ProduceProduct(ProduceViewModel model, int productId)
         {
-            var invent = new Inventory();
-
-            if (!context.Inventories.Any(x => x.Name == model.InventoryName))
-            {
-                invent.Name = model.InventoryName;
-
-                await context.Inventories.AddAsync(invent);
-                await context.SaveChangesAsync();
-            }
-
-            var product = await context.Products
-                .Where(x => x.Id == productId)
-                .FirstOrDefaultAsync();
-
-            product.Quantity += model.Quantity;
-
             var inventory = await context.Inventories
                  .Where(x => x.Name == model.InventoryName)
                  .FirstOrDefaultAsync();
@@ -186,7 +170,8 @@ namespace CarpetStoreAndManagement.Services.Services
             var inventoryProd = new InventoryProduct()
             {
                 InventoryId = inventory.Id,
-                ProductId = product.Id
+                ProductId = productId,
+                Quantity = model.Quantity 
             };
 
             await context.InventoryProducts.AddAsync(inventoryProd);
