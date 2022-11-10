@@ -5,18 +5,6 @@
     ViewBag.Title = "Produce product";
 }
 
-<form asp-controller="Inventory" asp-action="Add">
-    <label>
-        <p class="label-txt">Add inventory</p>
-        <input asp-for="@Model.InventoryName" type="text" class="input" value="">
-        <div class="line-box">
-            <div class="line"></div>
-        </div>
-    </label>
-    <button type="submit" class="btn btn-success">Add</button>
-</form>
-
-
 <div class="container">
     <div class="row">
         <section class="content">

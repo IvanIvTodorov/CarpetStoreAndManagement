@@ -13,16 +13,20 @@ namespace CarpetStoreAndManagement.Controllers
             this.inventoryService = inventoryService;
         }
 
+        [HttpPost]
         public async Task<IActionResult> Add(ProduceViewModel model)
         {
             await inventoryService.AddInventoryAsync(model.InventoryName);
 
-            return RedirectToAction("Produce", "Product"); 
+            return RedirectToAction(nameof(All)); 
         }
 
-        public IActionResult All()
+        [HttpGet]
+        public async Task<IActionResult> All()
         {
-            return View();
+            var model = await inventoryService.GetAllItemsAsync();
+
+            return View(model);
         }
     }
 }

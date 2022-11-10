@@ -1,4 +1,5 @@
 ﻿using CarpetStoreAndManagement.Data.Models.Inventory;
+using CarpetStoreAndManagement.ViewModels.InventoryViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,5 +14,7 @@ namespace CarpetStoreAndManagement.Services.Contracts
         Task AddInventoryAsync(string name);
 
         Task<IEnumerable<Inventory>> GetInventoriesAsync();
+
+        Task<AllInventoryViewModel> GetAllItemsAsync();
     }
 }
