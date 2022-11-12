@@ -10,6 +10,7 @@ namespace CarpetStoreAndManagement.Services.Services
     public class InventoryService : IInventoryService
     {
         private readonly CarpetStoreAndManagementDbContext context;
+        private const int requiredMaterials = 3;
 
         public InventoryService(CarpetStoreAndManagementDbContext context)
         {
@@ -58,20 +59,31 @@ namespace CarpetStoreAndManagement.Services.Services
 
         public async Task<bool> CheckRawMaterialsForProduce(List<string> colors, int qty, string inventoryName)
         {
-            var flag = true;
+            var flag = false;
+
             foreach (var color in colors)
             {
-                var rawMaterial = await context.InventoryRawMaterials
-                    .Include(x => x.Inventory)
-                    .Include(x => x.RawMaterial)
-                    .ThenInclude(x => x.Color)
-                    .Where(x => x.RawMaterial.Color.Name == color && x.Inventory.Name == inventoryName)
-                    .FirstOrDefaultAsync();
-
-                if (rawMaterial == null || rawMaterial.Quantity < qty )
+                if (context.InventoryRawMaterials
+                   .Include(x => x.Inventory)
+                   .Include(x => x.RawMaterial)
+                   .ThenInclude(x => x.Color)
+                   .Where(x => x.RawMaterial.Color.Name == color && x.Inventory.Name == inventoryName)
+                   .Count() == requiredMaterials)
                 {
-                    flag = false;
-                }
+                    flag = true;
+
+                    var rawMaterial = await context.InventoryRawMaterials
+                   .Include(x => x.Inventory)
+                   .Include(x => x.RawMaterial)
+                   .ThenInclude(x => x.Color)
+                   .Where(x => x.RawMaterial.Color.Name == color && x.Inventory.Name == inventoryName)
+                   .FirstOrDefaultAsync();
+
+                    if (rawMaterial == null || rawMaterial.Quantity < qty)
+                    {
+                        flag = false;
+                    }
+                }           
             }
             return flag;
         }

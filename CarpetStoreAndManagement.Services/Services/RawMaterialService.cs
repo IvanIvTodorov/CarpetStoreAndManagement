@@ -37,7 +37,7 @@ namespace CarpetStoreAndManagement.Services.Services
 
         public async Task AddRawMaterialAsync(AddRawMaterialViewModel model, string type)
         {
-            if (!context.RawMaterials.Any(x => x.Type == type && x.Color.Name == model.Color))
+            if (!await context.RawMaterials.AnyAsync(x => x.Type == type && x.Color.Name == model.Color))
             {
                 await AddColorAsync(model.Color);
                 var color = await context.Colors
@@ -55,18 +55,21 @@ namespace CarpetStoreAndManagement.Services.Services
 
                 await AddToInventoryAsync(material.Id, model.InventoryName, model.Quantity);
             }
+            else
+            {
+                var rawMaterial = await context.RawMaterials
+               .Include(x => x.Color)
+               .Where(x => x.Type == type && x.Color.Name == model.Color)
+               .FirstOrDefaultAsync();
 
-            var rawMaterial = await context.RawMaterials
-                .Include(x => x.Color)
-                .Where(x => x.Type == type && x.Color.Name == model.Color)
-                .FirstOrDefaultAsync();
+                await AddToInventoryAsync(rawMaterial.Id, model.InventoryName, model.Quantity);
 
-            await AddToInventoryAsync(rawMaterial.Id, model.InventoryName, model.Quantity);
+            }       
         }
 
         public async Task AddToInventoryAsync(int id, string name, int qty)
         {
-            if (!context.InventoryRawMaterials.Any(x => x.Inventory.Name == name && x.RawMaterialId == id))
+            if (!await context.InventoryRawMaterials.AnyAsync(x => x.Inventory.Name == name && x.RawMaterialId == id))
             {
                 var inventory = await context.Inventories
                   .Where(x => x.Name == name)
