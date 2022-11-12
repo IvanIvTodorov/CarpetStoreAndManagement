@@ -37,38 +37,64 @@ namespace CarpetStoreAndManagement.Services.Services
 
         public async Task AddRawMaterialAsync(AddRawMaterialViewModel model, string type)
         {
-            await AddColorAsync(model.Color);
-
-            var color = await context.Colors
-            .Where(x => x.Name == model.Color)
-            .FirstOrDefaultAsync();
-
-            var material = new RawMaterial()
+            if (!context.RawMaterials.Any(x => x.Type == type && x.Color.Name == model.Color))
             {
-                Type = type,
-                ColorId = color.Id
-            };
+                await AddColorAsync(model.Color);
+                var color = await context.Colors
+                   .Where(x => x.Name == model.Color)
+                   .FirstOrDefaultAsync();
 
-            await context.RawMaterials.AddAsync(material);
-            await context.SaveChangesAsync();
+                var material = new RawMaterial()
+                {
+                    Type = type,
+                    ColorId = color.Id
+                };
 
-            await AddToInventoryAsync(material.Id, model.InventoryName, model.Quantity);
+                await context.RawMaterials.AddAsync(material);
+                await context.SaveChangesAsync();
+
+                await AddToInventoryAsync(material.Id, model.InventoryName, model.Quantity);
+            }
+
+            var rawMaterial = await context.RawMaterials
+                .Include(x => x.Color)
+                .Where(x => x.Type == type && x.Color.Name == model.Color)
+                .FirstOrDefaultAsync();
+
+            await AddToInventoryAsync(rawMaterial.Id, model.InventoryName, model.Quantity);
         }
 
         public async Task AddToInventoryAsync(int id, string name, int qty)
         {
-            var inventory = await context.Inventories
-               .Where(x => x.Name == name)
-               .FirstOrDefaultAsync();
-
-            var inventoryRawMaterial = new InventoryRawMaterial()
+            if (!context.InventoryRawMaterials.Any(x => x.Inventory.Name == name && x.RawMaterialId == id))
             {
-                InventoryId = inventory.Id,
-                RawMaterialId = id,
-                Quantity = qty
-            };
+                var inventory = await context.Inventories
+                  .Where(x => x.Name == name)
+                  .FirstOrDefaultAsync();
 
-            await context.InventoryRawMaterials.AddAsync(inventoryRawMaterial);
+                var rawMaterial = await context.RawMaterials
+                    .Where(x => x.Id == id)
+                    .FirstOrDefaultAsync();
+
+
+                var inventoryRawMaterial = new InventoryRawMaterial()
+                {
+                    InventoryId = inventory.Id,
+                    RawMaterialId = id,
+                    Quantity = qty
+                };
+
+                await context.InventoryRawMaterials.AddAsync(inventoryRawMaterial);
+            }
+            else
+            {
+                var inventory = await context.InventoryRawMaterials
+                    .Where(x => x.Inventory.Name == name && x.RawMaterialId == id)
+                    .FirstOrDefaultAsync();
+
+                inventory.Quantity += qty;
+            }
+           
             await context.SaveChangesAsync();
         }
     }

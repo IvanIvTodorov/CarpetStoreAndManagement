@@ -31,7 +31,17 @@ namespace CarpetStoreAndManagement.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View(nameof(Show));
+                if (model.Quantity < 1)
+                {
+                    TempData["message"] = "Quantity should be higher than 0!";
+                }
+
+                if (model.Color == null)
+                {
+                    TempData["message"] = "Color is required!";
+                }
+
+                return RedirectToAction(nameof(Show));
             }
 
             await rawMaterialService.AddRawMaterialAsync(model, type);

@@ -32,5 +32,7 @@ namespace CarpetStoreAndManagement.Services.Contracts
 
         Task ProduceProduct(ProduceViewModel model, int productId);
 
+        Task<List<string>> GetProductColors(int productId);
+
     }
 }

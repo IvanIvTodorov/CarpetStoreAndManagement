@@ -16,5 +16,8 @@ namespace CarpetStoreAndManagement.Services.Contracts
         Task<IEnumerable<Inventory>> GetInventoriesAsync();
 
         Task<AllInventoryViewModel> GetAllItemsAsync();
+
+        Task<bool> CheckRawMaterialsForProduce(List<string> colors, int qty, string inventoryName);
+
     }
 }

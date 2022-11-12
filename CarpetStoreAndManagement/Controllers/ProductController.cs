@@ -1,4 +1,5 @@
 ﻿using CarpetStoreAndManagement.Services.Contracts;
+using CarpetStoreAndManagement.ViewModels;
 using CarpetStoreAndManagement.ViewModels.ProductViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -104,7 +105,7 @@ namespace CarpetStoreAndManagement.Controllers
             return RedirectToAction(nameof(Cart));
         }
         [HttpPost]
-        public async Task<IActionResult> RemoveFromCart (int productId)
+        public async Task<IActionResult> RemoveFromCart(int productId)
         {
             var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
@@ -116,6 +117,7 @@ namespace CarpetStoreAndManagement.Controllers
         [HttpGet]
         public async Task<IActionResult> Produce()
         {
+
             var model = new ProduceViewModel()
             {
                 Products = await productService.GetProductsAsync(),
@@ -128,12 +130,28 @@ namespace CarpetStoreAndManagement.Controllers
         [HttpPost]
         public async Task<IActionResult> Produce(ProduceViewModel model, int productId)
         {
+
             if (!ModelState.IsValid)
             {
-                return RedirectToAction(nameof(Produce));
+                if (model.Quantity < 1)
+                {
+                    TempData["message"] = "Quantity should be higher than 0!";
+                    return RedirectToAction(nameof(Produce));
+                }            
             };
 
+            var productColors = await productService.GetProductColors(productId);
+
+            if (!await inventoryService.CheckRawMaterialsForProduce(productColors, model.Quantity, model.InventoryName))
+            {
+                TempData["message"] = $"You do not have enough raw materials! You need to order {String.Join(" and", productColors)} raw materials for {model.InventoryName} inventory!";
+
+                return RedirectToAction("Show", "RawMaterial");
+            }
+
+
             await productService.ProduceProduct(model, productId);
+
 
             return RedirectToAction(nameof(Produce));
         }

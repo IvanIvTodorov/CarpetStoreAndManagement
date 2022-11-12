@@ -5,6 +5,11 @@
     ViewBag.Title = "Produce product";
 }
 
+@if (TempData["message"] != null)
+{
+    <script>alert('@TempData["message"]');</script>
+}
+
 <div class="container">
     <div class="row">
         <section class="content">
@@ -24,7 +29,7 @@
                                     </tr>
                                     @foreach (var product in Model.Products)
                                     {
-                                        <form asp-action="Produce" asp-route-productId="@product.Id" method="post">
+                                        <form asp-action="Produce"  method="post">
                                         <tr>
                                             <td>
                                                 <div class="media">
@@ -54,7 +59,7 @@
                                                 </select>
                                             </td>
                                             <td class="col-sm-1 col-md-1">
-                                                <button type="submit" class="btn btn-success">
+                                                <button type="submit" class="btn btn-success" asp-route-productId="@product.Id">
                                                     <span class="glyphicon glyphicon-remove"></span> Produce
                                                 </button>
                                             </td>
@@ -68,9 +73,10 @@
                 </div>
             </div>
         </section>
-
     </div>
-    @section Scripts {
-        <partial name="_ValidationScriptsPartial" />
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
     }
 

@@ -3,11 +3,7 @@ using CarpetStoreAndManagement.Data.Models.Inventory;
 using CarpetStoreAndManagement.Services.Contracts;
 using CarpetStoreAndManagement.ViewModels.InventoryViewModels;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace CarpetStoreAndManagement.Services.Services
 {
@@ -58,6 +54,26 @@ namespace CarpetStoreAndManagement.Services.Services
         public async Task<IEnumerable<Inventory>> GetInventoriesAsync()
         {
             return await context.Inventories.ToListAsync();
+        }
+
+        public async Task<bool> CheckRawMaterialsForProduce(List<string> colors, int qty, string inventoryName)
+        {
+            var flag = true;
+            foreach (var color in colors)
+            {
+                var rawMaterial = await context.InventoryRawMaterials
+                    .Include(x => x.Inventory)
+                    .Include(x => x.RawMaterial)
+                    .ThenInclude(x => x.Color)
+                    .Where(x => x.RawMaterial.Color.Name == color && x.Inventory.Name == inventoryName)
+                    .FirstOrDefaultAsync();
+
+                if (rawMaterial == null || rawMaterial.Quantity < qty )
+                {
+                    flag = false;
+                }
+            }
+            return flag;
         }
     }
 }

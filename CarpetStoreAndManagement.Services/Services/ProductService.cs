@@ -51,20 +51,24 @@ namespace CarpetStoreAndManagement.Services.Services
                 model.SecondaryColor
             };
 
+
             foreach (var name in colors)
             {
-                await AddColorAsync(name);
-
-                var color = await context.Colors
-                .Where(x => x.Name == name)
-                .FirstOrDefaultAsync();
-
-                var productColors = new ProductColor()
+                if (name != null)
                 {
-                    ColorId = color.Id,
-                    ProductId = product.Id
-                };
-                await context.ProductColors.AddAsync(productColors);
+                    await AddColorAsync(name);
+
+                    var color = await context.Colors
+                    .Where(x => x.Name == name)
+                    .FirstOrDefaultAsync();
+
+                    var productColors = new ProductColor()
+                    {
+                        ColorId = color.Id,
+                        ProductId = product.Id
+                    };
+                    await context.ProductColors.AddAsync(productColors);
+                };             
             };
 
             await context.SaveChangesAsync();
@@ -144,6 +148,15 @@ namespace CarpetStoreAndManagement.Services.Services
                 });
         }
 
+        public async Task<List<string>> GetProductColors(int productId)
+        {
+            return await context.ProductColors
+                .Include(x => x.Color)
+                .Where(x => x.ProductId == productId)
+                .Select(x => x.Color.Name)
+                .ToListAsync();
+        }
+
         public async Task<IEnumerable<Product>> GetProductsAsync()
         {
             return await context.Products.ToListAsync();
@@ -162,19 +175,34 @@ namespace CarpetStoreAndManagement.Services.Services
 
         public async Task ProduceProduct(ProduceViewModel model, int productId)
         {
-            var inventory = await context.Inventories
+            
+            if (await context.InventoryProducts
+                .Include(x => x.Inventory)
+                .AnyAsync(x => x.Inventory.Name == model.InventoryName && x.ProductId == productId))
+            {
+                var invent = await context.InventoryProducts
+                .Include(x => x.Inventory)
+                .Where(x => x.Inventory.Name == model.InventoryName && x.ProductId == productId)
+                .FirstOrDefaultAsync();
+
+                invent.Quantity += model.Quantity;
+            }
+            else
+            {
+                var inventory = await context.Inventories
                  .Where(x => x.Name == model.InventoryName)
                  .FirstOrDefaultAsync();
 
+                var inventoryProd = new InventoryProduct()
+                {
+                    InventoryId = inventory.Id,
+                    ProductId = productId,
+                    Quantity = model.Quantity,
+                };
 
-            var inventoryProd = new InventoryProduct()
-            {
-                InventoryId = inventory.Id,
-                ProductId = productId,
-                Quantity = model.Quantity 
-            };
+                await context.InventoryProducts.AddAsync(inventoryProd);
+            }
 
-            await context.InventoryProducts.AddAsync(inventoryProd);
             await context.SaveChangesAsync();
         }
 

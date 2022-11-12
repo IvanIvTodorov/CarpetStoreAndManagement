@@ -22,6 +22,6 @@ namespace CarpetStoreAndManagement.ViewModels.ProductViewModels
         public string? ImgUrl { get; set; }
         [Required]
         public string PrimaryColor { get; set; }
-        public string SecondaryColor { get; set; }
+        public string? SecondaryColor { get; set; }
     }
 }

@@ -16,5 +16,6 @@ namespace CarpetStoreAndManagement.Services.Contracts
         Task AddToInventoryAsync(int id, string name, int qty);
 
 
+
     }
 }
