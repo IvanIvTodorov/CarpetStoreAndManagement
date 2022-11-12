@@ -29,8 +29,6 @@ namespace CarpetStoreAndManagement.Data.Models.Product
         [Required]
         public string? ImgUrl { get; set; }
 
-        public bool IsDeleted { get; set; }
-
         public ICollection<UserProduct> ProductsInCart { get; set; } = new List<UserProduct>();
 
         public ICollection<InventoryProduct> InventoryProducts { get; set; } = new List<InventoryProduct>();

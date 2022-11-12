@@ -115,7 +115,6 @@ namespace CarpetStoreAndManagement.Services.Services
         public async Task<IEnumerable<ShowAllProductsViewModel>> GetAllProductsAsync()
         {
             var enteties = await context.Products
-               .Where(m => m.IsDeleted == false)
                .Include(m => m.InventoryProducts)
                .ToListAsync();
 
@@ -241,8 +240,7 @@ namespace CarpetStoreAndManagement.Services.Services
                 .Where(x => x.Id == productId)
                 .FirstOrDefaultAsync();
 
-            product.IsDeleted = true;
-
+            context.Products.Remove(product);
             await context.SaveChangesAsync();
         }
     }
