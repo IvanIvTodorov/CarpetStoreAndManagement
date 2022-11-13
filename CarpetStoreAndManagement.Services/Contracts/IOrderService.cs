@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CarpetStoreAndManagement.Data.Models.Product;
+using CarpetStoreAndManagement.ViewModels.OrderViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,5 +11,9 @@ namespace CarpetStoreAndManagement.Services.Contracts
     public interface IOrderService
     {
         Task MakeOrderAsync(string userId);
+
+        Task<IEnumerable<OrdersViewModel>> GetAllOrdersAsync();
+
+        Task<IEnumerable<Product>> CompleteOrderAsync(int orderId);
     }
 }

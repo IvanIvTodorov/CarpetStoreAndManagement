@@ -19,5 +19,7 @@ namespace CarpetStoreAndManagement.Services.Contracts
 
         Task<bool> CheckRawMaterialsForProduce(List<string> colors, int qty, string inventoryName);
 
+        Task DecreaseUsedRawMaterialsInInventory(List<string> colors, int qty, string inventoryName);
+
     }
 }

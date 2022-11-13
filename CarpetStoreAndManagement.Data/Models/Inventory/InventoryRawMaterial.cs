@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,7 +15,7 @@ namespace CarpetStoreAndManagement.Data.Models.Inventory
 
         public int InventoryId { get; set; }
         public Inventory Inventory { get; set; }
-
+        [Required]
         public int Quantity { get; set; }
 
     }

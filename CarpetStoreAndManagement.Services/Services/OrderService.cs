@@ -3,6 +3,7 @@ using CarpetStoreAndManagement.Data.Models;
 using CarpetStoreAndManagement.Data.Models.Product;
 using CarpetStoreAndManagement.Data.Models.User;
 using CarpetStoreAndManagement.Services.Contracts;
+using CarpetStoreAndManagement.ViewModels.OrderViewModels;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -21,40 +22,138 @@ namespace CarpetStoreAndManagement.Services.Services
             this.context = context;
         }
 
+        public async Task<IEnumerable<Product>> CompleteOrderAsync(int orderId)
+        {
+            var missingProducts = new List<Product>();
+
+            var products = await context.ProductOrders
+                .Where(x => x.OrderId == orderId)
+                .ToListAsync();
+
+            foreach (var product in products)
+            {
+                var curentProd = await context.InventoryProducts
+                    .Where(x => x.ProductId == product.ProductId)
+                    .FirstOrDefaultAsync();
+
+                if (curentProd == null || curentProd.Quantity < product.Quantity)
+                {
+                    missingProducts.Add(await context.Products.Where(x => x.Id == product.ProductId).FirstOrDefaultAsync());
+                }
+            }
+
+            if (missingProducts.Count == 0)
+            {
+                var order = await context.UserOrders
+                    .Where(x => x.OrderId == orderId)
+                    .FirstOrDefaultAsync();
+
+                order.IsCompleted = true;
+
+                foreach (var product in products)
+                {
+                    var inventoryProduct = context.InventoryProducts
+                        .Where(x => x.ProductId == product.ProductId)
+                        .FirstOrDefault();
+
+                    inventoryProduct.Quantity -= product.Quantity;
+                }
+
+                await context.SaveChangesAsync();
+            }
+            return missingProducts;
+        }
+
+        public async Task<IEnumerable<OrdersViewModel>> GetAllOrdersAsync()
+        {
+            var orders = await context.UserOrders
+                .Include(x => x.Order)
+                .ThenInclude(x => x.ProductOrders)
+                .ThenInclude(x => x.Product)
+                .ThenInclude(x => x.ProductColors)
+                .ThenInclude(x => x.Color)
+                .Include(x => x.User)
+                .Where(x => x.IsCompleted == false)
+                .ToListAsync();
+
+            var ordersViewModel = new List<OrdersViewModel>();
+            
+
+            foreach (var order in orders)
+            {
+                var productName = new List<string>();
+                var productType = new List<string>();
+                var productColors = new List<string>();
+                var productQty = new List<int>();
+
+                foreach (var product in order.Order.ProductOrders)
+                {
+                    productName.Add(product.Product.Name);
+                    productType.Add(product.Product.Type);
+                    productQty.Add(product.Quantity);
+
+                    var colors = new List<string>();
+                    foreach (var color in product.Product.ProductColors)
+                    {
+                        colors.Add(color.Color.Name);
+                    }
+
+                    productColors.Add(String.Join(", ", colors));
+                }
+
+                var curentOrder = new OrdersViewModel()
+                {
+                    OrderId = order.OrderId,
+                    ClientName = order.User.UserName,
+                    ProductName = productName,
+                    ProductType = productType,
+                    ProductColors = productColors,
+                    ProductQuantity = productQty,
+                    TotalPrice = order.Order.TotalPrice
+                };
+
+                ordersViewModel.Add(curentOrder);
+            }
+
+            return ordersViewModel;
+        }
+
         public async Task MakeOrderAsync(string userId)
         {
-            var product = await context.UserProducts
+            var products = await context.UserProducts
                 .Include(x => x.Product)
                 .Where(x => x.UserId == userId)
                 .ToListAsync();
 
             var order = new Order();
-            order.TotalPrice = product.Sum(x => x.Product.Price);
+            order.TotalPrice = products.Sum(x => x.Product.Price * x.Quantity);
 
             await context.Orders.AddAsync(order);
             await context.SaveChangesAsync();
 
             var productOrder = new List<ProductOrder>();
             var userProduct = new List<UserProduct>();
-            
-            foreach (var id in product.Select(x => x.ProductId))
+
+            foreach (var product in products)
             {
                 var prodOrder = new ProductOrder()
                 {
                     OrderId = order.Id,
-                    ProductId = id,
+                    ProductId = product.ProductId,
+                    Quantity = product.Quantity
                 };
 
                 productOrder.Add(prodOrder);
 
                 var userProd = await context.UserProducts
-                    .Where(x => x.UserId == userId && x.ProductId == id)
+                    .Where(x => x.UserId == userId && x.ProductId == product.ProductId)
                     .FirstOrDefaultAsync();
 
                 userProduct.Add(userProd);
             }
 
             await context.ProductOrders.AddRangeAsync(productOrder);
+            context.UserProducts.RemoveRange(userProduct);
 
             var userOrder = new UserOrder()
             {
@@ -63,8 +162,6 @@ namespace CarpetStoreAndManagement.Services.Services
             };
 
             await context.UserOrders.AddAsync(userOrder);
-
-            context.UserProducts.RemoveRange(userProduct);
 
             await context.SaveChangesAsync();
         }

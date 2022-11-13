@@ -5,6 +5,11 @@
     ViewData["Title"] = "My Shopping Cart";
 }
 
+@if (TempData["message"] != null)
+{
+    <script>alert('@TempData["message"]');</script>
+}
+
 <div class="container">
     <div class="row">
         <div class="col-sm-12 col-md-10 col-md-offset-1">
@@ -35,30 +40,34 @@
                                     <h4 class="media-heading"><strong>@product.Name</strong></h4>
                                 </div>
                             </td>
-                            <form asp-controller="Product" asp-action="IncreaseProductQuantityInCart" asp-route-productId="@product.Id" method="post">
                             <td>
-                                <div class="mb-3">
-                                    <input class="btn btn-primary" type="submit" value="+" />
-                                </div>
+                                <form asp-controller="Product" asp-action="IncreaseProductQuantityInCart" asp-route-productId="@product.Id" method="post">
+
+                                    <div class="mb-3">
+                                        <input class="btn btn-success" type="submit" value="+" />
+                                    </div>
+                                </form>
                             </td>
-                            </form>
                             <td class="col-sm-1 col-md-1 text-center"><strong>@product.Quantity</strong></td>
-                            <form asp-controller="Product" asp-action="DecreaseProductQuantityInCart" asp-route-productId="@product.Id" method="post">
                             <td>
-                                <div class="mb-3">
-                                    <input class="btn btn-primary" type="submit" value="-" />
-                                </div>
+                                <form asp-controller="Product" asp-action="DecreaseProductQuantityInCart" asp-route-productId="@product.Id" method="post">
+
+                                    <div class="mb-3">
+                                        <input class="btn btn-danger" type="submit" value="-" />
+                                    </div>
+                                </form>
+
                             </td>
-                            </form>
                             <td class="col-sm-1 col-md-1 text-center"><strong>@product.Price</strong></td>
                             <td class="col-sm-1 col-md-1 text-center"><strong>@product.TotalPrice</strong></td>
-                            <form asp-controller="Product" asp-action="RemoveFromCart" asp-route-productId="@product.Id" method="post">
                             <td class="col-sm-1 col-md-1">
-                                <button type="submit" class="btn btn-danger">
-                                    <span class="glyphicon glyphicon-remove"></span> Remove
-                                </button>
+                                <form asp-controller="Product" asp-action="RemoveFromCart" asp-route-productId="@product.Id" method="post">
+
+                                    <button type="submit" class="btn btn-danger">
+                                        <span class="glyphicon glyphicon-remove"></span> Remove
+                                    </button>
+                                </form>
                             </td>
-                            </form>
                         </tr>
 
                     }

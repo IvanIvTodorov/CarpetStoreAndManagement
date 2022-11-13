@@ -83,9 +83,29 @@ namespace CarpetStoreAndManagement.Services.Services
                     {
                         flag = false;
                     }
-                }           
+                }
             }
             return flag;
+        }
+
+        public async Task DecreaseUsedRawMaterialsInInventory(List<string> colors, int qty, string inventoryName)
+        {
+            foreach (var color in colors)
+            {
+                var rawMaterial = await context.InventoryRawMaterials
+               .Include(x => x.Inventory)
+               .Include(x => x.RawMaterial)
+               .ThenInclude(x => x.Color)
+               .Where(x => x.RawMaterial.Color.Name == color && x.Inventory.Name == inventoryName)
+               .ToListAsync();
+
+                foreach (var item in rawMaterial)
+                {
+                    item.Quantity -= qty;
+                }
+            }
+
+            await context.SaveChangesAsync();
         }
     }
 }

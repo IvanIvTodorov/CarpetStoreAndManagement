@@ -1,5 +1,6 @@
 ﻿using CarpetStoreAndManagement.Data.Models.Inventory;
 using CarpetStoreAndManagement.Data.Models.Product;
+using CarpetStoreAndManagement.Data.Models.User;
 using CarpetStoreAndManagement.ViewModels.ProductViewModels;
 using System;
 using System.Collections.Generic;
@@ -33,6 +34,8 @@ namespace CarpetStoreAndManagement.Services.Contracts
         Task ProduceProduct(ProduceViewModel model, int productId);
 
         Task<List<string>> GetProductColors(int productId);
+
+        Task<UserProduct> GetCurrentUserProduct(int productId);
 
     }
 }

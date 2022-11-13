@@ -10,6 +10,7 @@ namespace CarpetStoreAndManagement.Controllers
     {
         private readonly IProductService productService;
         private readonly IInventoryService inventoryService;
+        private const int requiredQuantity = 1;
 
         public ProductController(IProductService productService, IInventoryService inventoryService)
         {
@@ -100,6 +101,14 @@ namespace CarpetStoreAndManagement.Controllers
         [HttpPost]
         public async Task<IActionResult> DecreaseProductQuantityInCart(int productId)
         {
+            var userProduct = await productService.GetCurrentUserProduct(productId);
+
+            if (userProduct.Quantity <= requiredQuantity)
+            {
+                TempData["message"] = $"Quantity must not be zero or negative number!";
+                return RedirectToAction(nameof(Cart));
+            }
+
             await productService.DecreaseProductQtyInCartAsync(productId);
 
             return RedirectToAction(nameof(Cart));
@@ -133,7 +142,7 @@ namespace CarpetStoreAndManagement.Controllers
 
             if (!ModelState.IsValid)
             {
-                if (model.Quantity < 1)
+                if (model.Quantity < requiredQuantity)
                 {
                     TempData["message"] = "Quantity should be higher than 0!";
                     return RedirectToAction(nameof(Produce));
@@ -144,13 +153,13 @@ namespace CarpetStoreAndManagement.Controllers
 
             if (!await inventoryService.CheckRawMaterialsForProduce(productColors, model.Quantity, model.InventoryName))
             {
-                TempData["message"] = $"You do not have enough raw materials! You need to order {String.Join(" and", productColors)} raw materials for {model.InventoryName} inventory!";
+                TempData["message"] = $"You do not have enough raw materials in '{model.InventoryName}' inventory! You need to order {String.Join(" and ", productColors)} raw materials!";
 
                 return RedirectToAction("Show", "RawMaterial");
             }
 
-
             await productService.ProduceProduct(model, productId);
+            await inventoryService.DecreaseUsedRawMaterialsInInventory(productColors, model.Quantity, model.InventoryName);
 
 
             return RedirectToAction(nameof(Produce));

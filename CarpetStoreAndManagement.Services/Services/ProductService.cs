@@ -12,6 +12,7 @@ namespace CarpetStoreAndManagement.Services.Services
     public class ProductService : IProductService
     {
         private readonly CarpetStoreAndManagementDbContext context;
+        private const int startQuantity = 1;
 
         public ProductService(CarpetStoreAndManagementDbContext context)
         {
@@ -83,8 +84,7 @@ namespace CarpetStoreAndManagement.Services.Services
                     .Where(x => x.UserId == userId && x.ProductId == productId)
                     .FirstOrDefaultAsync();
 
-                userProd.Quantity += 1;
-
+                userProd.Quantity++;
             }
             else
             {
@@ -92,8 +92,7 @@ namespace CarpetStoreAndManagement.Services.Services
                 {
                     UserId = userId,
                     ProductId = productId,
-                    Quantity = 1,
-
+                    Quantity = startQuantity,
                 };
 
                 await context.UserProducts.AddAsync(userProduct);
@@ -107,7 +106,7 @@ namespace CarpetStoreAndManagement.Services.Services
                      .Where(x => x.ProductId == productId)
                      .FirstOrDefaultAsync();
 
-            userProd.Quantity -= 1;
+            userProd.Quantity--;
 
             await context.SaveChangesAsync();
         }
@@ -167,7 +166,7 @@ namespace CarpetStoreAndManagement.Services.Services
                      .Where(x => x.ProductId == productId)
                      .FirstOrDefaultAsync();
 
-            userProd.Quantity += 1;
+            userProd.Quantity++;
 
             await context.SaveChangesAsync();
         }
@@ -242,6 +241,15 @@ namespace CarpetStoreAndManagement.Services.Services
 
             context.Products.Remove(product);
             await context.SaveChangesAsync();
+        }
+
+        public async Task<UserProduct> GetCurrentUserProduct(int productId)
+        {
+            var userProduct = await context.UserProducts
+                .Where(x => x.ProductId == productId)
+                .FirstOrDefaultAsync();
+
+            return userProduct;
         }
     }
 }
