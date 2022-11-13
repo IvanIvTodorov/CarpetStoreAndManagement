@@ -8,6 +8,7 @@ namespace CarpetStoreAndManagement.Controllers
     {
         private readonly IRawMaterialService rawMaterialService;
         private readonly IInventoryService inventoryService;
+        private const int minQuantity = 1;
 
         public RawMaterialController(IRawMaterialService rawMaterialService, IInventoryService inventoryService)
         {
@@ -31,7 +32,7 @@ namespace CarpetStoreAndManagement.Controllers
         {
             if (!ModelState.IsValid)
             {
-                if (model.Quantity < 1)
+                if (model.Quantity < minQuantity)
                 {
                     TempData["message"] = "Quantity should be higher than 0!";
                 }
