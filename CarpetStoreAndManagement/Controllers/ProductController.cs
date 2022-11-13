@@ -11,6 +11,7 @@ namespace CarpetStoreAndManagement.Controllers
         private readonly IProductService productService;
         private readonly IInventoryService inventoryService;
         private const int requiredQuantity = 1;
+        private const int notValidOrderId = 0;
 
         public ProductController(IProductService productService, IInventoryService inventoryService)
         {
@@ -126,12 +127,9 @@ namespace CarpetStoreAndManagement.Controllers
         [HttpGet]
         public async Task<IActionResult> Produce()
         {
-
-            var model = new ProduceViewModel()
-            {
-                Products = await productService.GetProductsAsync(),
-                Inventories = await inventoryService.GetInventoriesAsync()
-            };
+            var model = new ProduceViewModel();
+            model.Inventories = await inventoryService.GetInventoriesAsync();
+            model.Products = await productService.GetProductsAsync();
 
             return View(model);
         }
@@ -146,14 +144,14 @@ namespace CarpetStoreAndManagement.Controllers
                 {
                     TempData["message"] = "Quantity should be higher than 0!";
                     return RedirectToAction(nameof(Produce));
-                }            
+                }
             };
 
             var productColors = await productService.GetProductColors(productId);
 
             if (!await inventoryService.CheckRawMaterialsForProduce(productColors, model.Quantity, model.InventoryName))
             {
-                TempData["message"] = $"You do not have enough raw materials in '{model.InventoryName}' inventory! You need to order {String.Join(" and ", productColors)} raw materials!";
+                TempData["message"] = $"You do not have enough raw materials in {model.InventoryName} inventory! You need to order {String.Join(" and ", productColors)} raw materials!";
 
                 return RedirectToAction("Show", "RawMaterial");
             }
@@ -164,5 +162,6 @@ namespace CarpetStoreAndManagement.Controllers
 
             return RedirectToAction(nameof(Produce));
         }
+        
     }
 }

@@ -2,7 +2,7 @@
 @model ProduceViewModel
 
 @{
-    ViewBag.Title = "Produce product";
+    ViewBag.Title = "Produce from order";
 }
 
 @if (TempData["message"] != null)
@@ -59,7 +59,7 @@
                                                 </select>
                                             </td>
                                             <td class="col-sm-1 col-md-1">
-                                                <button type="submit" class="btn btn-success" asp-route-productId="@product.Id">
+                                                <button type="submit" class="btn btn-success" asp-controller="Product" asp-action="Produce" asp-route-productId="@product.Id">
                                                     <span class="glyphicon glyphicon-remove"></span> Produce
                                                 </button>
                                             </td>
@@ -75,8 +75,3 @@
         </section>
     </div>
 </div>
-
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-    }
-

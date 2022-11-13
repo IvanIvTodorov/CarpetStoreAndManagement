@@ -37,5 +37,7 @@ namespace CarpetStoreAndManagement.Services.Contracts
 
         Task<UserProduct> GetCurrentUserProduct(int productId);
 
+        Task<IEnumerable<Product>> GetProductsFromOrderAsync(int orderId);
+
     }
 }

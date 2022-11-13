@@ -1,5 +1,6 @@
 ﻿using CarpetStoreAndManagement.Services.Contracts;
 using CarpetStoreAndManagement.ViewModels.OrderViewModels;
+using CarpetStoreAndManagement.ViewModels.ProductViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -8,10 +9,14 @@ namespace CarpetStoreAndManagement.Controllers
     public class OrderController : Controller
     {
         private readonly IOrderService orderService;
+        private readonly IProductService productService;
+        private readonly IInventoryService inventoryService;
 
-        public OrderController(IOrderService orderService)
+        public OrderController(IOrderService orderService, IProductService productService, IInventoryService inventoryService)
         {
             this.orderService = orderService;
+            this.productService = productService;
+            this.inventoryService = inventoryService;
         }
 
         [HttpPost]
@@ -40,11 +45,22 @@ namespace CarpetStoreAndManagement.Controllers
             {
                 TempData["message"] = $"You need to produce more from {String.Join(", ", orders.Select(x => x.Name).ToArray())}";
 
-                return RedirectToAction("Produce", "Product");
+                return RedirectToAction("Orders", "Order");
             }
 
 
             return RedirectToAction(nameof(Orders));
+        }
+
+        public async Task<IActionResult> ProduceFromOrder(int orderId)
+        {
+            var model = new ProduceViewModel()
+            {
+                Products = await productService.GetProductsFromOrderAsync(orderId),
+                Inventories = await inventoryService.GetInventoriesAsync()
+            };
+
+            return View(model);
         }
     }
 }

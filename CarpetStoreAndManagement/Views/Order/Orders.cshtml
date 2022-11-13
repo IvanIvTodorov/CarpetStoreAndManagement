@@ -4,6 +4,13 @@
 @{
     ViewData["Title"] = "Orders";
 }
+
+@if (TempData["message"] != null)
+{
+    <script>alert('@TempData["message"]');</script>
+}
+
+
 <body>
     <div class="container">
         <div class="table-wrapper">
@@ -12,7 +19,7 @@
                     <div class="col-sm-8"><h2>Orders</h2></div>
                 </div>
             </div>
-            <table class="table table-bordered">
+            <table style="border:1px solid black;" class="table table-bordered">
                 <thead>
                     <tr>
                         <th>Client name</th>
@@ -28,41 +35,65 @@
                     @foreach (var order in Model)
                     {
                         <tr>
-                            <td align="center">@order.ClientName</td>
-                            <td>
-                                @foreach (var name in order.ProductName)
-                                {
-                                    <td2>@name</td2>
-                                    <hr>
-                                }
-                            </td>
-                            <td>
-                                @foreach (var type in order.ProductType)
-                                {
-                                    <td2>@type</td2>
-                                    <hr>
-                                }
-                            </td>
-                            <td>
-                                @foreach (var colors in order.ProductColors)
-                                {
-                                    <td2>@colors</td2>
-                                    <hr>
-                                }
-                            </td>
-                            <td>
-                                @foreach (var qty in order.ProductQuantity)
-                                {
-                                    <td2>@qty</td2>
-                                    <hr>
-                                }
-                            </td>
+                            @if (order.ProductName.Count() == 1)
+                            {
+                                <td align="center">@order.ClientName</td>
+                                <td>
+
+                                    <td2>@order.ProductName[0]</td2>
+                                </td>
+                                <td>
+
+                                    <td2>@order.ProductType[0]</td2>
+                                </td>
+                                <td>
+
+                                    <td2>@order.ProductColors[0]</td2>
+                                </td>
+                                <td>
+                                    <td2>@order.ProductQuantity[0]</td2>
+                                </td>
+                            }
+                            else
+                            {
+                                <td align="center">@order.ClientName</td>
+                                <td>
+                                    @foreach (var name in order.ProductName)
+                                    {
+                                        <td2>@name</td2>
+                                        <hr>
+                                    }
+                                </td>
+                                <td>
+                                    @foreach (var type in order.ProductType)
+                                    {
+                                        <td2>@type</td2>
+                                        <hr>
+                                    }
+                                </td>
+                                <td>
+                                    @foreach (var colors in order.ProductColors)
+                                    {
+                                        <td2>@colors</td2>
+                                        <hr>
+                                    }
+                                </td>
+                                <td>
+                                    @foreach (var qty in order.ProductQuantity)
+                                    {
+                                        <td2>@qty</td2>
+                                        <hr>
+                                    }
+                                </td>
+                            }
                             <td align="center">@order.TotalPrice</td>
                             <td>
                                 <form asp-action="CompleteOrder" asp-route-orderId="@order.OrderId">
                                     <button class="btn-success float-end" type="submit">Complete order</button>
                                 </form>
-                                <button class="btn-info" type="submit">Produce</button>
+                                <form  asp-action="ProduceFromOrder" asp-route-orderId="@order.OrderId">
+                                    <button class="btn-info" type="submit">Produce</button>
+                                </form>
                             </td>
                         </tr>
                     }

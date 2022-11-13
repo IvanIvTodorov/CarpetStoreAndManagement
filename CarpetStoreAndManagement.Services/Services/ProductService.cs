@@ -251,5 +251,22 @@ namespace CarpetStoreAndManagement.Services.Services
 
             return userProduct;
         }
+
+        public async Task<IEnumerable<Product>> GetProductsFromOrderAsync(int orderId)
+        {
+            var products = await context.ProductOrders
+                 .Include(x => x.Product)
+                 .Where(x => x.OrderId == orderId)
+                 .ToListAsync();
+
+            var orderedProducts = new List<Product>();
+
+            foreach (var product in products)
+            {
+                orderedProducts.Add(product.Product);
+            }
+
+            return orderedProducts;
+        }
     }
 }
