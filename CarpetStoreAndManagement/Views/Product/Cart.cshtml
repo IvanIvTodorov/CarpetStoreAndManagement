@@ -90,7 +90,7 @@
                         <td>   </td>
                         <td>   </td>
                         <td>
-                            <form asp-controller="Order" asp-action="MakeOrder" method="post">
+                            <form asp-controller="Order" asp-action="MakeOrder" asp-route-model="@Model.Any()" method="post">
                                 <button type="submit" class="btn btn-success">
                                     Checkout <span class="glyphicon glyphicon-play"></span>
                                 </button>

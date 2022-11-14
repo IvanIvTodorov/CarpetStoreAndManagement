@@ -20,8 +20,14 @@ namespace CarpetStoreAndManagement.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> MakeOrder()
+        public async Task<IActionResult> MakeOrder(bool model)
         {
+            if (!model)
+            {
+                TempData["message"] = $"Your cart is empty!";
+
+                return RedirectToAction("Cart", "Product");
+            }
             var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
             await orderService.MakeOrderAsync(userId);
@@ -37,6 +43,7 @@ namespace CarpetStoreAndManagement.Controllers
             return View(model);
         }
 
+        [HttpPost]
         public async Task<IActionResult> CompleteOrder(int orderId)
         {
             var orders = await orderService.CompleteOrderAsync(orderId);
@@ -52,6 +59,7 @@ namespace CarpetStoreAndManagement.Controllers
             return RedirectToAction(nameof(Orders));
         }
 
+        [HttpPost]
         public async Task<IActionResult> ProduceFromOrder(int orderId)
         {
             var model = new ProduceViewModel()
@@ -59,6 +67,16 @@ namespace CarpetStoreAndManagement.Controllers
                 Products = await productService.GetProductsFromOrderAsync(orderId),
                 Inventories = await inventoryService.GetInventoriesAsync()
             };
+
+            return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> MyOrders()
+        {
+            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+            var model = await orderService.GetMyOrdersAsync(userId);
 
             return View(model);
         }

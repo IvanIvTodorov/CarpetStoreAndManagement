@@ -46,10 +46,16 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Order" asp-action="Orders">Orders</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Feedback" asp-action="Mine">Leave Feedback</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Order" asp-action="MyOrders">My orders</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Feedback" asp-action="LeaveFeedback">Leave feedback</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Feedback" asp-action="AllFeedbacks">Feedbacks</a>
                             </li>
                         }
-                    </ul>
+                    </ul>                 
                     <partial name="_LoginPartial" />
                 </div>
             </div>

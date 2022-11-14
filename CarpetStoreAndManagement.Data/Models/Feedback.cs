@@ -7,19 +7,18 @@ using System.Threading.Tasks;
 
 namespace CarpetStoreAndManagement.Data.Models
 {
-    public class Loom
+    public class Feedback
     {
         [Key]
         public int Id { get; set; }
         [Required]
-        [MinLength(4)]
-        [MaxLength(20)]
-        public string? Name { get; set; }
+        [MaxLength(100)]
+        public string FullName { get; set; }
         [Required]
-
-        public string? ImgUrl { get; set; }
+        [MaxLength(50)]
+        public string Email { get; set; }
         [Required]
-
-        public DateTime ExpirуDate { get; set; }
+        [MaxLength(2500)]
+        public string Message { get; set; }
     }
 }

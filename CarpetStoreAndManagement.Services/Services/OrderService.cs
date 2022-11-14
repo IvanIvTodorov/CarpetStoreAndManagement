@@ -118,6 +118,60 @@ namespace CarpetStoreAndManagement.Services.Services
             return ordersViewModel;
         }
 
+        public async Task<IEnumerable<MyOrdersViewModel>> GetMyOrdersAsync(string userId)
+        {
+            var orders = await context.UserOrders
+                .Include(x => x.Order)
+                .ThenInclude(x => x.ProductOrders)
+                .ThenInclude(x => x.Product)
+                .ThenInclude(x => x.ProductColors)
+                .ThenInclude(x => x.Color)
+                .Where(x => x.UserId == userId)
+                .ToListAsync();
+
+            var ordersViewModel = new List<MyOrdersViewModel>();
+
+
+            foreach (var order in orders)
+            {
+                var productName = new List<string>();
+                var productType = new List<string>();
+                var productColors = new List<string>();
+                var productQty = new List<int>();
+
+                foreach (var product in order.Order.ProductOrders)
+                {
+                    productName.Add(product.Product.Name);
+                    productType.Add(product.Product.Type);
+                    productQty.Add(product.Quantity);
+
+                    var colors = new List<string>();
+                    foreach (var color in product.Product.ProductColors)
+                    {
+                        colors.Add(color.Color.Name);
+                    }
+
+                    productColors.Add(String.Join(", ", colors));
+                }
+
+                var curentOrder = new MyOrdersViewModel()
+                {
+                    OrderId = order.OrderId,
+                    ProductName = productName,
+                    ProductType = productType,
+                    ProductColors = productColors,
+                    ProductQuantity = productQty,
+                    TotalPrice = order.Order.TotalPrice,
+                    IsCompleted = order.IsCompleted
+                    
+                };
+
+                ordersViewModel.Add(curentOrder);
+            }
+
+            return ordersViewModel;
+        }
+
         public async Task MakeOrderAsync(string userId)
         {
             var products = await context.UserProducts

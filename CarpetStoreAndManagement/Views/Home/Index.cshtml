@@ -2,6 +2,11 @@
     ViewData["Title"] = "Home Page";
 }
 
+@if (TempData["message"] != null)
+{
+    <script>alert('@TempData["message"]');</script>
+}
+
 <div class="text-center">
     <h1 class="display-4">Welcome to CarpetStoreAndManagement</h1>
 </div>

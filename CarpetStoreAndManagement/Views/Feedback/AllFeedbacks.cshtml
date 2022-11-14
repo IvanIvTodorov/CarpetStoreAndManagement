@@ -1,0 +1,31 @@
+﻿@using CarpetStoreAndManagement.ViewModels.FeedbackViewModels
+@model IEnumerable<FeedbackViewModel>
+
+@{
+    ViewBag.Title = "Feedbacks";
+}
+
+<h1 class="text-center">Feedbacks</h1>
+<div class="container">
+    <div>
+        <table class="table table-striped custab">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>FullName</th>
+                    <th>Email</th>
+                    <th>Feedback</th>
+                </tr>
+            </thead>
+            @foreach (var feedback in Model)
+            {
+            <tr>
+                <td>@feedback.Id</td>
+                <td>@feedback.FullName</td>
+                <td>@feedback.Email</td>
+                <td>@feedback.Message</td>
+            </tr>
+            }
+        </table>
+    </div>
+</div>

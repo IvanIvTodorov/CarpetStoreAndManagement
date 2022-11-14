@@ -13,6 +13,7 @@ namespace CarpetStoreAndManagement.Services.Contracts
         Task MakeOrderAsync(string userId);
 
         Task<IEnumerable<OrdersViewModel>> GetAllOrdersAsync();
+        Task<IEnumerable<MyOrdersViewModel>> GetMyOrdersAsync(string userId);
 
         Task<IEnumerable<Product>> CompleteOrderAsync(int orderId);
     }

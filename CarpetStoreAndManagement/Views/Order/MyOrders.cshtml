@@ -1,8 +1,8 @@
 ﻿@using CarpetStoreAndManagement.ViewModels.OrderViewModels
-@model IEnumerable<OrdersViewModel>
+@model IEnumerable<MyOrdersViewModel>
 
 @{
-    ViewData["Title"] = "Orders";
+    ViewData["Title"] = "My orders";
 }
 
 @if (TempData["message"] != null)
@@ -22,20 +22,23 @@
             <table style="border:1px solid black;" class="table table-bordered">
                 <thead>
                     <tr>
-                        <th>Client name</th>
+                        <th>Id</th>
                         <th>Product name</th>
                         <th>Type</th>
                         <th>Colors</th>
                         <th>Quantity</th>
                         <th>Total price</th>
-                        <th>Actions</th>
+                        <th>Status</th>
                     </tr>
                 </thead>
                 <tbody>
+                    @{
+                        var id = 1;
+                    }
                     @foreach (var order in Model)
                     {
                         <tr>
-                            <td align="center">@order.ClientName</td>
+                            <td>@(id++) </td>
                             @if (order.ProductName.Count() == 1)
                             {
                                 <td>
@@ -86,14 +89,14 @@
                                 </td>
                             }
                             <td align="center">@order.TotalPrice</td>
-                            <td>
-                                <form asp-action="CompleteOrder" asp-route-orderId="@order.OrderId">
-                                    <button class="btn-success float-end" type="submit">Complete order</button>
-                                </form>
-                                <form asp-action="ProduceFromOrder" asp-route-orderId="@order.OrderId">
-                                    <button class="btn-info" type="submit">Produce</button>
-                                </form>
-                            </td>
+                            @if (order.IsCompleted)
+                            {
+                                <td>Completed</td>
+                            }
+                            else
+                            {
+                                <td>In process...</td>
+                            }
                         </tr>
                     }
                 </tbody>
@@ -101,4 +104,3 @@
         </div>
     </div>
 </body>
-
