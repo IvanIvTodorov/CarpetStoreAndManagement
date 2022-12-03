@@ -8,12 +8,29 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Views\Inventory\**" />
+    <Compile Remove="Views\RawMaterial\**" />
+    <Content Remove="Views\Inventory\**" />
+    <Content Remove="Views\RawMaterial\**" />
+    <EmbeddedResource Remove="Views\Inventory\**" />
+    <EmbeddedResource Remove="Views\RawMaterial\**" />
+    <None Remove="Views\Inventory\**" />
+    <None Remove="Views\RawMaterial\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Controllers\InventoryController.cs" />
+    <Compile Remove="Controllers\RawMaterialController.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.6" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.6" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.6" />
     <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="6.0.6" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.10" />
   </ItemGroup>
 
   <ItemGroup>

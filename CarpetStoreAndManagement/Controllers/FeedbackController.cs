@@ -28,13 +28,5 @@ namespace CarpetStoreAndManagement.Controllers
 
             return RedirectToAction("Index", "Home");
         }
-
-        [HttpGet]
-        public async Task<IActionResult> AllFeedbacks()
-        {
-            var model = await feedbackService.GetAllFeedbacksAsync();
-
-            return View(model);
-        }
     }
 }

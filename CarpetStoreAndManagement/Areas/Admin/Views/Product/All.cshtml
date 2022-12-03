@@ -1,0 +1,26 @@
+﻿@using CarpetStoreAndManagement.ViewModels.ProductViewModels
+@model IEnumerable<ShowAllProductsViewModel>
+
+@{
+    ViewData["Title"] = "All";
+}
+
+<div class="container mb-4">
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4 mt-4">
+                <div class="card shadow">
+                    <div class="card-body text-center">
+                        <a href="#">
+                            <img class="card-img-top" src="@item.ImgUrl" alt="">
+                        </a>
+                        <a class="text-reset"><h3 class="card-title display-4">@item.Name</h3></a>
+                        <a class="btn btn-dark my-2" asp-action="DeleteProduct" asp-route-productId="@item.Id" role="button">Delete Product</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+

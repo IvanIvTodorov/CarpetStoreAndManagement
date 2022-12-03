@@ -28,49 +28,11 @@ namespace CarpetStoreAndManagement.Controllers
         }
 
         [HttpGet]
-        public IActionResult Add()
-        {
-            var model = new AddProductViewModel();
-
-            return View(model);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Add(AddProductViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-
-            try
-            {
-                await productService.AddProductAsync(model);
-                return RedirectToAction(nameof(All));
-            }
-            catch (Exception)
-            {
-
-                ModelState.AddModelError("", "Something went wrong!");
-            }
-
-            return View(model);
-        }
-
-        [HttpGet]
         public async Task<IActionResult> Details(int productId)
         {
             var model = await productService.ProductDetailsAsync(productId);
 
             return View(model);
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> DeleteProduct(int productId)
-        {
-            await productService.RemoveProductAsync(productId);
-
-            return RedirectToAction(nameof(All));
         }
 
         [HttpGet]
@@ -123,45 +85,5 @@ namespace CarpetStoreAndManagement.Controllers
 
             return RedirectToAction(nameof(Cart));
         }
-
-        [HttpGet]
-        public async Task<IActionResult> Produce()
-        {
-            var model = new ProduceViewModel();
-            model.Inventories = await inventoryService.GetInventoriesAsync();
-            model.Products = await productService.GetProductsAsync();
-
-            return View(model);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Produce(ProduceViewModel model, int productId)
-        {
-
-            if (!ModelState.IsValid)
-            {
-                if (model.Quantity < requiredQuantity)
-                {
-                    TempData["message"] = "Quantity should be higher than 0!";
-                    return RedirectToAction(nameof(Produce));
-                }
-            };
-
-            var productColors = await productService.GetProductColors(productId);
-
-            if (!await inventoryService.CheckRawMaterialsForProduce(productColors, model.Quantity, model.InventoryName))
-            {
-                TempData["message"] = $"You do not have enough raw materials in {model.InventoryName} inventory! You need to order {String.Join(" and ", productColors)} raw materials!";
-
-                return RedirectToAction("Show", "RawMaterial");
-            }
-
-            await productService.ProduceProduct(model, productId);
-            await inventoryService.DecreaseUsedRawMaterialsInInventory(productColors, model.Quantity, model.InventoryName);
-
-
-            return RedirectToAction(nameof(Produce));
-        }
-        
     }
 }

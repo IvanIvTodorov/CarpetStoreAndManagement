@@ -2,6 +2,7 @@
 using CarpetStoreAndManagement.Data.Models.Inventory;
 using CarpetStoreAndManagement.Data.Models.Product;
 using CarpetStoreAndManagement.Data.Models.User;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -32,6 +33,41 @@ namespace CarpetStoreAndManagement.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            string ADMIN_ID = "02174cf0–9412–4cfe-afbf-59f706d72cf6";
+            string ROLE_ID = "341743f0-asd2–42de-afbf-59kmkkmk72cf6";
+
+            builder.Entity<IdentityRole>().HasData(new IdentityRole
+            {
+                Name = "Admins",
+                NormalizedName = "ADMINS",
+                Id = ROLE_ID,
+                ConcurrencyStamp = ROLE_ID
+            });
+
+            var user = new User
+            {
+                Id = ADMIN_ID,
+                Email = "xxxx@example.com",
+                NormalizedEmail = "XXXX@EXAMPLE.COM",
+                UserName = "Vanko",
+                NormalizedUserName = "VANKO",
+                PhoneNumber = "+111111111111",
+                EmailConfirmed = true,
+                PhoneNumberConfirmed = true,
+                SecurityStamp = Guid.NewGuid().ToString("D")
+            };
+
+            PasswordHasher<User> ph = new PasswordHasher<User>();
+            user.PasswordHash = ph.HashPassword(user, "Cska1948!");
+
+            builder.Entity<User>().HasData(user);
+
+            builder.Entity<IdentityUserRole<string>>().HasData(new IdentityUserRole<string>
+            {
+                RoleId = ROLE_ID,
+                UserId = ADMIN_ID
+            });
+
 
             builder.Entity<ProductOrder>()
                 .HasKey(x => new { x.ProductId, x.OrderId });

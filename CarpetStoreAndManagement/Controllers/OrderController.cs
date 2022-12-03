@@ -36,42 +36,6 @@ namespace CarpetStoreAndManagement.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Orders()
-        {
-            var model = await orderService.GetAllOrdersAsync();
-
-            return View(model);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> CompleteOrder(int orderId)
-        {
-            var orders = await orderService.CompleteOrderAsync(orderId);
-
-            if (orders.Count() > 0)
-            {
-                TempData["message"] = $"You need to produce more from {String.Join(", ", orders.Select(x => x.Name).ToArray())}";
-
-                return RedirectToAction("Orders", "Order");
-            }
-
-
-            return RedirectToAction(nameof(Orders));
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> ProduceFromOrder(int orderId)
-        {
-            var model = new ProduceViewModel()
-            {
-                Products = await productService.GetProductsFromOrderAsync(orderId),
-                Inventories = await inventoryService.GetInventoriesAsync()
-            };
-
-            return View(model);
-        }
-
-        [HttpGet]
         public async Task<IActionResult> MyOrders()
         {
             var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;

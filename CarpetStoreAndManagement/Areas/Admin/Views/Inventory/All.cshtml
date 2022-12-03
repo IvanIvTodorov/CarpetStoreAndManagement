@@ -1,0 +1,75 @@
+﻿@using CarpetStoreAndManagement.ViewModels.InventoryViewModels
+@model AllInventoryViewModel
+
+@{
+    ViewData["Title"] = "All";
+}
+
+<form asp-controller="Inventory" asp-action="Add">
+    <label>
+        <p class="label-txt">Add inventory</p>
+        <input asp-for="@Model.InventoryName" type="text" class="input" value="">
+        <div class="line-box">
+            <div class="line"></div>
+        </div>
+    </label>
+    <button type="submit" class="btn btn-success">Add</button>
+</form>
+
+<h3 class="text-center">Carpets</h3>
+<table id="sailorTable" class="table table-striped table-bordered" width="100%">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Primary color</th>
+            <th>Secondary color</th>
+            <th>Price</th>
+            <th>Invenotry name</th>
+            <th>Quantity</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var product in Model.Products)
+        {
+            <tr>
+                <td>@product.Product.Name</td>
+                <td>@product.Product.Type</td>
+                <td>@product.Product.ProductColors.Where(x => x.ProductId == product.ProductId).Select(x => x.Color.Name).FirstOrDefault()</td>
+                @if (@product.Product.ProductColors.Where(x => x.ProductId == product.Product.Id).Count() < 2)
+                {
+                    <td>N/A</td>
+
+                }
+                else
+                {
+                    <td>@product.Product.ProductColors.Where(x => x.ProductId == product.Product.Id).Select(x => x.Color.Name).LastOrDefault()</td>
+                }
+                <td>@product.Product.Price</td>
+                <td>@product.Inventory.Name</td>
+                <td>@product.Quantity</td>
+            </tr>
+        }
+
+</table>
+<h3 class="text-center">RawMaterials</h3>
+<table id="sailorTable" class="table table-striped table-bordered" width="100%">
+    <thead>
+        <tr>
+            <th>Type</th>
+            <th>Color</th>
+            <th>Inventory name</th>
+            <th>Quantity</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var rawMaterial in Model.RawMaterials)
+        {
+            <tr>
+                <td>@rawMaterial.RawMaterial.Type</td>
+                <td>@rawMaterial.RawMaterial.Color.Name</td>
+                <td>@rawMaterial.Inventory.Name</td>
+                <td>@rawMaterial.Quantity</td>
+            </tr>
+        }
+</table>

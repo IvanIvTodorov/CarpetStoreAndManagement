@@ -1,0 +1,93 @@
+﻿@using CarpetStoreAndManagement.ViewModels.RawMaterialViewModels
+@model AddRawMaterialViewModel
+
+@{
+    ViewBag.Title = "Order raw materials";
+}
+
+@if (TempData["message"] != null)
+{
+    <script>alert('@TempData["message"]');</script>
+}
+
+<div class="container mb-4">
+    <div class="row">
+        <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4 mt-4">
+            <div class="card shadow">
+                <div class="card-body text-center">
+                    <h3 class="card-title display-5">Warp</h3>
+                    <a href="#">
+                        <img class="card-img-top" src="https://m.media-amazon.com/images/I/71FroNsHUBL.jpg" alt="">
+                    </a>
+                    <form asp-action="Order" asp-route-type="Warp" method="post">
+                        <div class="row form-gru">
+                            <h2 class="card-title display-10">Color</h2>
+                            <input asp-for="@Model.Color" class="form-control" aria-required="true" />
+                            <h2 class="card-title display-10">Quantity</h2>
+                            <input asp-for="@Model.Quantity" class="form-control" aria-required="true" />
+                            <h2 class="card-title display-10">Inventory</h2>
+                            <select asp-for="@Model.InventoryName" class="form-control">
+                                @foreach (var inventory in Model.Inventories)
+                                {
+                                    <option value="@inventory.Name">@inventory.Name</option>
+                                }
+                            </select>
+                        </div>
+                        <button class="btn btn-dark my-2 pull-center" type="submit">Order</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4 mt-4">
+            <div class="card shadow">
+                <div class="card-body text-center">
+                    <h3 class="card-title display-5">Yarn</h3>
+                    <img class="card-img-top" src="https://www.lankava.fi/media/catalog/product/cache/ee39f55c891f4ddf5a992621ab0f18ac/w/i/wilma-m.jpg" alt="">
+                    <form asp-action="Order" asp-route-type="Yarn" method="post">
+                        <div class="row form-gru">
+                            <h2 class="card-title display-10">Color</h2>
+                            <input asp-for="@Model.Color" class="form-control" aria-required="true" />
+                            <h2 class="card-title display-10">Quantity</h2>
+                            <input asp-for="@Model.Quantity" class="form-control" aria-required="true" />
+                            <h2 class="card-title display-10">Inventory</h2>
+                            <select asp-for="@Model.InventoryName" class="form-control">
+                                @foreach (var inventory in Model.Inventories)
+                                {
+                                    <option value="@inventory.Name">@inventory.Name</option>
+                                }
+                            </select>
+                        </div>
+                        <button class="btn btn-dark my-2 pull-center" type="submit">Order</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4 mt-4">
+            <div class="card shadow">
+                <div class="card-body text-center">
+                    <h1 class="card-title display-5">Weft</h1>
+                    <a href="#">
+                        <img class="card-img-top" src="https://5.imimg.com/data5/XX/SA/NJ/SELLER-86236584/polyeter-cotton-yarn-2f-pc-yarn-500x500-jpg-500x500.jpg" alt="">
+                    </a>
+                    <form asp-action="Order" asp-route-type="Weft" method="post">
+                        <div class="row form-gru">
+                            <h2 class="card-title display-10">Color</h2>
+                            <input asp-for="@Model.Color" class="form-control" aria-required="true" />
+                            <h2 class="card-title display-10">Quantity</h2>
+                            <input asp-for="@Model.Quantity" class="form-control" aria-required="true" />
+                            <h2 class="card-title display-10">Inventory</h2>
+                            <select asp-for="@Model.InventoryName" class="form-control">
+                                @foreach (var inventory in Model.Inventories)
+                                {
+                                    <option value="@inventory.Name">@inventory.Name</option>
+                                }
+                            </select>
+                        </div>
+                        <button class="btn btn-dark my-2 pull-center" type="submit">Order</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
