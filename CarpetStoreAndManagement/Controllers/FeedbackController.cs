@@ -24,7 +24,7 @@ namespace CarpetStoreAndManagement.Controllers
         {
             await feedbackService.SubmitFeedbackAsync(model);
 
-            TempData["message"] = $"Your feedback has been submitted!";       
+            TempData["message"] = $"Your feedback has been submitted!!!";       
 
             return RedirectToAction("Index", "Home");
         }
