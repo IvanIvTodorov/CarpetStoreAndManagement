@@ -3,6 +3,7 @@ using CarpetStoreAndManagement.Data.Models;
 using CarpetStoreAndManagement.Data.Models.Inventory;
 using CarpetStoreAndManagement.Services.Contracts;
 using CarpetStoreAndManagement.ViewModels.RawMaterialViewModels;
+using Ganss.Xss;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -15,19 +16,22 @@ namespace CarpetStoreAndManagement.Services.Services
     public class RawMaterialService : IRawMaterialService
     {
         private readonly CarpetStoreAndManagementDbContext context;
+        private readonly HtmlSanitizer sanitizer;
 
-        public RawMaterialService(CarpetStoreAndManagementDbContext context)
+        public RawMaterialService(CarpetStoreAndManagementDbContext context, HtmlSanitizer sanitizer)
         {
             this.context = context;
+            this.sanitizer = sanitizer;  
         }
 
         public async Task AddColorAsync(string name)
         {
-            if (!context.Colors.Any(x => x.Name == name))
+            var sanitizedName = sanitizer.Sanitize(name);
+            if (!context.Colors.Any(x => x.Name == sanitizedName))
             {
                 var color = new Color()
                 {
-                    Name = name
+                    Name = sanitizedName
                 };
 
                 await context.Colors.AddAsync(color);
@@ -37,7 +41,8 @@ namespace CarpetStoreAndManagement.Services.Services
 
         public async Task AddRawMaterialAsync(AddRawMaterialViewModel model, string type)
         {
-            if (!await context.RawMaterials.AnyAsync(x => x.Type == type && x.Color.Name == model.Color))
+            var sanitizedType = sanitizer.Sanitize(type);
+            if (!await context.RawMaterials.AnyAsync(x => x.Type == sanitizedType && x.Color.Name == model.Color))
             {
                 await AddColorAsync(model.Color);
                 var color = await context.Colors
@@ -46,7 +51,7 @@ namespace CarpetStoreAndManagement.Services.Services
 
                 var material = new RawMaterial()
                 {
-                    Type = type,
+                    Type = sanitizedType,
                     ColorId = color.Id
                 };
 
@@ -62,7 +67,7 @@ namespace CarpetStoreAndManagement.Services.Services
                .Where(x => x.Type == type && x.Color.Name == model.Color)
                .FirstOrDefaultAsync();
 
-                await AddToInventoryAsync(rawMaterial.Id, model.InventoryName, model.Quantity);
+                await AddToInventoryAsync(rawMaterial.Id, sanitizer.Sanitize(model.InventoryName), model.Quantity);
 
             }       
         }

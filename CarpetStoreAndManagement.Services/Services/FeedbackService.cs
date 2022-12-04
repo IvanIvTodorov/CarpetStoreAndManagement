@@ -2,6 +2,7 @@
 using CarpetStoreAndManagement.Data.Models;
 using CarpetStoreAndManagement.Services.Contracts;
 using CarpetStoreAndManagement.ViewModels.FeedbackViewModels;
+using Ganss.Xss;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -14,10 +15,12 @@ namespace CarpetStoreAndManagement.Services.Services
     public class FeedbackService : IFeedbackService
     {
         private readonly CarpetStoreAndManagementDbContext context;
+        private readonly HtmlSanitizer sanitizer;
 
-        public FeedbackService(CarpetStoreAndManagementDbContext context)
+        public FeedbackService(CarpetStoreAndManagementDbContext context, HtmlSanitizer sanitizer)
         {
             this.context = context;
+            this.sanitizer = sanitizer;
         }
 
         public async Task<IEnumerable<FeedbackViewModel>> GetAllFeedbacksAsync()
@@ -44,9 +47,9 @@ namespace CarpetStoreAndManagement.Services.Services
         {
             var feedback = new Feedback()
             {
-                Email = model.Email,
-                Message = model.Message,
-                FullName = model.FullName
+                Email = sanitizer.Sanitize(model.Email),
+                Message = sanitizer.Sanitize(model.Message),
+                FullName = sanitizer.Sanitize(model.FullName)
             };
 
             await context.Feedbacks.AddAsync(feedback);

@@ -5,6 +5,7 @@ using CarpetStoreAndManagement.Data.Models.Product;
 using CarpetStoreAndManagement.Data.Models.User;
 using CarpetStoreAndManagement.Services.Contracts;
 using CarpetStoreAndManagement.ViewModels.ProductViewModels;
+using Ganss.Xss;
 using Microsoft.EntityFrameworkCore;
 
 namespace CarpetStoreAndManagement.Services.Services
@@ -13,19 +14,22 @@ namespace CarpetStoreAndManagement.Services.Services
     {
         private readonly CarpetStoreAndManagementDbContext context;
         private const int startQuantity = 1;
+        private readonly HtmlSanitizer sanitzer;
 
-        public ProductService(CarpetStoreAndManagementDbContext context)
+        public ProductService(CarpetStoreAndManagementDbContext context, HtmlSanitizer sanitzer)
         {
             this.context = context;
+            this.sanitzer = sanitzer;
         }
 
         public async Task AddColorAsync(string name)
         {
-            if (!context.Colors.Any(x => x.Name == name))
+            var sanitizedName = sanitzer.Sanitize(name);
+            if (!context.Colors.Any(x => x.Name == sanitizedName))
             {
                 var color = new Color()
                 {
-                    Name = name
+                    Name = sanitizedName
                 };
 
                 await context.Colors.AddAsync(color);
@@ -37,9 +41,9 @@ namespace CarpetStoreAndManagement.Services.Services
         {
             var product = new Product()
             {
-                ImgUrl = model.ImgUrl,
-                Name = model.Name,
-                Type = model.Type,
+                ImgUrl = sanitzer.Sanitize(model.ImgUrl),
+                Name = sanitzer.Sanitize(model.Name),
+                Type = sanitzer.Sanitize(model.Type),
                 Price = model.Price
             };
 
@@ -48,8 +52,8 @@ namespace CarpetStoreAndManagement.Services.Services
 
             var colors = new List<string>()
             {
-                model.PrimaryColor,
-                model.SecondaryColor
+                sanitzer.Sanitize(model.PrimaryColor),
+                sanitzer.Sanitize(model.SecondaryColor)
             };
 
 

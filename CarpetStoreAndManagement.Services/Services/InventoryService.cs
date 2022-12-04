@@ -2,6 +2,7 @@
 using CarpetStoreAndManagement.Data.Models.Inventory;
 using CarpetStoreAndManagement.Services.Contracts;
 using CarpetStoreAndManagement.ViewModels.InventoryViewModels;
+using Ganss.Xss;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -10,20 +11,23 @@ namespace CarpetStoreAndManagement.Services.Services
     public class InventoryService : IInventoryService
     {
         private readonly CarpetStoreAndManagementDbContext context;
+        private readonly HtmlSanitizer sanitizer;
         private const int requiredMaterials = 3;
 
-        public InventoryService(CarpetStoreAndManagementDbContext context)
+        public InventoryService(CarpetStoreAndManagementDbContext context, HtmlSanitizer sanitizer)
         {
             this.context = context;
+            this.sanitizer = sanitizer;
         }
 
         public async Task AddInventoryAsync(string name)
         {
-            if (!context.Inventories.Any(x => x.Name == name))
+            var sanitizedName = sanitizer.Sanitize(name);
+            if (!context.Inventories.Any(x => x.Name == sanitizedName))
             {
                 var invent = new Inventory()
                 {
-                    Name = name
+                    Name = sanitizedName
                 };
 
                 await context.Inventories.AddAsync(invent);

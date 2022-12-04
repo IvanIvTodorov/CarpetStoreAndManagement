@@ -1,5 +1,6 @@
 ﻿using CarpetStoreAndManagement.Services.Contracts;
 using CarpetStoreAndManagement.Services.Services;
+using Ganss.Xss;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -14,6 +15,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped<IRawMaterialService, RawMaterialService>();
             services.AddScoped<IInventoryService, InventoryService>();
             services.AddScoped<IFeedbackService, FeedbackService>();
+            services.AddScoped<HtmlSanitizer>();
 
             return services;
         }
