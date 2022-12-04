@@ -23,8 +23,6 @@ namespace CarpetStoreAndManagement.Data.Models.Product
         [MaxLength(50)]
         public string? Type { get; set; }
         [Required]
-        [Range(typeof(decimal), "0.0", "50")]
-
         public decimal Price { get; set; }
         [Required]
         public string? ImgUrl { get; set; }

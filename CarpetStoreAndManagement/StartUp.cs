@@ -1,5 +1,6 @@
 using CarpetStoreAndManagement.Data;
 using CarpetStoreAndManagement.Data.Models.User;
+using CarpetStoreAndManagement.ModelBinders;
 using CarpetStoreAndManagement.Services.Contracts;
 using CarpetStoreAndManagement.Services.Services;
 using Microsoft.AspNetCore.Identity;
@@ -25,6 +26,12 @@ builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IRawMaterialService, RawMaterialService>();
 builder.Services.AddScoped<IInventoryService, InventoryService>();
 builder.Services.AddScoped<IFeedbackService, FeedbackService>();
+
+builder.Services.AddControllersWithViews()
+    .AddMvcOptions(options =>
+    {
+        options.ModelBinderProviders.Insert(0, new DecimalModelBinderProvider());
+    });
 
 var app = builder.Build();
 
