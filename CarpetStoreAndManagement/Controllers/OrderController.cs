@@ -38,7 +38,7 @@ namespace CarpetStoreAndManagement.Controllers
         [HttpGet]
         public async Task<IActionResult> MyOrders()
         {
-            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            string? userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
             var model = await orderService.GetMyOrdersAsync(userId);
 

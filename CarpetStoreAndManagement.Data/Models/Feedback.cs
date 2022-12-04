@@ -13,12 +13,12 @@ namespace CarpetStoreAndManagement.Data.Models
         public int Id { get; set; }
         [Required]
         [MaxLength(100)]
-        public string FullName { get; set; }
+        public string FullName { get; set; } = null!;
         [Required]
         [MaxLength(50)]
-        public string Email { get; set; }
+        public string Email { get; set; } = null!;
         [Required]
         [MaxLength(2500)]
-        public string Message { get; set; }
+        public string Message { get; set; } = null!;
     }
 }

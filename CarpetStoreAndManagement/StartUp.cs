@@ -1,14 +1,11 @@
 using CarpetStoreAndManagement.Data;
 using CarpetStoreAndManagement.Data.Models.User;
 using CarpetStoreAndManagement.ModelBinders;
-using CarpetStoreAndManagement.Services.Contracts;
-using CarpetStoreAndManagement.Services.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<CarpetStoreAndManagementDbContext>(options =>
     options.UseSqlServer(connectionString));
@@ -20,12 +17,6 @@ builder.Services.AddDefaultIdentity<User>(options =>
 })
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<CarpetStoreAndManagementDbContext>();
-builder.Services.AddControllersWithViews();
-builder.Services.AddScoped<IProductService, ProductService>();
-builder.Services.AddScoped<IOrderService, OrderService>();
-builder.Services.AddScoped<IRawMaterialService, RawMaterialService>();
-builder.Services.AddScoped<IInventoryService, InventoryService>();
-builder.Services.AddScoped<IFeedbackService, FeedbackService>();
 
 builder.Services.AddControllersWithViews()
     .AddMvcOptions(options =>
@@ -33,9 +24,10 @@ builder.Services.AddControllersWithViews()
         options.ModelBinderProviders.Insert(0, new DecimalModelBinderProvider());
     });
 
+builder.Services.AddAppServices();
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
@@ -43,7 +35,6 @@ if (app.Environment.IsDevelopment())
 else
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 

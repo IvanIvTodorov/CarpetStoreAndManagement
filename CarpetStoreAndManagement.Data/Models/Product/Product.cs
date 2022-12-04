@@ -17,15 +17,15 @@ namespace CarpetStoreAndManagement.Data.Models.Product
         [Required]
         [MinLength(3)]
         [MaxLength(50)]
-        public string? Name { get; set; }
+        public string Name { get; set; } = null!;
         [Required]
         [MinLength(3)]
         [MaxLength(50)]
-        public string? Type { get; set; }
+        public string Type { get; set; } = null!;
         [Required]
         public decimal Price { get; set; }
         [Required]
-        public string? ImgUrl { get; set; }
+        public string ImgUrl { get; set; } = null!;
 
         public ICollection<UserProduct> ProductsInCart { get; set; } = new List<UserProduct>();
 

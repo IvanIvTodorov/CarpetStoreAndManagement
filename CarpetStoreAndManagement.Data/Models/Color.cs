@@ -14,7 +14,7 @@ namespace CarpetStoreAndManagement.Data.Models
         public int Id { get; set; }
 
         [Required]
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
 
         public ICollection<ProductColor> ProductColors { get; set; } = new List<ProductColor>();
         public ICollection<RawMaterial> RawMaterials { get; set; } = new List<RawMaterial>();

@@ -101,7 +101,7 @@ namespace CarpetStoreAndManagement.Controllers
                         return RedirectToAction("Index", "Home", new { area = "Admin" });
                     }
 
-                    return RedirectToAction("All", "Product");
+                    return RedirectToAction("Index", "Home");
                 }
             }
 

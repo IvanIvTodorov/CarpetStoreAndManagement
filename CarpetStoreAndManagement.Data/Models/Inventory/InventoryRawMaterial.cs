@@ -11,10 +11,10 @@ namespace CarpetStoreAndManagement.Data.Models.Inventory
     {
         public int RawMaterialId { get; set; }
 
-        public RawMaterial RawMaterial { get; set; }
+        public RawMaterial RawMaterial { get; set; } = null!;
 
         public int InventoryId { get; set; }
-        public Inventory Inventory { get; set; }
+        public Inventory Inventory { get; set; } = null!;
         [Required]
         public int Quantity { get; set; }
 

@@ -15,12 +15,12 @@ namespace CarpetStoreAndManagement.Data.Models
         [Required]
         [MinLength(4)]
         [MaxLength(50)]
-        public string Type { get; set; }
+        public string Type { get; set; } = null!;
         [Required]
         [Range(0, double.MaxValue)]
         public int ColorId { get; set; }
 
-        public Color Color { get; set; }
+        public Color Color { get; set; } = null!;
 
         public ICollection<InventoryRawMaterial> InventoryRawMaterials { get; set; } = new List<InventoryRawMaterial>();
 

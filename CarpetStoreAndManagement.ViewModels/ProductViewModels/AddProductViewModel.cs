@@ -19,7 +19,7 @@ namespace CarpetStoreAndManagement.ViewModels.ProductViewModels
         [Required]
         public string? ImgUrl { get; set; }
         [Required]
-        public string PrimaryColor { get; set; }
+        public string PrimaryColor { get; set; } = null!;
         public string? SecondaryColor { get; set; }
     }
 }
