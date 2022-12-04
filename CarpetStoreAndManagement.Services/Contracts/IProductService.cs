@@ -22,6 +22,9 @@ namespace CarpetStoreAndManagement.Services.Contracts
         Task AddColorAsync(string name);
 
         Task RemoveProductAsync(int productId);
+        Task<EditProductViewModel> EditProductAsync(int productId);
+        Task EditProductAsync(EditProductViewModel model);
+        Task EditProductColorAsync(int productId,string primaryColor, string secondaryColor);
 
         Task AddProductToCartAsync(int productId, string userId);
 

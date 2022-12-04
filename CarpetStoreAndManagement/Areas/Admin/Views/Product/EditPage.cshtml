@@ -1,8 +1,8 @@
 ﻿@using CarpetStoreAndManagement.ViewModels.ProductViewModels
-@model AddProductViewModel
+@model EditProductViewModel
  
 @{
-    ViewData["Title"] = "Add design";
+    ViewData["Title"] = "Edit design";
 }
 
 <h2 class="text-center">@ViewBag.Title</h2>
@@ -10,39 +10,40 @@
 
 <div class="row">
     <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
-        <form asp-action="Add" method="post">
+        <form asp-action="Edit" method="post">
             <div class="mb-3">
+                <input type="hidden" asp-for="@Model.Id"></input>
                 <label asp-for="@Model.Name" class="form-label">Name</label>
-                <input asp-for="@Model.Name" class="form-control" aria-required="true"/>
+                <input asp-for="@Model.Name" value="@Model.Name" class="form-control" aria-required="true"/>
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="mb-3">
                 <label asp-for="@Model.Type" class="form-label">Type</label>
-                <input asp-for="@Model.Type" class="form-control" aria-required="true" />
+                <input asp-for="@Model.Type" value="@Model.Type" class="form-control" aria-required="true" />
                 <span asp-validation-for="Type" class="text-danger"></span>
             </div>
             <div class="mb-3">
                 <label asp-for="@Model.Price" class="form-label">Price</label>
-                <input asp-for="@Model.Price" class="form-control" aria-required="true" />
+                <input asp-for="@Model.Price" value="@Model.Price" class="form-control" aria-required="true" />
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
             <div class="mb-3">
                 <label asp-for="@Model.ImgUrl" class="form-label">Image URL</label>
-                <input asp-for="@Model.ImgUrl" class="form-control" aria-required="true" />
+                <input asp-for="@Model.ImgUrl" value="@Model.ImgUrl" class="form-control" aria-required="true" />
                 <span asp-validation-for="ImgUrl" class="text-danger"></span>
             </div>
             <div class="mb-3">
                 <label asp-for="@Model.PrimaryColor" class="form-label">Primary Color</label>
-                <input asp-for="@Model.PrimaryColor" class="form-control" value="" />
+                <input asp-for="@Model.PrimaryColor" value="@Model.PrimaryColor" class="form-control"/>
                 <span asp-validation-for="PrimaryColor" class="text-danger"></span>
             </div>
             <div class="mb-3">
                 <label asp-for="@Model.SecondaryColor" class="form-label">Secondary Color</label>
-                <input asp-for="@Model.SecondaryColor" class="form-control" value="" />
+                <input asp-for="@Model.SecondaryColor" value="@Model.SecondaryColor" class="form-control"/>
                 <span asp-validation-for="SecondaryColor" class="text-danger"></span>
             </div>
             <div class="mb-3">
-                <input class="btn btn-primary" type="submit" value="Add" />
+                <input class="btn btn-primary" type="submit" value="Edit" />
             </div>
         </form>
     </div>

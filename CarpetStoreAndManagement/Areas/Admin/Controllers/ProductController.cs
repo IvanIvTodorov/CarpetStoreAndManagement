@@ -109,5 +109,20 @@ namespace CarpetStoreAndManagement.Areas.Admin.Controllers
 
             return RedirectToAction(nameof(Produce));
         }
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> EditPage(int productId)
+        {
+            var model = await productService.EditProductAsync(productId);
+
+            return View(model);
+        }
+
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Edit(EditProductViewModel model)
+        {
+            await productService.EditProductAsync(model);
+
+            return RedirectToAction(nameof(All));
+        }
     }
 }

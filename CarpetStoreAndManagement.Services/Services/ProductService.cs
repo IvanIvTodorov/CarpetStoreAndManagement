@@ -14,6 +14,7 @@ namespace CarpetStoreAndManagement.Services.Services
     {
         private readonly CarpetStoreAndManagementDbContext context;
         private const int startQuantity = 1;
+        private const int minProduct = 1;
         private readonly HtmlSanitizer sanitzer;
 
         public ProductService(CarpetStoreAndManagementDbContext context, HtmlSanitizer sanitzer)
@@ -271,6 +272,58 @@ namespace CarpetStoreAndManagement.Services.Services
             }
 
             return orderedProducts;
+        }
+
+        public async Task<EditProductViewModel> EditProductAsync(int productId)
+        {
+            var model = await context.Products
+                .Include(x => x.ProductColors)
+                .ThenInclude(x => x.Color)
+                .Where(x => x.Id == productId)
+                .Select(x => new EditProductViewModel
+                {
+                    Id = x.Id,
+                    ImgUrl = x.ImgUrl,
+                    Name = x.Name,
+                    Price = x.Price,
+                    PrimaryColor = x.ProductColors.FirstOrDefault(x => x.ProductId == productId).Color.Name,
+                    SecondaryColor = x.ProductColors.ToList().Select(x => x.Color.Name).ToList()[1],
+                    Type = x.Type
+                })
+                .FirstOrDefaultAsync();
+            return model;
+        }
+
+        public async Task EditProductAsync(EditProductViewModel model)
+        {
+            var product = await context.Products
+                .Where(x => x.Id == model.Id)
+                .FirstOrDefaultAsync();
+
+            product.ImgUrl = sanitzer.Sanitize(model.ImgUrl);
+            product.Type = sanitzer.Sanitize(model.Type);
+            product.Name = sanitzer.Sanitize(model.Name);
+            product.Price = model.Price;
+
+            await EditProductColorAsync(model.Id, sanitzer.Sanitize(model.PrimaryColor), sanitzer.Sanitize(model.SecondaryColor));
+
+            await context.SaveChangesAsync();
+        }
+
+        public async Task EditProductColorAsync(int productId, string primaryColor, string secondaryColor)
+        {
+            var products = await context.ProductColors
+                .Include(x => x.Color)
+                .Where(x => x.ProductId == productId)
+                .ToArrayAsync();
+
+            if (products.Count() > minProduct)
+            {
+                products[1].Color.Name = sanitzer.Sanitize(secondaryColor);
+            }
+            products[0].Color.Name = sanitzer.Sanitize(primaryColor);
+
+            await context.SaveChangesAsync();
         }
     }
 }
