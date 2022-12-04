@@ -33,28 +33,37 @@ namespace CarpetStoreAndManagement.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            string ADMIN_ID = "02174cf0–9412–4cfe-afbf-59f706d72cf6";
-            string ROLE_ID = "341743f0-asd2–42de-afbf-59kmkkmk72cf6";
+            string adminId = Guid.NewGuid().ToString("D");
+            string adminRoleId = Guid.NewGuid().ToString("D");
+            string userRoleId = Guid.NewGuid().ToString("D");
 
             builder.Entity<IdentityRole>().HasData(new IdentityRole
             {
-                Name = "Admins",
-                NormalizedName = "ADMINS",
-                Id = ROLE_ID,
-                ConcurrencyStamp = ROLE_ID
+                Name = "Admin",
+                NormalizedName = "ADMIN",
+                Id = adminRoleId,
+                ConcurrencyStamp = adminRoleId
+            });
+
+            builder.Entity<IdentityRole>().HasData(new IdentityRole
+            {
+                Name = "User",
+                NormalizedName = "USER",
+                Id = userRoleId,
+                ConcurrencyStamp = userRoleId
             });
 
             var user = new User
             {
-                Id = ADMIN_ID,
-                Email = "xxxx@example.com",
-                NormalizedEmail = "XXXX@EXAMPLE.COM",
-                UserName = "Vanko",
-                NormalizedUserName = "VANKO",
+                Id = adminId,
+                Email = "ivan@abv.bg",
+                NormalizedEmail = "IVAN@ABV.BG",
+                UserName = "Ivan",
+                NormalizedUserName = "IVAN",
                 PhoneNumber = "+111111111111",
                 EmailConfirmed = true,
                 PhoneNumberConfirmed = true,
-                SecurityStamp = Guid.NewGuid().ToString("D")
+                SecurityStamp = adminId
             };
 
             PasswordHasher<User> ph = new PasswordHasher<User>();
@@ -64,8 +73,8 @@ namespace CarpetStoreAndManagement.Data
 
             builder.Entity<IdentityUserRole<string>>().HasData(new IdentityUserRole<string>
             {
-                RoleId = ROLE_ID,
-                UserId = ADMIN_ID
+                RoleId = adminRoleId,
+                UserId = adminId
             });
 
 
@@ -77,7 +86,6 @@ namespace CarpetStoreAndManagement.Data
 
             builder.Entity<InventoryProduct>()
                 .HasKey(x => new { x.ProductId, x.InventoryId });
-
 
             builder.Entity<InventoryRawMaterial>()
                 .HasKey(x => new { x.InventoryId, x.RawMaterialId});

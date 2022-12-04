@@ -10,6 +10,7 @@ namespace CarpetStoreAndManagement.Controllers
     {
         private readonly UserManager<User> userManager;
         private readonly SignInManager<User> signInManager;
+        private const string ROLE = "User";
 
         public UserController(UserManager<User> userManager, SignInManager<User> signInManager)
         {
@@ -23,7 +24,7 @@ namespace CarpetStoreAndManagement.Controllers
         {
             if (User?.Identity?.IsAuthenticated ?? false)
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("All", "Product");
             }
 
             var model = new RegisterViewModel();
@@ -52,7 +53,8 @@ namespace CarpetStoreAndManagement.Controllers
 
             if (result.Succeeded)
             {
-                return RedirectToAction("Index", "Home");
+                await userManager.AddToRoleAsync(user, ROLE);
+                return RedirectToAction("Login", "User");
             }
 
             foreach (var item in result.Errors)
@@ -94,6 +96,11 @@ namespace CarpetStoreAndManagement.Controllers
 
                 if (result.Succeeded)
                 {
+                    if (await userManager.IsInRoleAsync(user, "Admin"))
+                    {
+                        return RedirectToAction("Index", "Home", new { area = "Admin" });
+                    }
+
                     return RedirectToAction("Index", "Home");
                 }
             }

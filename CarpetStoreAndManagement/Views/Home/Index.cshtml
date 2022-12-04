@@ -1,12 +1,22 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
-
-@if (TempData["message"] != null)
+﻿@if (TempData["message"] != null)
 {
     <script>alert('@TempData["message"]');</script>
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome to CarpetStoreAndManagement</h1>
+<h1 class="text-center">Welcome to our carpet store!</h1>
+<hr>
+<div class="row">
+    <div class="col-md-6 how-img">
+        <img src="https://www.shutterstock.com/image-photo/part-old-red-persian-carpet-260nw-1912241188.jpg" class="rounded-circle img-fluid" alt="" />
+    </div>
+    <div class="col-md-6">
+        <h4>We are the first machine made carpet factory in Bulgaria!</h4>
+        <p class="text-muted">
+            We have produced more than 1 milion sqm and we are using the latest technologies in the carpet manufacturing.
+            The quality of the products is our number one priority! We have rich assortiment with modern designs.           
+        </p>
+        <div class="text-end">
+            <button type="button" class="btn btn-secondary">Products</button>
+        </div>
+    </div>
 </div>
