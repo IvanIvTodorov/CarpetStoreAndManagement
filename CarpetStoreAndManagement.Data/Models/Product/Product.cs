@@ -26,6 +26,8 @@ namespace CarpetStoreAndManagement.Data.Models.Product
         public decimal Price { get; set; }
         [Required]
         public string ImgUrl { get; set; } = null!;
+        [Required]
+        public bool IsDeleted { get; set; }
 
         public ICollection<UserProduct> ProductsInCart { get; set; } = new List<UserProduct>();
 

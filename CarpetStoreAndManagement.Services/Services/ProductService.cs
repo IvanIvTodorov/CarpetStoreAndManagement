@@ -120,6 +120,7 @@ namespace CarpetStoreAndManagement.Services.Services
         {
             var enteties = await context.Products
                .Include(m => m.InventoryProducts)
+               .Where(m => m.IsDeleted == false)
                .ToListAsync();
 
             return enteties
@@ -244,7 +245,7 @@ namespace CarpetStoreAndManagement.Services.Services
                 .Where(x => x.Id == productId)
                 .FirstOrDefaultAsync();
 
-            context.Products.Remove(product);
+            product.IsDeleted = true;
             await context.SaveChangesAsync();
         }
 
@@ -287,7 +288,7 @@ namespace CarpetStoreAndManagement.Services.Services
                     Name = x.Name,
                     Price = x.Price,
                     PrimaryColor = x.ProductColors.FirstOrDefault(x => x.ProductId == productId).Color.Name,
-                    SecondaryColor = x.ProductColors.ToList().Select(x => x.Color.Name).ToList()[1],
+                    SecondaryColor = x.ProductColors.ToList().Skip(1).FirstOrDefault().Color.Name,
                     Type = x.Type
                 })
                 .FirstOrDefaultAsync();
@@ -317,7 +318,30 @@ namespace CarpetStoreAndManagement.Services.Services
                 .Where(x => x.ProductId == productId)
                 .ToArrayAsync();
 
-            if (products.Count() > minProduct)
+            if (products.Count() > minProduct && (secondaryColor == String.Empty || secondaryColor == null))
+            {
+                context.ProductColors.Remove(products[1]);
+                await context.SaveChangesAsync();
+            }
+
+            if (products.Count() == minProduct && (secondaryColor != String.Empty || secondaryColor != null))
+            {
+                await AddColorAsync(secondaryColor);
+
+                var color = await context.Colors
+                    .Where(x => x.Name == secondaryColor)
+                    .FirstOrDefaultAsync();
+
+                context.ProductColors.Add(new ProductColor
+                {
+                    ProductId = productId,
+                    ColorId = color.Id
+                });
+
+                await context.SaveChangesAsync();
+            }
+
+            if (products.Count() > minProduct && secondaryColor != String.Empty)
             {
                 products[1].Color.Name = sanitzer.Sanitize(secondaryColor);
             }
