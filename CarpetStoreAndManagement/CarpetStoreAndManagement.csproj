@@ -8,12 +8,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Areas\Identity\**" />
     <Compile Remove="Views\Inventory\**" />
     <Compile Remove="Views\RawMaterial\**" />
+    <Content Remove="Areas\Identity\**" />
     <Content Remove="Views\Inventory\**" />
     <Content Remove="Views\RawMaterial\**" />
+    <EmbeddedResource Remove="Areas\Identity\**" />
     <EmbeddedResource Remove="Views\Inventory\**" />
     <EmbeddedResource Remove="Views\RawMaterial\**" />
+    <None Remove="Areas\Identity\**" />
     <None Remove="Views\Inventory\**" />
     <None Remove="Views\RawMaterial\**" />
   </ItemGroup>
