@@ -4,33 +4,52 @@
     ViewData["Title"] = "Details";
 }
 <body>
-
-    <div class="container">
-        <div class="card">
-            <div class="container-fliud">
-                <div class="wrapper row">
-                    <div class="preview col-md-6">
-                        <div class="preview-pic tab-content">
-                            <div class="tab-pane active" id="pic-1"><img src="@Model.ImgUrl" /></div>
-                        </div>
-                    </div>
-                    <div class="details col-md-6">
-                        <h3 class="product-title">Name: @Model.Name</h3>
-                        <h3 class="product-description">Type: @Model.Type</h3>
-                        <h4 class="price">Current price: <span>$ @Model.Price</span></h4>
-                        <h5 class="price">
-                            Color:
-                            @foreach (var item in Model.Colors)
-                            {
-                                <span>@item.Color.Name</span>
-                            }
-                        </h5>
-                        <div class="action">
-                            <a class="btn btn-dark my-2" asp-action="AddToCart" asp-route-productId="@Model.Id" role="button">Add to cart</a>
-                        </div>
-                    </div>
+    <div class="border">
+        <div class="d-flex align-items-center justify-content-center">
+            <div class="border">
+                <a><img src="@Model.ImgUrl" style="width: 250px; height: 250px;"> </a>
+            </div>
+            <div class="offset-1">
+                <p>Name: @Model.Name</p>
+                <p>Type: @Model.Type</p>
+                <p>Current price: <span>$ @Model.Price</span></p>
+                <p>
+                    Primary Color:
+                    <span>@Model.Colors.FirstOrDefault().Color.Name</span>
+                </p>
+                @if (Model.Colors.Skip(1).FirstOrDefault() != null)
+                {
+                    <p>
+                        Secondary Color:
+                        <span>@Model.Colors.Skip(1).FirstOrDefault().Color.Name</span>
+                    </p>
+                }
+                <div class="action">
+                    <a class="btn btn-dark my-2" asp-action="AddToCart" asp-route-productId="@Model.Id" role="button">Add to cart</a>
                 </div>
             </div>
         </div>
     </div>
+
 </body>
+
+<hr>
+<h3 class="text-center">Simmilar products</h3>
+<div class="row d-flex align-items-center justify-content-center">
+    @foreach (var item in Model.Products)
+    {
+        <div class="col-10 col-sm-10 col-md-5 col-lg-2 col-xl-2 mt-2">
+            <div class="card shadow">
+                <div class="card-body text-center">
+                    <a href="#">
+                        <img class="card-img-top" src="@item.ImgUrl" alt="">
+                    </a>
+                    <a class="text-reset"><h3 class="card-title display-4">@item.Name</h3></a>
+                    <a class="btn btn-dark my-2" asp-action="Details" asp-route-productId="@item.Id" role="button">Product Details</a>
+                    <a class="btn btn-dark my-2" asp-action="AddToCart" asp-route-productId="@item.Id" role="button">Add to cart</a>
+                </div>
+            </div>
+        </div>
+    }
+
+</div>

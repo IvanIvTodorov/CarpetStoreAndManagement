@@ -1,9 +1,12 @@
-﻿using CarpetStoreAndManagement.Services.Contracts;
+﻿using CarpetStoreAndManagement.CustomRoles;
+using CarpetStoreAndManagement.Services.Contracts;
 using CarpetStoreAndManagement.ViewModels.FeedbackViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarpetStoreAndManagement.Controllers
 {
+    [Authorize]
     public class FeedbackController : Controller
     {
         private readonly IFeedbackService feedbackService;
@@ -13,12 +16,14 @@ namespace CarpetStoreAndManagement.Controllers
             this.feedbackService = feedbackService;
         }
 
+        [Authorize(Roles = CustomRole.AdminOrUser)]
         [HttpGet]
         public IActionResult LeaveFeedback()
         {
             return View();
         }
 
+        [Authorize(Roles = CustomRole.AdminOrUser)]
         [HttpPost]
         public async Task<IActionResult> SubmitFeedback(FeedbackViewModel model)
         {

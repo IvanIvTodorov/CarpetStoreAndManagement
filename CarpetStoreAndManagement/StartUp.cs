@@ -30,6 +30,12 @@ builder.Services.AddMvc(options =>
     options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
 });
 
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.AccessDeniedPath = "/Error/AccessDenied";
+    options.LoginPath = "/User/Login";
+});
+
 builder.Services.AddAppServices();
 
 var app = builder.Build();
@@ -37,6 +43,7 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
+    app.UseStatusCodePagesWithRedirects("/Error/{0}");
 }
 else
 {
@@ -54,15 +61,15 @@ app.UseAuthorization();
 
 app.UseEndpoints(endpoints =>
 {
-      endpoints.MapControllerRoute(
-      name: "areas",
-      pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
-    );
-});
+    endpoints.MapControllerRoute(
+    name: "areas",
+    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 
-app.MapControllerRoute(
+    endpoints.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-app.MapRazorPages();
+
+    endpoints.MapRazorPages();
+});
 
 app.Run();

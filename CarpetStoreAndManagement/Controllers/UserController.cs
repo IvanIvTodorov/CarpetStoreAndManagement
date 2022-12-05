@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CarpetStoreAndManagement.Controllers
 {
+    [Authorize]
     public class UserController : Controller
     {
         private readonly UserManager<User> userManager;
@@ -71,7 +72,7 @@ namespace CarpetStoreAndManagement.Controllers
         {
             if (User?.Identity?.IsAuthenticated ?? false)
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("All", "Product");
             }
 
             var model = new LoginViewModel();
@@ -96,12 +97,7 @@ namespace CarpetStoreAndManagement.Controllers
 
                 if (result.Succeeded)
                 {
-                    if (await userManager.IsInRoleAsync(user, "Admin"))
-                    {
-                        return RedirectToAction("Index", "Home", new { area = "Admin" });
-                    }
-
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("All", "Product");
                 }
             }
 
@@ -110,6 +106,7 @@ namespace CarpetStoreAndManagement.Controllers
             return View(model);
         }
 
+        [HttpPost]
         public async Task<IActionResult> Logout()
         {
             await signInManager.SignOutAsync();

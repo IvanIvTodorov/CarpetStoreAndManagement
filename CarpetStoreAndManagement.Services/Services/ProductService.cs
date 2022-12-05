@@ -15,6 +15,7 @@ namespace CarpetStoreAndManagement.Services.Services
         private readonly CarpetStoreAndManagementDbContext context;
         private const int startQuantity = 1;
         private const int minProduct = 1;
+        private const int maxProduct = 5;
         private readonly HtmlSanitizer sanitzer;
 
         public ProductService(CarpetStoreAndManagementDbContext context, HtmlSanitizer sanitzer)
@@ -218,6 +219,11 @@ namespace CarpetStoreAndManagement.Services.Services
                 .Where(x => x.Id == productId)
                 .FirstOrDefaultAsync();
 
+            var products = await context.Products
+                .Where(x => x.Type == product.Type)
+                .Take(maxProduct)
+                .ToListAsync();
+
             return new ProductDetailsViewModel
             {
                 Id = product.Id,
@@ -225,7 +231,8 @@ namespace CarpetStoreAndManagement.Services.Services
                 Price = product.Price,
                 Type = product.Type,
                 Name = product.Name,
-                Colors = product.ProductColors
+                Colors = product.ProductColors,
+                Products = products
             };
         }
 
@@ -348,6 +355,13 @@ namespace CarpetStoreAndManagement.Services.Services
             products[0].Color.Name = sanitzer.Sanitize(primaryColor);
 
             await context.SaveChangesAsync();
+        }
+
+        public async Task<bool> ProductIdExist(int productId)
+        {
+            var flag = await context.Products.AnyAsync(x => x.Id == productId);
+
+            return flag;
         }
     }
 }

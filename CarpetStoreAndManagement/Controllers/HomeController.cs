@@ -1,5 +1,6 @@
 ﻿using CarpetStoreAndManagement.Data.Models.User;
 using CarpetStoreAndManagement.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -7,6 +8,7 @@ using System.Security.Claims;
 
 namespace CarpetStoreAndManagement.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly UserManager<User> userManager;
@@ -16,25 +18,13 @@ namespace CarpetStoreAndManagement.Controllers
             this.userManager = userManager;
         }
 
-        public async Task<IActionResult> Index()
-        {
-            try
-            {
-                var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-                var user = await userManager.FindByIdAsync(userId);
-                if (await userManager.IsInRoleAsync(user, "Admin"))
-                {
-                    return RedirectToAction("Index", "Home", new { area = "Admin" });
-                }
-            }
-            catch (Exception)
-            {
-                return View();
-            }  
-                
+        [AllowAnonymous]
+        public IActionResult Index()
+        {        
             return View();
         }
 
+        [AllowAnonymous]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

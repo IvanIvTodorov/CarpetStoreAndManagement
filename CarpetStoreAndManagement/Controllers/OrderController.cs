@@ -1,24 +1,24 @@
-﻿using CarpetStoreAndManagement.Services.Contracts;
+﻿using CarpetStoreAndManagement.CustomRoles;
+using CarpetStoreAndManagement.Services.Contracts;
 using CarpetStoreAndManagement.ViewModels.OrderViewModels;
 using CarpetStoreAndManagement.ViewModels.ProductViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
 namespace CarpetStoreAndManagement.Controllers
 {
+    [Authorize]
     public class OrderController : Controller
     {
         private readonly IOrderService orderService;
-        private readonly IProductService productService;
-        private readonly IInventoryService inventoryService;
 
-        public OrderController(IOrderService orderService, IProductService productService, IInventoryService inventoryService)
+        public OrderController(IOrderService orderService)
         {
             this.orderService = orderService;
-            this.productService = productService;
-            this.inventoryService = inventoryService;
         }
 
+        [Authorize(Roles = CustomRole.AdminOrUser)]
         [HttpPost]
         public async Task<IActionResult> MakeOrder(bool model)
         {
@@ -35,6 +35,7 @@ namespace CarpetStoreAndManagement.Controllers
             return RedirectToAction("All", "Product");
         }
 
+        [Authorize(Roles = CustomRole.AdminOrUser)]
         [HttpGet]
         public async Task<IActionResult> MyOrders()
         {

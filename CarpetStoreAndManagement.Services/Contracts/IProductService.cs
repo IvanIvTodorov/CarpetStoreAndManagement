@@ -42,5 +42,7 @@ namespace CarpetStoreAndManagement.Services.Contracts
 
         Task<IEnumerable<Product>> GetProductsFromOrderAsync(int orderId);
 
+        Task<bool> ProductIdExist(int productId);
+
     }
 }
