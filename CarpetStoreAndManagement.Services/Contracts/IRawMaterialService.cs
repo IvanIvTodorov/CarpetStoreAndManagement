@@ -1,21 +1,14 @@
-﻿using CarpetStoreAndManagement.ViewModels.RawMaterialViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CarpetStoreAndManagement.Data.Models.Enums;
+using CarpetStoreAndManagement.ViewModels.RawMaterialViewModels;
+
 
 namespace CarpetStoreAndManagement.Services.Contracts
 {
     public interface IRawMaterialService
     {
 
-        Task AddRawMaterialAsync(AddRawMaterialViewModel model, string type);
-        Task AddColorAsync(string name);
+        Task AddRawMaterialAsync(AddRawMaterialViewModel model, RawMaterialType type);
 
         Task AddToInventoryAsync(int id, string name, int qty);
-
-
-
     }
 }

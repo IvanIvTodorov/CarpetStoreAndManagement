@@ -20,10 +20,26 @@ namespace CarpetStoreAndManagement.Areas.Admin.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpGet]
+        [HttpGet] 
         public async Task<IActionResult> All()
         {
             var model = await productService.GetAllProductsAsync();
+
+            return View(model);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public async Task<IActionResult> ShowByType(string type)
+        {
+            if (!await productService.CheckIfTypeExistAsync(type))
+            {
+                TempData["message"] = $"This type do not exist!";
+
+                return RedirectToAction(nameof(All));
+            }
+
+            var model = await productService.GetProductsByTypeAsync(type);
 
             return View(model);
         }

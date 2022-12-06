@@ -4,6 +4,7 @@ using CarpetStoreAndManagement.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarpetStoreAndManagement.Data.Migrations
 {
     [DbContext(typeof(CarpetStoreAndManagementDbContext))]
-    partial class CarpetStoreAndManagementDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221206174042_ColorAndProductUpdated")]
+    partial class ColorAndProductUpdated
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -212,16 +214,16 @@ namespace CarpetStoreAndManagement.Data.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Type")
                         .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
@@ -289,7 +291,7 @@ namespace CarpetStoreAndManagement.Data.Migrations
                             IsDeleted = false,
                             Name = "Alisa",
                             Price = 10.5m,
-                            Type = "Path"
+                            Type = "Carpet"
                         },
                         new
                         {
@@ -298,7 +300,7 @@ namespace CarpetStoreAndManagement.Data.Migrations
                             IsDeleted = false,
                             Name = "Vision",
                             Price = 14.5m,
-                            Type = "Path"
+                            Type = "Carpet"
                         },
                         new
                         {
@@ -307,7 +309,7 @@ namespace CarpetStoreAndManagement.Data.Migrations
                             IsDeleted = false,
                             Name = "Checkmate",
                             Price = 10.5m,
-                            Type = "Path"
+                            Type = "Carpet"
                         },
                         new
                         {
@@ -316,7 +318,7 @@ namespace CarpetStoreAndManagement.Data.Migrations
                             IsDeleted = false,
                             Name = "Siera",
                             Price = 17.5m,
-                            Type = "Path"
+                            Type = "Carpet"
                         },
                         new
                         {
@@ -325,7 +327,7 @@ namespace CarpetStoreAndManagement.Data.Migrations
                             IsDeleted = false,
                             Name = "Modern",
                             Price = 16.5m,
-                            Type = "Path"
+                            Type = "Carpet"
                         },
                         new
                         {
@@ -334,7 +336,7 @@ namespace CarpetStoreAndManagement.Data.Migrations
                             IsDeleted = false,
                             Name = "Modern",
                             Price = 18.5m,
-                            Type = "Path"
+                            Type = "Carpet"
                         });
                 });
 
@@ -351,93 +353,6 @@ namespace CarpetStoreAndManagement.Data.Migrations
                     b.HasIndex("ColorId");
 
                     b.ToTable("ProductColors");
-
-                    b.HasData(
-                        new
-                        {
-                            ProductId = 1,
-                            ColorId = 1
-                        },
-                        new
-                        {
-                            ProductId = 2,
-                            ColorId = 5
-                        },
-                        new
-                        {
-                            ProductId = 3,
-                            ColorId = 6
-                        },
-                        new
-                        {
-                            ProductId = 4,
-                            ColorId = 7
-                        },
-                        new
-                        {
-                            ProductId = 5,
-                            ColorId = 2
-                        },
-                        new
-                        {
-                            ProductId = 5,
-                            ColorId = 8
-                        },
-                        new
-                        {
-                            ProductId = 6,
-                            ColorId = 2
-                        },
-                        new
-                        {
-                            ProductId = 6,
-                            ColorId = 7
-                        },
-                        new
-                        {
-                            ProductId = 7,
-                            ColorId = 6
-                        },
-                        new
-                        {
-                            ProductId = 8,
-                            ColorId = 9
-                        },
-                        new
-                        {
-                            ProductId = 9,
-                            ColorId = 2
-                        },
-                        new
-                        {
-                            ProductId = 9,
-                            ColorId = 3
-                        },
-                        new
-                        {
-                            ProductId = 10,
-                            ColorId = 10
-                        },
-                        new
-                        {
-                            ProductId = 11,
-                            ColorId = 6
-                        },
-                        new
-                        {
-                            ProductId = 11,
-                            ColorId = 7
-                        },
-                        new
-                        {
-                            ProductId = 12,
-                            ColorId = 6
-                        },
-                        new
-                        {
-                            ProductId = 12,
-                            ColorId = 4
-                        });
                 });
 
             modelBuilder.Entity("CarpetStoreAndManagement.Data.Models.Product.ProductOrder", b =>
@@ -549,13 +464,13 @@ namespace CarpetStoreAndManagement.Data.Migrations
                         {
                             Id = "41d1aea7-5764-4ebb-8a0d-055594610abb",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "004571f1-9ed2-4db4-86ff-122c19943354",
+                            ConcurrencyStamp = "e381ca1b-f4e5-425e-a94f-6602197d0b4a",
                             Email = "ivan@abv.bg",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "IVAN@ABV.BG",
                             NormalizedUserName = "IVAN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEM9L/NoIMC977V69+Fdv7qfIxh8JvXR+gzNBtoaeo1WBf1Dk0nD5Ai/VWrG/ConPlQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEN5KTKJSJ2wCFxlHVqOuMmh54dt1nf7iTlWaCD4J2OOen90jDlieaOhOoZkUwRnVVg==",
                             PhoneNumber = "+111111111111",
                             PhoneNumberConfirmed = true,
                             SecurityStamp = "41d1aea7-5764-4ebb-8a0d-055594610abb",

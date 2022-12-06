@@ -4,6 +4,7 @@ using CarpetStoreAndManagement.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarpetStoreAndManagement.Data.Migrations
 {
     [DbContext(typeof(CarpetStoreAndManagementDbContext))]
-    partial class CarpetStoreAndManagementDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221206164809_inventoryConfigAdded")]
+    partial class inventoryConfigAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -37,58 +39,6 @@ namespace CarpetStoreAndManagement.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Colors");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Brown"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "White"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Black"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "Orange"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Name = "Gray"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Name = "Beige"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Name = "Green"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Name = "Blue"
-                        },
-                        new
-                        {
-                            Id = 9,
-                            Name = "Dark vision"
-                        },
-                        new
-                        {
-                            Id = 10,
-                            Name = "Dark brown"
-                        });
                 });
 
             modelBuilder.Entity("CarpetStoreAndManagement.Data.Models.Feedback", b =>
@@ -212,130 +162,20 @@ namespace CarpetStoreAndManagement.Data.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Type")
                         .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
                     b.ToTable("Products");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            ImgUrl = "https://www.e-kilimi.com/uploads/com_article/gallery/062da0dfa1b262854b14a04c0f91e3d4ed2e8086.jpg",
-                            IsDeleted = false,
-                            Name = "Nehir",
-                            Price = 10.5m,
-                            Type = "Carpet"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            ImgUrl = "https://www.e-kilimi.com/uploads/com_article/gallery/0cde9e862fcf46270e1cb5d6c5c61656eb6ce3a3.jpg",
-                            IsDeleted = false,
-                            Name = "Sahar",
-                            Price = 8.5m,
-                            Type = "Carpet"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            ImgUrl = "https://www.e-kilimi.com/uploads/com_article/gallery/57b812b1fffaea9b8a309adb18594d805f3f81f9.jpg",
-                            IsDeleted = false,
-                            Name = "Bahar",
-                            Price = 15.5m,
-                            Type = "Carpet"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            ImgUrl = "https://domtextilu.s14.cdn-upgates.com/_cache/7/f/7fd25c6864f8df5af92d438c386d6730.jpg",
-                            IsDeleted = false,
-                            Name = "Sofia",
-                            Price = 10.5m,
-                            Type = "Carpet"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            ImgUrl = "https://m.media-amazon.com/images/I/51o3KTsZqUL._AC_SY580_.jpg",
-                            IsDeleted = false,
-                            Name = "Amaya",
-                            Price = 9.5m,
-                            Type = "Carpet"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            ImgUrl = "https://m.media-amazon.com/images/I/51KuKwOewHL._AC_.jpg",
-                            IsDeleted = false,
-                            Name = "Amira",
-                            Price = 10.5m,
-                            Type = "Carpet"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            ImgUrl = "https://kilimi.com/wp-content/uploads/2021/09/Ednotsvetna-pateka-Bela-Bezhov-1.jpg",
-                            IsDeleted = false,
-                            Name = "Alisa",
-                            Price = 10.5m,
-                            Type = "Path"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            ImgUrl = "https://kilimi.com/wp-content/uploads/2021/11/Moderna-pateka-Atlas-878-Tamen-Vizon.jpg",
-                            IsDeleted = false,
-                            Name = "Vision",
-                            Price = 14.5m,
-                            Type = "Path"
-                        },
-                        new
-                        {
-                            Id = 9,
-                            ImgUrl = "https://kilimi.com/wp-content/uploads/2021/05/Moderna-pateka-Iris-596-Siv.jpg",
-                            IsDeleted = false,
-                            Name = "Checkmate",
-                            Price = 10.5m,
-                            Type = "Path"
-                        },
-                        new
-                        {
-                            Id = 10,
-                            ImgUrl = "https://kilimi.com/wp-content/uploads/2021/11/Moderna-pateka-Atlas-855-Tamno-Kafyav.jpg",
-                            IsDeleted = false,
-                            Name = "Siera",
-                            Price = 17.5m,
-                            Type = "Path"
-                        },
-                        new
-                        {
-                            Id = 11,
-                            ImgUrl = "https://kilimi.com/wp-content/uploads/2021/05/Moderna-pateka-Iris-596-Bezhov-Zelen.jpg",
-                            IsDeleted = false,
-                            Name = "Modern",
-                            Price = 16.5m,
-                            Type = "Path"
-                        },
-                        new
-                        {
-                            Id = 12,
-                            ImgUrl = "https://kilimi.com/wp-content/uploads/2021/05/Moderna-pateka-Iris-596-Bezhov-Oranzhev.jpg",
-                            IsDeleted = false,
-                            Name = "Modern",
-                            Price = 18.5m,
-                            Type = "Path"
-                        });
                 });
 
             modelBuilder.Entity("CarpetStoreAndManagement.Data.Models.Product.ProductColor", b =>
@@ -351,93 +191,6 @@ namespace CarpetStoreAndManagement.Data.Migrations
                     b.HasIndex("ColorId");
 
                     b.ToTable("ProductColors");
-
-                    b.HasData(
-                        new
-                        {
-                            ProductId = 1,
-                            ColorId = 1
-                        },
-                        new
-                        {
-                            ProductId = 2,
-                            ColorId = 5
-                        },
-                        new
-                        {
-                            ProductId = 3,
-                            ColorId = 6
-                        },
-                        new
-                        {
-                            ProductId = 4,
-                            ColorId = 7
-                        },
-                        new
-                        {
-                            ProductId = 5,
-                            ColorId = 2
-                        },
-                        new
-                        {
-                            ProductId = 5,
-                            ColorId = 8
-                        },
-                        new
-                        {
-                            ProductId = 6,
-                            ColorId = 2
-                        },
-                        new
-                        {
-                            ProductId = 6,
-                            ColorId = 7
-                        },
-                        new
-                        {
-                            ProductId = 7,
-                            ColorId = 6
-                        },
-                        new
-                        {
-                            ProductId = 8,
-                            ColorId = 9
-                        },
-                        new
-                        {
-                            ProductId = 9,
-                            ColorId = 2
-                        },
-                        new
-                        {
-                            ProductId = 9,
-                            ColorId = 3
-                        },
-                        new
-                        {
-                            ProductId = 10,
-                            ColorId = 10
-                        },
-                        new
-                        {
-                            ProductId = 11,
-                            ColorId = 6
-                        },
-                        new
-                        {
-                            ProductId = 11,
-                            ColorId = 7
-                        },
-                        new
-                        {
-                            ProductId = 12,
-                            ColorId = 6
-                        },
-                        new
-                        {
-                            ProductId = 12,
-                            ColorId = 4
-                        });
                 });
 
             modelBuilder.Entity("CarpetStoreAndManagement.Data.Models.Product.ProductOrder", b =>
@@ -549,13 +302,13 @@ namespace CarpetStoreAndManagement.Data.Migrations
                         {
                             Id = "41d1aea7-5764-4ebb-8a0d-055594610abb",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "004571f1-9ed2-4db4-86ff-122c19943354",
+                            ConcurrencyStamp = "7681d250-df8c-4d3f-b7b6-3e8604c11cc5",
                             Email = "ivan@abv.bg",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "IVAN@ABV.BG",
                             NormalizedUserName = "IVAN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEM9L/NoIMC977V69+Fdv7qfIxh8JvXR+gzNBtoaeo1WBf1Dk0nD5Ai/VWrG/ConPlQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEPmCoHBfZ3JgS91KsTblpU2ptm9Q+Ipznw+ZJkPzIwV3WaJ1z8mnvBtKD9EK7Mv2Hw==",
                             PhoneNumber = "+111111111111",
                             PhoneNumberConfirmed = true,
                             SecurityStamp = "41d1aea7-5764-4ebb-8a0d-055594610abb",

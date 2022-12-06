@@ -1,4 +1,5 @@
-﻿using CarpetStoreAndManagement.Data.Models.Inventory;
+﻿using CarpetStoreAndManagement.Data.Models.Enums;
+using CarpetStoreAndManagement.Data.Models.Inventory;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -15,7 +16,7 @@ namespace CarpetStoreAndManagement.Data.Models
         [Required]
         [MinLength(4)]
         [MaxLength(50)]
-        public string Type { get; set; } = null!;
+        public RawMaterialType Type { get; set; }
         [Required]
         [Range(0, double.MaxValue)]
         public int ColorId { get; set; }

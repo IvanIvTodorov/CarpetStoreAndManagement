@@ -1,4 +1,5 @@
-﻿using CarpetStoreAndManagement.Services.Contracts;
+﻿using CarpetStoreAndManagement.Data.Models.Enums;
+using CarpetStoreAndManagement.Services.Contracts;
 using CarpetStoreAndManagement.ViewModels.RawMaterialViewModels;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,12 +10,14 @@ namespace CarpetStoreAndManagement.Areas.Admin.Controllers
     {
         private readonly IRawMaterialService rawMaterialService;
         private readonly IInventoryService inventoryService;
+        private readonly IColorService colorService;
         private const int minQuantity = 1;
 
-        public RawMaterialController(IRawMaterialService rawMaterialService, IInventoryService inventoryService)
+        public RawMaterialController(IRawMaterialService rawMaterialService, IInventoryService inventoryService, IColorService colorService)
         {
             this.rawMaterialService = rawMaterialService;
             this.inventoryService = inventoryService;
+            this.colorService = colorService;
         }
 
         [HttpGet]
@@ -22,7 +25,8 @@ namespace CarpetStoreAndManagement.Areas.Admin.Controllers
         {
             var model = new AddRawMaterialViewModel()
             {
-                Inventories = await inventoryService.GetInventoriesAsync()
+                Inventories = await inventoryService.GetInventoriesAsync(),
+                Colors = await colorService.GetAllColorsAsync()
             };
 
             return View(model);
@@ -42,11 +46,20 @@ namespace CarpetStoreAndManagement.Areas.Admin.Controllers
                 {
                     TempData["message"] = "Color is required!";
                 }
-
-                return RedirectToAction(nameof(Show));
             }
+            else if (!await colorService.CheckColorExistAsync(model.Color))
+            {
+                TempData["message"] = "Invalid color!";
+            }
+            else if (Enum.TryParse(type, true, out RawMaterialType typeParsed) == false)
+            {
+                TempData["message"] = "Invalid raw material type!";
+            }
+            else
+            {
+                await rawMaterialService.AddRawMaterialAsync(model, typeParsed);
 
-            await rawMaterialService.AddRawMaterialAsync(model, type);
+            }
 
             return RedirectToAction(nameof(Show));
         }

@@ -220,7 +220,7 @@ namespace CarpetStoreAndManagement.Services.Services
                 .FirstOrDefaultAsync();
 
             var products = await context.Products
-                .Where(x => x.Type == product.Type)
+                .Where(x => x.Type == product.Type && x.Id != product.Id)
                 .Take(maxProduct)
                 .ToListAsync();
 
@@ -362,6 +362,30 @@ namespace CarpetStoreAndManagement.Services.Services
             var flag = await context.Products.AnyAsync(x => x.Id == productId);
 
             return flag;
+        }
+
+        public async Task<IEnumerable<ShowAllProductsViewModel>> GetProductsByTypeAsync(string type)
+        {
+            var sanitizedType = sanitzer.Sanitize(type);
+            var enteties = await context.Products
+               .Include(m => m.InventoryProducts)
+               .Where(m => m.IsDeleted == false && m.Type == sanitizedType)
+               .ToListAsync();
+
+            return enteties
+                .Select(m => new ShowAllProductsViewModel()
+                {
+                    Id = m.Id,
+                    ImgUrl = m.ImgUrl,
+                    Name = m.Name,
+                    Price = m.Price
+                });
+        }
+
+        public async Task<bool> CheckIfTypeExistAsync(string type)
+        {
+            var sanitizedType = sanitzer.Sanitize(type);
+            return await context.Products.AnyAsync(x => x.Type == sanitizedType);
         }
     }
 }

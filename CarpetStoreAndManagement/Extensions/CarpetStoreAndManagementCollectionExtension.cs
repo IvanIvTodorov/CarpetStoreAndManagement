@@ -15,6 +15,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped<IRawMaterialService, RawMaterialService>();
             services.AddScoped<IInventoryService, InventoryService>();
             services.AddScoped<IFeedbackService, FeedbackService>();
+            services.AddScoped<IColorService, ColorService>();
             services.AddScoped<HtmlSanitizer>();
 
             return services;

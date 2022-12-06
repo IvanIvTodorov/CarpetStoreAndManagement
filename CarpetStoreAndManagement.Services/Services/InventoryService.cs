@@ -111,5 +111,34 @@ namespace CarpetStoreAndManagement.Services.Services
 
             await context.SaveChangesAsync();
         }
+
+        public async Task<ProductsInInventoryViewModel> GetInventoryProductAsync()
+        {
+            var products = await context.InventoryProducts
+                .Include(x => x.Inventory)
+                .Include(x => x.Product)
+                .ThenInclude(x => x.ProductColors)
+                .ThenInclude(x => x.Color)
+                .ToListAsync();
+
+            return new ProductsInInventoryViewModel()
+            {
+                Products = products
+            };
+        }
+
+        public async Task<RawMaterialsInInventoryViewModel> GetInventoryRawMaterialAsync()
+        {
+            var rawMaterials = await context.InventoryRawMaterials
+               .Include(x => x.Inventory)
+               .Include(x => x.RawMaterial)
+               .ThenInclude(x => x.Color)
+               .ToListAsync();
+
+            return new RawMaterialsInInventoryViewModel()
+            {
+                RawMaterials = rawMaterials
+            };
+        }
     }
 }

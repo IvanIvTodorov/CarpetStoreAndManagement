@@ -16,11 +16,11 @@ namespace CarpetStoreAndManagement.Data.Models.Product
 
         [Required]
         [MinLength(3)]
-        [MaxLength(50)]
+        [MaxLength(10)]
         public string Name { get; set; } = null!;
         [Required]
         [MinLength(3)]
-        [MaxLength(50)]
+        [MaxLength(10)]
         public string Type { get; set; } = null!;
         [Required]
         public decimal Price { get; set; }

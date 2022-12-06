@@ -17,12 +17,17 @@
                 <div class="card-body text-center">
                     <h3 class="card-title display-5">Warp</h3>
                     <a href="#">
-                        <img class="card-img-top" src="https://m.media-amazon.com/images/I/71FroNsHUBL.jpg" alt="">
+                        <img class="card-img-top" src="https://m.media-amazon.com/images/I/71FroNsHUBL.jpg" style="width: 150px; height: 150px;">
                     </a>
                     <form asp-action="Order" asp-route-type="Warp" method="post">
                         <div class="row form-gru">
                             <h2 class="card-title display-10">Color</h2>
-                            <input asp-for="@Model.Color" class="form-control" aria-required="true" />
+                            <select asp-for="@Model.Color" class="form-control">
+                                @foreach (var color in Model.Colors)
+                                {
+                                    <option value="@color.Name">@color.Name</option>
+                                }
+                            </select>
                             <h2 class="card-title display-10">Quantity</h2>
                             <input asp-for="@Model.Quantity" class="form-control" aria-required="true" />
                             <h2 class="card-title display-10">Inventory</h2>
@@ -42,11 +47,16 @@
             <div class="card shadow">
                 <div class="card-body text-center">
                     <h3 class="card-title display-5">Yarn</h3>
-                    <img class="card-img-top" src="https://www.lankava.fi/media/catalog/product/cache/ee39f55c891f4ddf5a992621ab0f18ac/w/i/wilma-m.jpg" alt="">
+                    <img class="card-img-top" src="https://www.lankava.fi/media/catalog/product/cache/ee39f55c891f4ddf5a992621ab0f18ac/w/i/wilma-m.jpg" style="width: 150px; height: 150px;">
                     <form asp-action="Order" asp-route-type="Yarn" method="post">
                         <div class="row form-gru">
                             <h2 class="card-title display-10">Color</h2>
-                            <input asp-for="@Model.Color" class="form-control" aria-required="true" />
+                           <select asp-for="@Model.Color" class="form-control">
+                                @foreach (var color in Model.Colors)
+                                {
+                                    <option value="@color.Name">@color.Name</option>
+                                }
+                            </select>
                             <h2 class="card-title display-10">Quantity</h2>
                             <input asp-for="@Model.Quantity" class="form-control" aria-required="true" />
                             <h2 class="card-title display-10">Inventory</h2>
@@ -67,12 +77,17 @@
                 <div class="card-body text-center">
                     <h1 class="card-title display-5">Weft</h1>
                     <a href="#">
-                        <img class="card-img-top" src="https://5.imimg.com/data5/XX/SA/NJ/SELLER-86236584/polyeter-cotton-yarn-2f-pc-yarn-500x500-jpg-500x500.jpg" alt="">
+                        <img class="card-img-top" src="https://5.imimg.com/data5/XX/SA/NJ/SELLER-86236584/polyeter-cotton-yarn-2f-pc-yarn-500x500-jpg-500x500.jpg" style="width: 150px; height: 150px;">
                     </a>
                     <form asp-action="Order" asp-route-type="Weft" method="post">
                         <div class="row form-gru">
                             <h2 class="card-title display-10">Color</h2>
-                            <input asp-for="@Model.Color" class="form-control" aria-required="true" />
+                            <select asp-for="@Model.Color" class="form-control">
+                                @foreach (var color in Model.Colors)
+                                {
+                                    <option value="@color.Name">@color.Name</option>
+                                }
+                            </select>
                             <h2 class="card-title display-10">Quantity</h2>
                             <input asp-for="@Model.Quantity" class="form-control" aria-required="true" />
                             <h2 class="card-title display-10">Inventory</h2>

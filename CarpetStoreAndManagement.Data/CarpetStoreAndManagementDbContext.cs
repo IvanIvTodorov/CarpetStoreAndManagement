@@ -37,6 +37,10 @@ namespace CarpetStoreAndManagement.Data
             builder.ApplyConfiguration(new UserConfiguration());
             builder.ApplyConfiguration(new IdentityRoleConfiguration());
             builder.ApplyConfiguration(new IdentityUserRoleConfiguration());
+            builder.ApplyConfiguration(new InventoryConfiguration());
+            builder.ApplyConfiguration(new ProductConfiguration());
+            builder.ApplyConfiguration(new ColorConfiguration());
+            builder.ApplyConfiguration(new ProductColorConfiguration());
 
             builder.Entity<ProductOrder>()
                 .HasKey(x => new { x.ProductId, x.OrderId });

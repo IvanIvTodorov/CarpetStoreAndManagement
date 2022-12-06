@@ -8,11 +8,11 @@ namespace CarpetStoreAndManagement.ViewModels.ProductViewModels
     {
         [Required]
         [MinLength(3)]
-        [MaxLength(50)]
+        [MaxLength(10)]
         public string? Name { get; set; }
         [Required]
         [MinLength(3)]
-        [MaxLength(50)]
+        [MaxLength(10)]
         public string? Type { get; set; }
         [Required]
         public decimal Price { get; set; }

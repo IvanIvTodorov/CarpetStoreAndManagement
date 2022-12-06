@@ -25,18 +25,15 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Dropdown
+                            <a class="nav-link dropdown-toggle text-dark" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Products
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Action</a></li>
-                                <li><a class="dropdown-item" href="#">Another action</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Product" asp-action="ShowByType" asp-route-type="Carpet">Carpets</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Product" asp-action="ShowByType" asp-route-type="Path">Paths</a></li>
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="#">Something else here</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Product" asp-action="All">All</a></li>
                             </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Product" asp-action="All">Products</a>
                         </li>
                         @if (User.IsInRole("User") || User.IsInRole("Admin"))
                         {
@@ -67,7 +64,6 @@
             @RenderBody()
         </main>
     </div>
-
     <footer class="border-top footer text-muted">
         <div class="container">
             <a>CarpetStoreAndManagment</a>

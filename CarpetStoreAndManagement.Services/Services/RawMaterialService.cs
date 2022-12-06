@@ -1,5 +1,6 @@
 ﻿using CarpetStoreAndManagement.Data;
 using CarpetStoreAndManagement.Data.Models;
+using CarpetStoreAndManagement.Data.Models.Enums;
 using CarpetStoreAndManagement.Data.Models.Inventory;
 using CarpetStoreAndManagement.Services.Contracts;
 using CarpetStoreAndManagement.ViewModels.RawMaterialViewModels;
@@ -24,34 +25,32 @@ namespace CarpetStoreAndManagement.Services.Services
             this.sanitizer = sanitizer;  
         }
 
-        public async Task AddColorAsync(string name)
-        {
-            var sanitizedName = sanitizer.Sanitize(name);
-            if (!context.Colors.Any(x => x.Name == sanitizedName))
-            {
-                var color = new Color()
-                {
-                    Name = sanitizedName
-                };
+        //public async Task AddColorAsync(string name)
+        //{
+        //    var sanitizedName = sanitizer.Sanitize(name);
+        //    if (!context.Colors.Any(x => x.Name == sanitizedName))
+        //    {
+        //        var color = new Color()
+        //        {
+        //            Name = sanitizedName
+        //        };
 
-                await context.Colors.AddAsync(color);
-                await context.SaveChangesAsync();
-            }
-        }
+        //        await context.Colors.AddAsync(color);
+        //        await context.SaveChangesAsync();
+        //    }
+        //}
 
-        public async Task AddRawMaterialAsync(AddRawMaterialViewModel model, string type)
+        public async Task AddRawMaterialAsync(AddRawMaterialViewModel model, RawMaterialType type)
         {
-            var sanitizedType = sanitizer.Sanitize(type);
-            if (!await context.RawMaterials.AnyAsync(x => x.Type == sanitizedType && x.Color.Name == model.Color))
+            if (!await context.RawMaterials.AnyAsync(x => x.Type == type && x.Color.Name == model.Color))
             {
-                await AddColorAsync(model.Color);
                 var color = await context.Colors
                    .Where(x => x.Name == model.Color)
                    .FirstOrDefaultAsync();
 
                 var material = new RawMaterial()
                 {
-                    Type = sanitizedType,
+                    Type = type,
                     ColorId = color.Id
                 };
 
@@ -68,7 +67,6 @@ namespace CarpetStoreAndManagement.Services.Services
                .FirstOrDefaultAsync();
 
                 await AddToInventoryAsync(rawMaterial.Id, sanitizer.Sanitize(model.InventoryName), model.Quantity);
-
             }       
         }
 

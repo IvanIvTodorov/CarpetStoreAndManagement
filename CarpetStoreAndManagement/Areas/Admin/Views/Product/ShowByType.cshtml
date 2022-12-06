@@ -1,11 +1,11 @@
 ﻿@using CarpetStoreAndManagement.ViewModels.ProductViewModels
 @model IEnumerable<ShowAllProductsViewModel>
 
+
 @if (TempData["message"] != null)
 {
     <script>alert('@TempData["message"]');</script>
 }
-
 
 <div class="container mb-4">
     <div class="row">
@@ -26,4 +26,3 @@
         }
     </div>
 </div>
-

@@ -1,0 +1,54 @@
+﻿@using CarpetStoreAndManagement.ViewModels.InventoryViewModels
+@model RawMaterialsInInventoryViewModel
+
+<div class="d-flex justify-content-between">
+    <form asp-controller="Inventory" asp-action="Add">
+        <label>
+            <p class="label-txt">Add inventory name</p>
+            <input asp-for="@Model.InventoryName" type="text" class="input" value="">
+            <div class="line-box">
+                <div class="line"></div>
+            </div>
+        </label>
+        <button type="submit" class="btn btn-success">Add</button>
+    </form>
+    <form>
+        <div>
+            <label>
+                <p class="label-txt">Inventory name</p>
+                <input type="text" class="input" value="">
+            </label>
+            <label>
+                <p class="label-txt">Color</p>
+                <input type="text" class="input" value="">
+            </label>
+            <label>
+                <p class="label-txt">Type</p>
+                <input type="text" class="input" value="">
+            </label>
+            <button type="submit" class="btn btn-success">Search</button>
+        </div>
+    </form>
+</div>
+
+<h3 class="text-center">Raw materials</h3>
+<table id="sailorTable" class="table table-striped table-bordered" width="100%">
+    <thead>
+        <tr>
+            <th>Type</th>
+            <th>Color</th>
+            <th>Inventory name</th>
+            <th>Quantity</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var rawMaterial in Model.RawMaterials)
+        {
+            <tr>
+                <td>@rawMaterial.RawMaterial.Type</td>
+                <td>@rawMaterial.RawMaterial.Color.Name</td>
+                <td>@rawMaterial.Inventory.Name</td>
+                <td>@rawMaterial.Quantity</td>
+            </tr>
+        }
+</table>

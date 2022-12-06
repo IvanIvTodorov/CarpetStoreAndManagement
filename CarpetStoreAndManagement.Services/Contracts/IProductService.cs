@@ -13,6 +13,9 @@ namespace CarpetStoreAndManagement.Services.Contracts
     public interface IProductService
     {
         Task<IEnumerable<ShowAllProductsViewModel>> GetAllProductsAsync();
+        Task<IEnumerable<ShowAllProductsViewModel>> GetProductsByTypeAsync(string type);
+
+        Task<bool> CheckIfTypeExistAsync(string type);
 
         Task AddProductAsync(AddProductViewModel model);
         Task<IEnumerable<Product>> GetProductsAsync();

@@ -31,6 +31,22 @@ namespace CarpetStoreAndManagement.Controllers
             return View(model);
         }
 
+        [AllowAnonymous]
+        [HttpGet]
+        public async Task<IActionResult> ShowByType(string type)
+        {
+            if (!await productService.CheckIfTypeExistAsync(type))
+            {
+                TempData["message"] = $"This type do not exist!";
+
+                return RedirectToAction(nameof(All));
+            }
+
+            var model = await productService.GetProductsByTypeAsync(type);
+
+            return View(model);
+        }
+
         [Authorize(Roles = CustomRole.AdminOrUser)]
         [HttpGet]
         public async Task<IActionResult> Details(int productId)

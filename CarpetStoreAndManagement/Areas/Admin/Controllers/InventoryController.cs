@@ -29,5 +29,19 @@ namespace CarpetStoreAndManagement.Areas.Admin.Controllers
 
             return View(model);
         }
+
+        public async Task<IActionResult> Products()
+        {
+            var model = await inventoryService.GetInventoryProductAsync();
+
+            return View(model);
+        }
+
+        public async Task<IActionResult> RawMaterials()
+        {
+            var model = await inventoryService.GetInventoryRawMaterialAsync();
+
+            return View(model);
+        }
     }
 }
