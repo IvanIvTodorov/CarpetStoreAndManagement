@@ -1,30 +1,45 @@
 ﻿@using CarpetStoreAndManagement.ViewModels.InventoryViewModels
-@model ProductsInInventoryViewModel 
+@model ProductsInInventoryViewModel
 
 <div class="d-flex justify-content-between">
     <form asp-controller="Inventory" asp-action="Add">
         <label>
-            <p class="label-txt">Add inventory name</p>
-            <input asp-for="@Model.InventoryName" type="text" class="input" value="">
-            <div class="line-box">
-                <div class="line"></div>
-            </div>
+                <p class="label-txt">Add inventory name</p>
+                <input asp-for="@Model.InventoryName" type="text" value="">
+                <div class="line-box">
+                    <div class="line"></div>
+                </div>
         </label>
         <button type="submit" class="btn btn-success">Add</button>
     </form>
-    <form>
+    <form asp-controller="Inventory" asp-action="ProductsBySearch">
         <div>
             <label>
-                <p class="label-txt">Inventory name</p>
-                <input type="text" class="input" value="">
+                <p class="label-txt text-center">Inventory name</p>
+                <select asp-for="@Model.InventoryName" class="form-control">
+                    @foreach (var inventory in Model.Inventories)
+                    {
+                        <option value="@inventory.Name">@inventory.Name</option>
+                    }
+                </select>
             </label>
             <label>
-                <p class="label-txt">Color</p>
-                <input type="text" class="input" value="">
+                <p class="label-txt text-center">Color</p>
+                <select asp-for="@Model.Color" class="form-control">
+                    @foreach (var color in Model.Colors)
+                    {
+                        <option value="@color.Name">@color.Name</option>
+                    }
+                </select>
             </label>
             <label>
-                <p class="label-txt">Type</p>
-                <input type="text" class="input" value="">
+                <p class="label-txt text-center">Type</p>
+                <select asp-for="@Model.Type" class="form-control">
+                    @foreach (var type in Model.Types)
+                    {
+                        <option value="@type">@type</option>
+                    }
+                </select>
             </label>
             <button type="submit" class="btn btn-success">Search</button>
         </div>

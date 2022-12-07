@@ -1,4 +1,5 @@
 ﻿using CarpetStoreAndManagement.Data;
+using CarpetStoreAndManagement.Data.Models.Enums;
 using CarpetStoreAndManagement.Data.Models.Inventory;
 using CarpetStoreAndManagement.Services.Contracts;
 using CarpetStoreAndManagement.ViewModels.InventoryViewModels;
@@ -12,12 +13,16 @@ namespace CarpetStoreAndManagement.Services.Services
     {
         private readonly CarpetStoreAndManagementDbContext context;
         private readonly HtmlSanitizer sanitizer;
+        private readonly IColorService colorService;
+        private readonly IProductService productService;
         private const int requiredMaterials = 3;
 
-        public InventoryService(CarpetStoreAndManagementDbContext context, HtmlSanitizer sanitizer)
+        public InventoryService(CarpetStoreAndManagementDbContext context, HtmlSanitizer sanitizer, IColorService colorService, IProductService productService)
         {
             this.context = context;
             this.sanitizer = sanitizer;
+            this.colorService = colorService;
+            this.productService = productService;
         }
 
         public async Task AddInventoryAsync(string name)
@@ -123,7 +128,10 @@ namespace CarpetStoreAndManagement.Services.Services
 
             return new ProductsInInventoryViewModel()
             {
-                Products = products
+                Products = products,
+                Inventories = await GetInventoriesAsync(),
+                Colors = await colorService.GetAllColorsAsync(),
+                Types = await productService.GetAllProductTypesAsync()
             };
         }
 
@@ -137,7 +145,10 @@ namespace CarpetStoreAndManagement.Services.Services
 
             return new RawMaterialsInInventoryViewModel()
             {
-                RawMaterials = rawMaterials
+                RawMaterials = rawMaterials,
+                Inventories = await GetInventoriesAsync(),
+                Colors = await colorService.GetAllColorsAsync(),
+                Types = Enum.GetNames(typeof(RawMaterialType)).ToList()
             };
         }
     }

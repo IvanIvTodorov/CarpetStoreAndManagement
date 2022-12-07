@@ -14,6 +14,8 @@ namespace CarpetStoreAndManagement.ViewModels.ProductViewModels
 
         public decimal Price { get; set; }
 
+        public string Type { get; set; }
+
         public string ImgUrl { get; set; }
     }
 }

@@ -47,7 +47,7 @@ namespace CarpetStoreAndManagement.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = CustomRole.AdminOrUser)]
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> Details(int productId)
         {

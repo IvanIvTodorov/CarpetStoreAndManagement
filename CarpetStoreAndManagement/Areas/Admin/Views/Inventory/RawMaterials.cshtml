@@ -15,16 +15,31 @@
     <form>
         <div>
             <label>
-                <p class="label-txt">Inventory name</p>
-                <input type="text" class="input" value="">
+                <p class="label-txt text-center">Inventory name</p>
+                <select asp-for="@Model.InventoryName" class="form-control">
+                    @foreach (var inventory in Model.Inventories)
+                    {
+                        <option value="@inventory.Name">@inventory.Name</option>
+                    }
+                </select>
             </label>
             <label>
-                <p class="label-txt">Color</p>
-                <input type="text" class="input" value="">
+                <p class="label-txt text-center">Color</p>
+                <select asp-for="@Model.Color" class="form-control">
+                    @foreach (var color in Model.Colors)
+                    {
+                        <option value="@color.Name">@color.Name</option>
+                    }
+                </select>
             </label>
             <label>
-                <p class="label-txt">Type</p>
-                <input type="text" class="input" value="">
+                <p class="label-txt text-center">Type</p>
+                <select asp-for="@Model.Type" class="form-control">
+                    @foreach (var type in Model.Types)
+                    {
+                        <option value="@type.ToString()">@type.ToString()</option>
+                    }
+                </select>
             </label>
             <button type="submit" class="btn btn-success">Search</button>
         </div>

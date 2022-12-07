@@ -10,5 +10,6 @@ namespace CarpetStoreAndManagement.Services.Contracts
         Task AddRawMaterialAsync(AddRawMaterialViewModel model, RawMaterialType type);
 
         Task AddToInventoryAsync(int id, string name, int qty);
+
     }
 }

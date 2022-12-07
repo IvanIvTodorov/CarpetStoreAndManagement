@@ -1,6 +1,7 @@
 ﻿using CarpetStoreAndManagement.Data.Models.Inventory;
 using CarpetStoreAndManagement.Data.Models.Product;
 using CarpetStoreAndManagement.Data.Models.User;
+using CarpetStoreAndManagement.ViewModels.InventoryViewModels;
 using CarpetStoreAndManagement.ViewModels.ProductViewModels;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,7 @@ namespace CarpetStoreAndManagement.Services.Contracts
         Task<IEnumerable<ShowAllProductsViewModel>> GetProductsByTypeAsync(string type);
 
         Task<bool> CheckIfTypeExistAsync(string type);
+        Task<List<string>> GetAllProductTypesAsync();
 
         Task AddProductAsync(AddProductViewModel model);
         Task<IEnumerable<Product>> GetProductsAsync();
@@ -46,6 +48,8 @@ namespace CarpetStoreAndManagement.Services.Contracts
         Task<IEnumerable<Product>> GetProductsFromOrderAsync(int orderId);
 
         Task<bool> ProductIdExist(int productId);
+
+        Task<IEnumerable<InventoryProduct>> GetProductsInInventoryBySearch(ProductsInInventoryViewModel model);
 
     }
 }

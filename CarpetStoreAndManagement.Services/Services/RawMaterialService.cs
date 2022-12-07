@@ -25,21 +25,6 @@ namespace CarpetStoreAndManagement.Services.Services
             this.sanitizer = sanitizer;  
         }
 
-        //public async Task AddColorAsync(string name)
-        //{
-        //    var sanitizedName = sanitizer.Sanitize(name);
-        //    if (!context.Colors.Any(x => x.Name == sanitizedName))
-        //    {
-        //        var color = new Color()
-        //        {
-        //            Name = sanitizedName
-        //        };
-
-        //        await context.Colors.AddAsync(color);
-        //        await context.SaveChangesAsync();
-        //    }
-        //}
-
         public async Task AddRawMaterialAsync(AddRawMaterialViewModel model, RawMaterialType type)
         {
             if (!await context.RawMaterials.AnyAsync(x => x.Type == type && x.Color.Name == model.Color))
@@ -103,5 +88,6 @@ namespace CarpetStoreAndManagement.Services.Services
            
             await context.SaveChangesAsync();
         }
+
     }
 }

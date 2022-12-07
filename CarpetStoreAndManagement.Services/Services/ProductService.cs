@@ -4,6 +4,7 @@ using CarpetStoreAndManagement.Data.Models.Inventory;
 using CarpetStoreAndManagement.Data.Models.Product;
 using CarpetStoreAndManagement.Data.Models.User;
 using CarpetStoreAndManagement.Services.Contracts;
+using CarpetStoreAndManagement.ViewModels.InventoryViewModels;
 using CarpetStoreAndManagement.ViewModels.ProductViewModels;
 using Ganss.Xss;
 using Microsoft.EntityFrameworkCore;
@@ -75,7 +76,7 @@ namespace CarpetStoreAndManagement.Services.Services
                         ProductId = product.Id
                     };
                     await context.ProductColors.AddAsync(productColors);
-                };             
+                };
             };
 
             await context.SaveChangesAsync();
@@ -180,7 +181,7 @@ namespace CarpetStoreAndManagement.Services.Services
 
         public async Task ProduceProduct(ProduceViewModel model, int productId)
         {
-            
+
             if (await context.InventoryProducts
                 .Include(x => x.Inventory)
                 .AnyAsync(x => x.Inventory.Name == model.InventoryName && x.ProductId == productId))
@@ -378,6 +379,7 @@ namespace CarpetStoreAndManagement.Services.Services
                     Id = m.Id,
                     ImgUrl = m.ImgUrl,
                     Name = m.Name,
+                    Type = m.Type,
                     Price = m.Price
                 });
         }
@@ -386,6 +388,44 @@ namespace CarpetStoreAndManagement.Services.Services
         {
             var sanitizedType = sanitzer.Sanitize(type);
             return await context.Products.AnyAsync(x => x.Type == sanitizedType);
+        }
+
+        public async Task<List<string>> GetAllProductTypesAsync()
+        {
+            var types = await context.Products
+                .Select(x => x.Type)
+                .Distinct()
+                .ToListAsync();
+
+            return types;
+        }
+
+        public async Task<IEnumerable<InventoryProduct>> GetProductsInInventoryBySearch(ProductsInInventoryViewModel model)
+        {
+            var productsId = await context.InventoryProducts
+                .Include(x => x.Inventory)
+                .Include(x => x.Product)
+                .Where(x => x.Inventory.Name == model.InventoryName
+                && x.Product.Type == model.Type)
+                .Select(x => x.ProductId)
+                .ToListAsync();
+
+            var prodColor = await context.ProductColors
+                .Include(x => x.Color)
+                .Where(x => x.Color.Name == model.Color)
+                .Select(x => x.ProductId)
+                .ToListAsync();
+
+            var matched = productsId.Intersect(prodColor);
+
+            var products = await context.InventoryProducts
+                .Include(x => x.Product)
+                .ThenInclude(x => x.ProductColors)
+                .ThenInclude(x => x.Color)
+                .Where(x => matched.Contains(x.Product.Id))
+                .ToListAsync();
+
+            return products;
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using CarpetStoreAndManagement.Data.Models.Inventory;
+﻿using CarpetStoreAndManagement.Data.Models;
+using CarpetStoreAndManagement.Data.Models.Enums;
+using CarpetStoreAndManagement.Data.Models.Inventory;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -14,7 +16,13 @@ namespace CarpetStoreAndManagement.ViewModels.InventoryViewModels
         [MaxLength(25)]
         [MinLength(3)]
         public string InventoryName { get; set; } = null!;
-
+        [Required]
+        public string Color { get; set; }
+        [Required]
+        public RawMaterialType Type { get; set; }
         public IEnumerable<InventoryRawMaterial> RawMaterials { get; set; } = new List<InventoryRawMaterial>();
+        public IEnumerable<Inventory> Inventories { get; set; } = new List<Inventory>();
+        public IEnumerable<Color> Colors { get; set; } = new List<Color>();
+        public IEnumerable<string> Types { get; set; } = new List<string>();
     }
 }
