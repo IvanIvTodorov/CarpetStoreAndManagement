@@ -3,6 +3,7 @@ using CarpetStoreAndManagement.Data.Models;
 using CarpetStoreAndManagement.Data.Models.Enums;
 using CarpetStoreAndManagement.Data.Models.Inventory;
 using CarpetStoreAndManagement.Services.Contracts;
+using CarpetStoreAndManagement.ViewModels.InventoryViewModels;
 using CarpetStoreAndManagement.ViewModels.RawMaterialViewModels;
 using Ganss.Xss;
 using Microsoft.EntityFrameworkCore;
@@ -89,5 +90,30 @@ namespace CarpetStoreAndManagement.Services.Services
             await context.SaveChangesAsync();
         }
 
+        public async Task<IEnumerable<InventoryRawMaterial>> GetRawMatInInventoryBySearch(RawMaterialsInInventoryViewModel model)
+        {
+            var rawMatId = await context.InventoryRawMaterials
+                 .Include(x => x.Inventory)
+                 .Include(x => x.RawMaterial)
+                 .Where(x => x.Inventory.Name == model.InventoryName
+                 && x.RawMaterial.Type == model.Type)
+                 .Select(x => x.RawMaterialId)
+                 .ToListAsync();
+
+            var rawMatColor = await context.RawMaterials
+                .Where(x => x.Color.Name == model.Color)
+                .Select(x => x.Id)
+                .ToListAsync();
+
+            var matched = rawMatId.Intersect(rawMatColor);
+
+            var products = await context.InventoryRawMaterials
+                .Include(x => x.RawMaterial)
+                .ThenInclude(x => x.Color)
+                .Where(x => matched.Contains(x.RawMaterialId))
+                .ToListAsync();
+
+            return products;
+        }
     }
 }

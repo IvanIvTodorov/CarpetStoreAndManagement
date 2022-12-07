@@ -93,6 +93,10 @@ namespace CarpetStoreAndManagement.Services.Services
                         flag = false;
                     }
                 }
+                if (!flag)
+                {
+                    break;
+                }
             }
             return flag;
         }

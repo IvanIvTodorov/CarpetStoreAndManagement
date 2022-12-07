@@ -7,15 +7,14 @@
     <script>alert('@TempData["message"]');</script>
 }
 
-@if (Model.FirstOrDefault().Type == "Carpet")
+@if (Model.FirstOrDefault() != null && (Model.FirstOrDefault().Type == "Carpet"))
 {
     ViewBag.Title = "Carpets";
-}else
+}else if (Model.FirstOrDefault() != null && (Model.FirstOrDefault().Type == "Path"))
 {
     ViewBag.Title = "Paths";
         
 }
-
 
 <h1 class="text-center">@ViewBag.Title</h1>
 <hr>

@@ -1,4 +1,5 @@
-﻿using CarpetStoreAndManagement.Services.Contracts;
+﻿using CarpetStoreAndManagement.Data.Models.Enums;
+using CarpetStoreAndManagement.Services.Contracts;
 using CarpetStoreAndManagement.ViewModels.InventoryViewModels;
 using CarpetStoreAndManagement.ViewModels.ProductViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -11,12 +12,14 @@ namespace CarpetStoreAndManagement.Areas.Admin.Controllers
         private readonly IInventoryService inventoryService;
         private readonly IProductService productService;
         private readonly IColorService colorService;
+        private readonly IRawMaterialService rawMaterialService;
 
-        public InventoryController(IInventoryService inventoryService, IProductService productService, IColorService colorService)
+        public InventoryController(IInventoryService inventoryService, IProductService productService, IColorService colorService, IRawMaterialService rawMaterialService)
         {
             this.inventoryService = inventoryService;
             this.productService = productService;
             this.colorService = colorService;
+            this.rawMaterialService = rawMaterialService;
         }
 
         [HttpPost]
@@ -64,11 +67,19 @@ namespace CarpetStoreAndManagement.Areas.Admin.Controllers
             return View(nameof(Products), passModell);
         }
 
-        //public async Task<IActionResult> RawMaterialsBySearch(RawMaterialsInInventoryViewModel model)
-        //{
-        //    var model = new object();
+        public async Task<IActionResult> RawMaterialsBySearch(RawMaterialsInInventoryViewModel model)
+        {
+            var passModel = await rawMaterialService.GetRawMatInInventoryBySearch(model);
 
-        //    return View(nameof(RawMaterials), new { model });
-        //}
+            var passModell = new RawMaterialsInInventoryViewModel()
+            {
+                RawMaterials = passModel,
+                Inventories = await inventoryService.GetInventoriesAsync(),
+                Types = Enum.GetNames(typeof(RawMaterialType)).ToList(),
+                Colors = await colorService.GetAllColorsAsync()
+            };
+
+            return View(nameof(RawMaterials), passModell);
+        }
     }
 }

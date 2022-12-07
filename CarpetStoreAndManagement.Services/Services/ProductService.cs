@@ -422,7 +422,7 @@ namespace CarpetStoreAndManagement.Services.Services
                 .Include(x => x.Product)
                 .ThenInclude(x => x.ProductColors)
                 .ThenInclude(x => x.Color)
-                .Where(x => matched.Contains(x.Product.Id))
+                .Where(x => matched.Contains(x.ProductId))
                 .ToListAsync();
 
             return products;
