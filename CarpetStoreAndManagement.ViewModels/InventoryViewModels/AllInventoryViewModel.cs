@@ -8,8 +8,8 @@ namespace CarpetStoreAndManagement.ViewModels.InventoryViewModels
     public class AllInventoryViewModel
     {
         [Required]
-        [MaxLength(25)]
         [MinLength(3)]
+        [MaxLength(25)]
         public string InventoryName { get; set; } = null!;
 
         public IEnumerable<InventoryProduct> Products { get; set; } = new List<InventoryProduct>();

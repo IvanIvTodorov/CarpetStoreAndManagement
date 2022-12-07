@@ -13,13 +13,11 @@ namespace CarpetStoreAndManagement.ViewModels.InventoryViewModels
     public class RawMaterialsInInventoryViewModel
     {
         [Required]
-        [MaxLength(25)]
         [MinLength(3)]
+        [MaxLength(25)]
         public string InventoryName { get; set; } = null!;
         [Required]
         public string Color { get; set; }
-        [Required]
-        public RawMaterialType Type { get; set; }
         public IEnumerable<InventoryRawMaterial> RawMaterials { get; set; } = new List<InventoryRawMaterial>();
         public IEnumerable<Inventory> Inventories { get; set; } = new List<Inventory>();
         public IEnumerable<Color> Colors { get; set; } = new List<Color>();

@@ -1,6 +1,7 @@
 ﻿using CarpetStoreAndManagement.Data.Models.Enums;
 using CarpetStoreAndManagement.Services.Contracts;
 using CarpetStoreAndManagement.ViewModels.RawMaterialViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarpetStoreAndManagement.Areas.Admin.Controllers
@@ -20,6 +21,7 @@ namespace CarpetStoreAndManagement.Areas.Admin.Controllers
             this.colorService = colorService;
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> Show()
         {
@@ -31,7 +33,7 @@ namespace CarpetStoreAndManagement.Areas.Admin.Controllers
 
             return View(model);
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Order(AddRawMaterialViewModel model, string type)
         {

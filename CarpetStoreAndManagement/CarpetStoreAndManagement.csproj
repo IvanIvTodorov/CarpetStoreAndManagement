@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Areas\Admin\Controllers\UserController.cs" />
     <Compile Remove="Controllers\InventoryController.cs" />
     <Compile Remove="Controllers\RawMaterialController.cs" />
   </ItemGroup>

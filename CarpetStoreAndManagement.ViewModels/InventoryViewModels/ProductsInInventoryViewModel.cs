@@ -12,10 +12,12 @@ namespace CarpetStoreAndManagement.ViewModels.InventoryViewModels
     public class ProductsInInventoryViewModel
     {
         [Required]
-        [MaxLength(25)]
         [MinLength(3)]
+        [MaxLength(25)]
         public string InventoryName { get; set; } = null!;
         [Required]
+        [MinLength(1)]
+        [MaxLength(20)]
         public string Color { get; set; }
         [Required]
         public string Type { get; set; }

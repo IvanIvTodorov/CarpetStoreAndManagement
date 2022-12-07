@@ -25,6 +25,7 @@ namespace CarpetStoreAndManagement.Data.Models.Product
         [Required]
         public decimal Price { get; set; }
         [Required]
+        [MinLength(1)]
         public string ImgUrl { get; set; } = null!;
         [Required]
         public bool IsDeleted { get; set; }

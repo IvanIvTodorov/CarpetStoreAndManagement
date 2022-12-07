@@ -1,4 +1,5 @@
 ﻿using CarpetStoreAndManagement.Services.Contracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarpetStoreAndManagement.Areas.Admin.Controllers
@@ -13,6 +14,7 @@ namespace CarpetStoreAndManagement.Areas.Admin.Controllers
             this.feedbackService = feedbackService;
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> AllFeedbacks()
         {

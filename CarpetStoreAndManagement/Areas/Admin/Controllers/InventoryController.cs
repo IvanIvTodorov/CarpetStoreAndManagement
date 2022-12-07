@@ -2,6 +2,7 @@
 using CarpetStoreAndManagement.Services.Contracts;
 using CarpetStoreAndManagement.ViewModels.InventoryViewModels;
 using CarpetStoreAndManagement.ViewModels.ProductViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarpetStoreAndManagement.Areas.Admin.Controllers
@@ -22,6 +23,7 @@ namespace CarpetStoreAndManagement.Areas.Admin.Controllers
             this.rawMaterialService = rawMaterialService;
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Add(ProduceViewModel model)
         {
@@ -29,7 +31,7 @@ namespace CarpetStoreAndManagement.Areas.Admin.Controllers
 
             return RedirectToAction(nameof(All));
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> All()
         {
@@ -37,21 +39,24 @@ namespace CarpetStoreAndManagement.Areas.Admin.Controllers
 
             return View(model);
         }
-
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
         public async Task<IActionResult> Products()
         {
             var model = await inventoryService.GetInventoryProductAsync();
 
             return View(model);
         }
-
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
         public async Task<IActionResult> RawMaterials()
         {
             var model = await inventoryService.GetInventoryRawMaterialAsync();
 
             return View(model);
         }
-
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
         public async Task<IActionResult> ProductsBySearch(ProductsInInventoryViewModel model)
         {
             var passModel = await productService.GetProductsInInventoryBySearch(model);
@@ -66,7 +71,8 @@ namespace CarpetStoreAndManagement.Areas.Admin.Controllers
 
             return View(nameof(Products), passModell);
         }
-
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
         public async Task<IActionResult> RawMaterialsBySearch(RawMaterialsInInventoryViewModel model)
         {
             var passModel = await rawMaterialService.GetRawMatInInventoryBySearch(model);

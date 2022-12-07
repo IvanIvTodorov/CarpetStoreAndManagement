@@ -14,11 +14,8 @@ namespace CarpetStoreAndManagement.Data.Models
         [Key]
         public int Id { get; set; }
         [Required]
-        [MinLength(4)]
-        [MaxLength(50)]
         public RawMaterialType Type { get; set; }
         [Required]
-        [Range(0, double.MaxValue)]
         public int ColorId { get; set; }
 
         public Color Color { get; set; } = null!;

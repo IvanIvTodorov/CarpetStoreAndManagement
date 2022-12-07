@@ -24,8 +24,6 @@ namespace CarpetStoreAndManagement.Services.Contracts
 
         Task<ProductDetailsViewModel> ProductDetailsAsync(int productId);
 
-        Task AddColorAsync(string name);
-
         Task RemoveProductAsync(int productId);
         Task<EditProductViewModel> EditProductAsync(int productId);
         Task EditProductAsync(EditProductViewModel model);
@@ -50,6 +48,7 @@ namespace CarpetStoreAndManagement.Services.Contracts
         Task<bool> ProductIdExist(int productId);
 
         Task<IEnumerable<InventoryProduct>> GetProductsInInventoryBySearch(ProductsInInventoryViewModel model);
+        Task<IEnumerable<Product>> PorductsByTypeAsync(string type);
 
     }
 }

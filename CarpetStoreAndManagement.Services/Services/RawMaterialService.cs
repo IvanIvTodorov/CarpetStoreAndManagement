@@ -95,8 +95,7 @@ namespace CarpetStoreAndManagement.Services.Services
             var rawMatId = await context.InventoryRawMaterials
                  .Include(x => x.Inventory)
                  .Include(x => x.RawMaterial)
-                 .Where(x => x.Inventory.Name == model.InventoryName
-                 && x.RawMaterial.Type == model.Type)
+                 .Where(x => x.Inventory.Name == model.InventoryName)
                  .Select(x => x.RawMaterialId)
                  .ToListAsync();
 

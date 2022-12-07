@@ -1,5 +1,6 @@
 ﻿using CarpetStoreAndManagement.Services.Contracts;
 using CarpetStoreAndManagement.ViewModels.ProductViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarpetStoreAndManagement.Areas.Admin.Controllers
@@ -17,7 +18,7 @@ namespace CarpetStoreAndManagement.Areas.Admin.Controllers
             this.productService = productService;
             this.inventoryService = inventoryService;
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> Orders()
         {
@@ -25,7 +26,7 @@ namespace CarpetStoreAndManagement.Areas.Admin.Controllers
 
             return View(model);
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> CompleteOrder(int orderId)
         {
@@ -41,7 +42,7 @@ namespace CarpetStoreAndManagement.Areas.Admin.Controllers
 
             return RedirectToAction(nameof(Orders));
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> ProduceFromOrder(int orderId)
         {

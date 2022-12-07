@@ -6,5 +6,6 @@ namespace CarpetStoreAndManagement.Services.Contracts
     {
         Task<IEnumerable<Color>> GetAllColorsAsync();
         Task<bool> CheckColorExistAsync(string colorName);
+        Task AddColorAsync(string name);
     }
 }

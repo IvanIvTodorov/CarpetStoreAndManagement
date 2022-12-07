@@ -92,6 +92,7 @@ namespace CarpetStoreAndManagement.Areas.Admin.Controllers
             var model = new ProduceViewModel();
             model.Inventories = await inventoryService.GetInventoriesAsync();
             model.Products = await productService.GetProductsAsync();
+            model.Types = await productService.GetAllProductTypesAsync();
 
             return View(model);
         }
@@ -114,7 +115,7 @@ namespace CarpetStoreAndManagement.Areas.Admin.Controllers
 
             if (!await inventoryService.CheckRawMaterialsForProduce(productColors, model.Quantity, model.InventoryName))
             {
-                TempData["message"] = $"You do not have enough raw materials in {model.InventoryName} inventory! You need to order {String.Join(" and ", productColors)} raw materials!";
+                TempData["message"] = $"You do not have enough raw materials in {model.InventoryName} inventory! You need to order {String.Join(" ", productColors)} raw materials!";
 
                 return RedirectToAction("Show", "RawMaterial");
             }
@@ -126,6 +127,7 @@ namespace CarpetStoreAndManagement.Areas.Admin.Controllers
             return RedirectToAction(nameof(Produce));
         }
         [Authorize(Roles = "Admin")]
+        [HttpGet]
         public async Task<IActionResult> EditPage(int productId)
         {
             var model = await productService.EditProductAsync(productId);
@@ -134,11 +136,28 @@ namespace CarpetStoreAndManagement.Areas.Admin.Controllers
         }
 
         [Authorize(Roles = "Admin")]
+        [HttpPost]
         public async Task<IActionResult> Edit(EditProductViewModel model)
         {
             await productService.EditProductAsync(model);
 
             return RedirectToAction(nameof(All));
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public async Task<IActionResult> SearchByType(string type)
+        {
+            var types = await productService.GetProductsByTypeAsync(type);
+
+            var model = new ProduceViewModel()
+            {
+                Products = await productService.PorductsByTypeAsync(type),
+                Inventories = await inventoryService.GetInventoriesAsync(),
+                Types = await productService.GetAllProductTypesAsync(),
+            };
+
+            return View(nameof(Produce), model);
         }
     }
 }

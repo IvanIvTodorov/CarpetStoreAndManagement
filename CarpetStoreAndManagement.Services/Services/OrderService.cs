@@ -98,7 +98,7 @@ namespace CarpetStoreAndManagement.Services.Services
                         colors.Add(color.Color.Name);
                     }
 
-                    productColors.Add(String.Join(", ", colors));
+                    productColors.Add(String.Join(" ", colors));
                 }
 
                 var curentOrder = new OrdersViewModel()

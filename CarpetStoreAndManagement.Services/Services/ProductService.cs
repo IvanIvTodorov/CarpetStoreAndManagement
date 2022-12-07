@@ -14,39 +14,28 @@ namespace CarpetStoreAndManagement.Services.Services
     public class ProductService : IProductService
     {
         private readonly CarpetStoreAndManagementDbContext context;
+        private readonly IColorService colorService;
         private const int startQuantity = 1;
         private const int minProduct = 1;
         private const int maxProduct = 5;
-        private readonly HtmlSanitizer sanitzer;
+        private readonly HtmlSanitizer sanitizer;
 
-        public ProductService(CarpetStoreAndManagementDbContext context, HtmlSanitizer sanitzer)
+        public ProductService(CarpetStoreAndManagementDbContext context, HtmlSanitizer sanitizer, IColorService colorService)
         {
             this.context = context;
-            this.sanitzer = sanitzer;
+            this.sanitizer = sanitizer;
+            this.colorService = colorService;
         }
 
-        public async Task AddColorAsync(string name)
-        {
-            var sanitizedName = sanitzer.Sanitize(name);
-            if (!context.Colors.Any(x => x.Name == sanitizedName))
-            {
-                var color = new Color()
-                {
-                    Name = sanitizedName
-                };
-
-                await context.Colors.AddAsync(color);
-                await context.SaveChangesAsync();
-            }
-        }
+        
 
         public async Task AddProductAsync(AddProductViewModel model)
         {
             var product = new Product()
             {
-                ImgUrl = sanitzer.Sanitize(model.ImgUrl),
-                Name = sanitzer.Sanitize(model.Name),
-                Type = sanitzer.Sanitize(model.Type),
+                ImgUrl = sanitizer.Sanitize(model.ImgUrl),
+                Name = sanitizer.Sanitize(model.Name),
+                Type = sanitizer.Sanitize(model.Type),
                 Price = model.Price
             };
 
@@ -55,8 +44,8 @@ namespace CarpetStoreAndManagement.Services.Services
 
             var colors = new List<string>()
             {
-                sanitzer.Sanitize(model.PrimaryColor),
-                sanitzer.Sanitize(model.SecondaryColor)
+                sanitizer.Sanitize(model.PrimaryColor),
+                sanitizer.Sanitize(model.SecondaryColor)
             };
 
 
@@ -64,7 +53,7 @@ namespace CarpetStoreAndManagement.Services.Services
             {
                 if (name != null)
                 {
-                    await AddColorAsync(name);
+                    await colorService.AddColorAsync(name);
 
                     var color = await context.Colors
                     .Where(x => x.Name == name)
@@ -309,12 +298,12 @@ namespace CarpetStoreAndManagement.Services.Services
                 .Where(x => x.Id == model.Id)
                 .FirstOrDefaultAsync();
 
-            product.ImgUrl = sanitzer.Sanitize(model.ImgUrl);
-            product.Type = sanitzer.Sanitize(model.Type);
-            product.Name = sanitzer.Sanitize(model.Name);
+            product.ImgUrl = sanitizer.Sanitize(model.ImgUrl);
+            product.Type = sanitizer.Sanitize(model.Type);
+            product.Name = sanitizer.Sanitize(model.Name);
             product.Price = model.Price;
 
-            await EditProductColorAsync(model.Id, sanitzer.Sanitize(model.PrimaryColor), sanitzer.Sanitize(model.SecondaryColor));
+            await EditProductColorAsync(model.Id, sanitizer.Sanitize(model.PrimaryColor), sanitizer.Sanitize(model.SecondaryColor));
 
             await context.SaveChangesAsync();
         }
@@ -334,7 +323,7 @@ namespace CarpetStoreAndManagement.Services.Services
 
             if (products.Count() == minProduct && (secondaryColor != String.Empty || secondaryColor != null))
             {
-                await AddColorAsync(secondaryColor);
+                await colorService.AddColorAsync(secondaryColor);
 
                 var color = await context.Colors
                     .Where(x => x.Name == secondaryColor)
@@ -351,9 +340,9 @@ namespace CarpetStoreAndManagement.Services.Services
 
             if (products.Count() > minProduct && secondaryColor != String.Empty)
             {
-                products[1].Color.Name = sanitzer.Sanitize(secondaryColor);
+                products[1].Color.Name = sanitizer.Sanitize(secondaryColor);
             }
-            products[0].Color.Name = sanitzer.Sanitize(primaryColor);
+            products[0].Color.Name = sanitizer.Sanitize(primaryColor);
 
             await context.SaveChangesAsync();
         }
@@ -367,7 +356,7 @@ namespace CarpetStoreAndManagement.Services.Services
 
         public async Task<IEnumerable<ShowAllProductsViewModel>> GetProductsByTypeAsync(string type)
         {
-            var sanitizedType = sanitzer.Sanitize(type);
+            var sanitizedType = sanitizer.Sanitize(type);
             var enteties = await context.Products
                .Include(m => m.InventoryProducts)
                .Where(m => m.IsDeleted == false && m.Type == sanitizedType)
@@ -386,7 +375,7 @@ namespace CarpetStoreAndManagement.Services.Services
 
         public async Task<bool> CheckIfTypeExistAsync(string type)
         {
-            var sanitizedType = sanitzer.Sanitize(type);
+            var sanitizedType = sanitizer.Sanitize(type);
             return await context.Products.AnyAsync(x => x.Type == sanitizedType);
         }
 
@@ -426,6 +415,16 @@ namespace CarpetStoreAndManagement.Services.Services
                 .ToListAsync();
 
             return products;
+        }
+
+        public async Task<IEnumerable<Product>> PorductsByTypeAsync(string type)
+        {
+            var sanitizedType = sanitizer.Sanitize(type);
+            var productTypes = await context.Products
+               .Where(m => m.Type == sanitizedType)
+               .ToListAsync();
+
+            return productTypes;
         }
     }
 }

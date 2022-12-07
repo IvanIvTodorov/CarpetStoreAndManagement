@@ -1,9 +1,6 @@
 ﻿@using CarpetStoreAndManagement.ViewModels.ProductViewModels
 @model ProduceViewModel
 
-@{
-    ViewBag.Title = "Produce product";
-}
 
 @if (TempData["message"] != null)
 {
@@ -25,11 +22,36 @@
                                         <th>Type</th>
                                         <th>Quantity</th>
                                         <th>Inventory</th>
+                                        <form asp-controller="Product" asp-action="SearchByType">
+                                            <div class="container">
+                                                <br />
+                                                <div class="row justify-content-center">
+                                                    <div class="col-12 col-md-10 col-lg-8">
+                                                        <div class="card-body row no-gutters align-items-center">
+                                                            <div class="col-auto">
+                                                                <i class="fas fa-search h4 text-body"></i>
+                                                            </div>
+                                                            <div class="col">
+                                                                <select asp-for="@Model.Type" class="form-control">
+                                                                    @foreach (var type in Model.Types)
+                                                                    {
+                                                                        <option value="@type">@type</option>
+                                                                    }
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-auto">
+                                                                <button class="btn btn-lg btn-success" type="submit">Search by type</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
                                         <th></th>
                                     </tr>
                                     @foreach (var product in Model.Products)
                                     {
-                                        <form asp-controller="Product" asp-action="Produce"  method="post">
+                                        <form asp-controller="Product" asp-action="Produce" method="post">
                                         <tr>
                                             <td>
                                                 <div class="media">
@@ -75,8 +97,3 @@
         </section>
     </div>
 </div>
-
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-    }
-

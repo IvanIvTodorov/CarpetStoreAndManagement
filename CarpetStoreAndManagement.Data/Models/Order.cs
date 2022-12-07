@@ -15,6 +15,7 @@ namespace CarpetStoreAndManagement.Data.Models
         public int Id { get; set; }
 
         [Required]
+        [Range(0, double.MaxValue)]
         public decimal TotalPrice { get; set; }
 
         public ICollection<UserOrder> UserOrders { get; set; } = new List<UserOrder>();

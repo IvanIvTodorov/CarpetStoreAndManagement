@@ -1,6 +1,7 @@
 ﻿using CarpetStoreAndManagement.Data;
 using CarpetStoreAndManagement.Data.Models;
 using CarpetStoreAndManagement.Services.Contracts;
+using Ganss.Xss;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -13,10 +14,12 @@ namespace CarpetStoreAndManagement.Services.Services
     public class ColorService : IColorService
     {
         private readonly CarpetStoreAndManagementDbContext context;
+        private readonly HtmlSanitizer sanitizer;
 
-        public ColorService(CarpetStoreAndManagementDbContext context)
+        public ColorService(CarpetStoreAndManagementDbContext context, HtmlSanitizer sanitizer)
         {
             this.context = context;
+            this.sanitizer = sanitizer;
         }
 
         public Task<bool> CheckColorExistAsync(string colorName)
@@ -27,6 +30,21 @@ namespace CarpetStoreAndManagement.Services.Services
         public async Task<IEnumerable<Color>> GetAllColorsAsync()
         {
             return await context.Colors.ToListAsync();
+        }
+
+        public async Task AddColorAsync(string name)
+        {
+            var sanitizedName = sanitizer.Sanitize(name);
+            if (!context.Colors.Any(x => x.Name == sanitizedName))
+            {
+                var color = new Color()
+                {
+                    Name = sanitizedName
+                };
+
+                await context.Colors.AddAsync(color);
+                await context.SaveChangesAsync();
+            }
         }
     }
 }

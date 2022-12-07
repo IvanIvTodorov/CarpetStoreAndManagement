@@ -15,6 +15,7 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddDefaultIdentity<User>(options =>
 {
     options.SignIn.RequireConfirmedAccount = false;
+    options.Password.RequiredLength = 5;
 })
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<CarpetStoreAndManagementDbContext>();
