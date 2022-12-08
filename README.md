@@ -1,2 +1,2 @@
 # CarpetStoreAndManagement
-My SoftUni web project
+My SoftUni WEB project
