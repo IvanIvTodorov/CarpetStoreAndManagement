@@ -1,6 +1,11 @@
 ﻿@using CarpetStoreAndManagement.ViewModels.InventoryViewModels
 @model RawMaterialsInInventoryViewModel
 
+@if (TempData["message"] != null)
+{
+    <script>alert('@TempData["message"]');</script>
+}
+
 <div class="d-flex justify-content-between">
     <form asp-controller="Inventory" asp-action="Add">
         <label>

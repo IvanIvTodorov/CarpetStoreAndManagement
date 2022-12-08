@@ -4,6 +4,7 @@ using CarpetStoreAndManagement.Data.Models.Product;
 using CarpetStoreAndManagement.Data.Models.User;
 using CarpetStoreAndManagement.Services.Contracts;
 using CarpetStoreAndManagement.ViewModels.OrderViewModels;
+using CarpetStoreAndManagement.ViewModels.ProductViewModels;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -16,10 +17,19 @@ namespace CarpetStoreAndManagement.Services.Services
     public class OrderService : IOrderService
     {
         private readonly CarpetStoreAndManagementDbContext context;
-
-        public OrderService(CarpetStoreAndManagementDbContext context)
+        private readonly IProductService productService;
+        private readonly IInventoryService inventoryService;
+        public OrderService(CarpetStoreAndManagementDbContext context, IProductService productService, IInventoryService inventoryService)
         {
             this.context = context;
+            this.productService = productService;
+            this.inventoryService = inventoryService;
+        }
+
+        public async Task<bool> CheckIfOrderExist(int orderId)
+        {
+            return await context.Orders.AnyAsync(x => x.Id == orderId);
+
         }
 
         public async Task<IEnumerable<Product>> CompleteOrderAsync(int orderId)
@@ -77,7 +87,7 @@ namespace CarpetStoreAndManagement.Services.Services
                 .ToListAsync();
 
             var ordersViewModel = new List<OrdersViewModel>();
-            
+
 
             foreach (var order in orders)
             {
@@ -163,7 +173,7 @@ namespace CarpetStoreAndManagement.Services.Services
                     ProductQuantity = productQty,
                     TotalPrice = order.Order.TotalPrice,
                     IsCompleted = order.IsCompleted
-                    
+
                 };
 
                 ordersViewModel.Add(curentOrder);
@@ -218,6 +228,18 @@ namespace CarpetStoreAndManagement.Services.Services
             await context.UserOrders.AddAsync(userOrder);
 
             await context.SaveChangesAsync();
+        }
+
+        public async Task<ProduceFromOrderViewModel> SetProduceFromOrderViewModelAsync(int orderid)
+        {
+            var model = new ProduceFromOrderViewModel()
+            {
+                Inventories = await inventoryService.GetInventoriesAsync(),
+                OrderId = orderid,
+                Products = await productService.GetProductsFromOrderAsync(orderid)
+            };
+
+            return model;
         }
     }
 }

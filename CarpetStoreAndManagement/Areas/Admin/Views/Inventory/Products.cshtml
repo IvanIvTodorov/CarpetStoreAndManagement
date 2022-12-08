@@ -1,6 +1,11 @@
 ﻿@using CarpetStoreAndManagement.ViewModels.InventoryViewModels
 @model ProductsInInventoryViewModel
 
+@if (TempData["message"] != null)
+{
+    <script>alert('@TempData["message"]');</script>
+}
+
 <div class="d-flex justify-content-between">
     <form asp-controller="Inventory" asp-action="Add">
         <label>
@@ -89,3 +94,4 @@ else
 {
     <h1 class="text-center">No products found !</h1>
 }
+

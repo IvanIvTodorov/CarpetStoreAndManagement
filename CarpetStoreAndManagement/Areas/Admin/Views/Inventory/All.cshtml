@@ -1,7 +1,13 @@
 ﻿@using CarpetStoreAndManagement.ViewModels.InventoryViewModels
 @model AllInventoryViewModel
 
-<div class="d-flex justify-content-between">
+
+@if (TempData["message"] != null)
+{
+    <script>alert('@TempData["message"]');</script>
+}
+
+<div class="d-flex justify-content-end">
     <form asp-controller="Inventory" asp-action="Add">
         <label>
             <p class="label-txt">Add inventory name</p>

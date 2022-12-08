@@ -1,4 +1,5 @@
-﻿using CarpetStoreAndManagement.Services.Contracts;
+﻿using CarpetStoreAndManagement.Data.Models.Product;
+using CarpetStoreAndManagement.Services.Contracts;
 using CarpetStoreAndManagement.ViewModels.ProductViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -20,7 +21,7 @@ namespace CarpetStoreAndManagement.Areas.Admin.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpGet] 
+        [HttpGet]
         public async Task<IActionResult> All()
         {
             var model = await productService.GetAllProductsAsync();
@@ -80,6 +81,12 @@ namespace CarpetStoreAndManagement.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> DeleteProduct(int productId)
         {
+            if (!await productService.ProductIdExist(productId))
+            {
+                TempData["message"] = "Invalid product!";
+                return RedirectToAction(nameof(All));
+            }
+
             await productService.RemoveProductAsync(productId);
 
             return RedirectToAction(nameof(All));
@@ -90,6 +97,7 @@ namespace CarpetStoreAndManagement.Areas.Admin.Controllers
         public async Task<IActionResult> Produce()
         {
             var model = new ProduceViewModel();
+
             model.Inventories = await inventoryService.GetInventoriesAsync();
             model.Products = await productService.GetProductsAsync();
             model.Types = await productService.GetAllProductTypesAsync();
@@ -111,6 +119,12 @@ namespace CarpetStoreAndManagement.Areas.Admin.Controllers
                 }
             };
 
+            if (!await productService.ProductIdExist(productId))
+            {
+                TempData["message"] = "Invalid product!";
+                return RedirectToAction(nameof(Produce));
+            }
+
             var productColors = await productService.GetProductColors(productId);
 
             if (!await inventoryService.CheckRawMaterialsForProduce(productColors, model.Quantity, model.InventoryName))
@@ -123,13 +137,18 @@ namespace CarpetStoreAndManagement.Areas.Admin.Controllers
             await productService.ProduceProduct(model, productId);
             await inventoryService.DecreaseUsedRawMaterialsInInventory(productColors, model.Quantity, model.InventoryName);
 
-
-            return RedirectToAction(nameof(Produce));
+            return RedirectToAction("Products", "Inventory");
         }
         [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> EditPage(int productId)
         {
+            if (!await productService.ProductIdExist(productId))
+            {
+                TempData["message"] = "Invalid product!";
+
+                return RedirectToAction(nameof(All));
+            }
             var model = await productService.EditProductAsync(productId);
 
             return View(model);
@@ -139,6 +158,11 @@ namespace CarpetStoreAndManagement.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(EditProductViewModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return RedirectToAction(nameof(All));
+            }
+
             await productService.EditProductAsync(model);
 
             return RedirectToAction(nameof(All));

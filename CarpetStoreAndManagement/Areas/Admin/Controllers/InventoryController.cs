@@ -27,8 +27,15 @@ namespace CarpetStoreAndManagement.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(ProduceViewModel model)
         {
-            await inventoryService.AddInventoryAsync(model.InventoryName);
-
+            if (model.InventoryName == null || model.InventoryName == "" || model.InventoryName.Length < 3 || model.InventoryName.Length > 25)
+            {
+                TempData["message"] = "Inventory name should be with minimum length 3 and maximum length 25!";
+            }
+            else
+            {
+                await inventoryService.AddInventoryAsync(model.InventoryName);
+            }
+            
             return RedirectToAction(nameof(All));
         }
         [Authorize(Roles = "Admin")]
@@ -59,6 +66,12 @@ namespace CarpetStoreAndManagement.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> ProductsBySearch(ProductsInInventoryViewModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                TempData["message"] = "Invalid search parameters!";
+
+            }
+
             var passModel = await productService.GetProductsInInventoryBySearch(model);
 
             var passModell = new ProductsInInventoryViewModel()
@@ -75,6 +88,11 @@ namespace CarpetStoreAndManagement.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> RawMaterialsBySearch(RawMaterialsInInventoryViewModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                TempData["message"] = "Invalid search parameters!";
+
+            }
             var passModel = await rawMaterialService.GetRawMatInInventoryBySearch(model);
 
             var passModell = new RawMaterialsInInventoryViewModel()

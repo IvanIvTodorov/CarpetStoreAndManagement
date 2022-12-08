@@ -1,5 +1,6 @@
 ﻿using CarpetStoreAndManagement.Data.Models.Product;
 using CarpetStoreAndManagement.ViewModels.OrderViewModels;
+using CarpetStoreAndManagement.ViewModels.ProductViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,5 +17,9 @@ namespace CarpetStoreAndManagement.Services.Contracts
         Task<IEnumerable<MyOrdersViewModel>> GetMyOrdersAsync(string userId);
 
         Task<IEnumerable<Product>> CompleteOrderAsync(int orderId);
+
+        Task<ProduceFromOrderViewModel> SetProduceFromOrderViewModelAsync(int orderid);
+
+        Task<bool> CheckIfOrderExist(int orderId);
     }
 }

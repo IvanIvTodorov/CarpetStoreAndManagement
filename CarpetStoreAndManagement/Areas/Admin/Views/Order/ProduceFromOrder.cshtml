@@ -1,5 +1,5 @@
 ﻿@using CarpetStoreAndManagement.ViewModels.ProductViewModels
-@model ProduceViewModel
+@model ProduceFromOrderViewModel
 
 @{
     ViewBag.Title = "Produce from order";
@@ -59,7 +59,7 @@
                                                 </select>
                                             </td>
                                             <td class="col-sm-1 col-md-1">
-                                                <button type="submit" class="btn btn-success" asp-controller="Product" asp-action="Produce" asp-route-productId="@product.Id">
+                                                <button type="submit" class="btn btn-success" asp-controller="Order" asp-action="Produce" asp-route-productId="@product.Id" asp-route-orderId="@Model.OrderId" >
                                                     <span class="glyphicon glyphicon-remove"></span> Produce
                                                 </button>
                                             </td>
