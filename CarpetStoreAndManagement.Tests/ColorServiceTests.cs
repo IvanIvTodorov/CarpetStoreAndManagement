@@ -61,7 +61,7 @@ namespace CarpetStoreAndManagement.Tests
 
             var success = service.GetAllColorsAsync().Result;
 
-            Assert.Equal(3, success.Count());
+            Assert.Equal(4, success.Count());
         }
 
 

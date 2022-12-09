@@ -38,9 +38,6 @@
                         @if (User.IsInRole("User") || User.IsInRole("Admin"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Product" asp-action="Cart">My shopping cart</a>
-                            </li>
-                            <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Order" asp-action="MyOrders">My orders</a>
                             </li>
                             <li class="nav-item">
@@ -49,6 +46,13 @@
                         }
                     </ul>
                     <ul class="navbar-nav">
+                        @if (User.IsInRole("User") || User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Product" asp-action="Cart">My shopping cart</a>
+                            </li>
+                           
+                        }
                         @if (User.IsInRole("Admin"))
                         {
                             <li class="nav-item">

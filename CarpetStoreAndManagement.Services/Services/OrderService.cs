@@ -43,12 +43,13 @@ namespace CarpetStoreAndManagement.Services.Services
             foreach (var product in products)
             {
                 var curentProd = await context.InventoryProducts
+                    .Include(x => x.Product)
                     .Where(x => x.ProductId == product.ProductId)
                     .FirstOrDefaultAsync();
 
                 if (curentProd == null || curentProd.Quantity < product.Quantity)
                 {
-                    missingProducts.Add(await context.Products.Where(x => x.Id == product.ProductId).FirstOrDefaultAsync());
+                    missingProducts.Add(curentProd.Product);
                 }
             }
 

@@ -130,13 +130,15 @@ namespace CarpetStoreAndManagement.Services.Services
                 .ThenInclude(x => x.Color)
                 .ToListAsync();
 
-            return new ProductsInInventoryViewModel()
+            var model = new ProductsInInventoryViewModel()
             {
                 Products = products,
                 Inventories = await GetInventoriesAsync(),
                 Colors = await colorService.GetAllColorsAsync(),
                 Types = await productService.GetAllProductTypesAsync()
             };
+
+            return model;
         }
 
         public async Task<RawMaterialsInInventoryViewModel> GetInventoryRawMaterialAsync()
