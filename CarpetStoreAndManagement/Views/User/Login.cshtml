@@ -22,7 +22,8 @@
                     <input asp-for="@Model.Password" type="password" class="form-control" autocomplete="current-password" aria-required="true" />
                     <span asp-validation-for="@Model.Password" class="text-danger"></span>
                 </div>
-                <div class="text-center">
+                <div class="d-flex align-items-center justify-content-between">
+                    <a class="btn btn-primary" href="/User/Register">Register</a>
                     <button id="login-submit" type="submit" class="btn btn-primary">Log in</button>
                 </div>
             </form>

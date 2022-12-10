@@ -20,61 +20,80 @@
     </form>
 </div>
 
+@if (!Model.Products.Any())
+{
+    <h1 class="text-center">No products in the inventory !</h1>
 
-<h3 class="text-center">Products</h3>
-<table id="sailorTable" class="table table-striped table-bordered" width="100%">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Type</th>
-            <th>Primary color</th>
-            <th>Secondary color</th>
-            <th>Price</th>
-            <th>Invenotry name</th>
-            <th>Quantity</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var product in Model.Products)
-        {
+}
+else
+{
+    <h3 class="text-center">Products</h3>
+    <table id="sailorTable" class="table table-striped table-bordered" width="100%">
+        <thead>
             <tr>
-                <td>@product.Product.Name</td>
-                <td>@product.Product.Type</td>
-                <td>@product.Product.ProductColors.Where(x => x.ProductId == product.ProductId).Select(x => x.Color.Name).FirstOrDefault()</td>
-                @if (@product.Product.ProductColors.Where(x => x.ProductId == product.Product.Id).Count() < 2)
-                {
-                    <td>N/A</td>
-
-                }
-                else
-                {
-                    <td>@product.Product.ProductColors.Where(x => x.ProductId == product.Product.Id).Select(x => x.Color.Name).LastOrDefault()</td>
-                }
-                <td>@product.Product.Price</td>
-                <td>@product.Inventory.Name</td>
-                <td>@product.Quantity</td>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Primary color</th>
+                <th>Secondary color</th>
+                <th>Price</th>
+                <th>Invenotry name</th>
+                <th>Quantity</th>
             </tr>
-        }
+        </thead>
+        <tbody>
+            @foreach (var product in Model.Products)
+            {
+                <tr>
+                    <td>@product.Product.Name</td>
+                    <td>@product.Product.Type</td>
+                    <td>@product.Product.ProductColors.Where(x => x.ProductId == product.ProductId).Select(x => x.Color.Name).FirstOrDefault()</td>
+                    @if (@product.Product.ProductColors.Where(x => x.ProductId == product.Product.Id).Count() < 2)
+                    {
+                        <td>N/A</td>
 
-</table>
-<h3 class="text-center">RawMaterials</h3>
-<table id="sailorTable" class="table table-striped table-bordered" width="100%">
-    <thead>
-        <tr>
-            <th>Type</th>
-            <th>Color</th>
-            <th>Inventory name</th>
-            <th>Quantity</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var rawMaterial in Model.RawMaterials)
-        {
+                    }
+                    else
+                    {
+                        <td>@product.Product.ProductColors.Where(x => x.ProductId == product.Product.Id).Select(x => x.Color.Name).LastOrDefault()</td>
+                    }
+                    <td>@product.Product.Price</td>
+                    <td>@product.Inventory.Name</td>
+                    <td>@product.Quantity</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@if (!Model.RawMaterials.Any())
+{
+    <h1 class="text-center">No raw materials in the inventory !</h1>
+
+}
+else
+{
+    <h3 class="text-center">RawMaterials</h3>
+    <table id="sailorTable" class="table table-striped table-bordered" width="100%">
+        <thead>
             <tr>
-                <td>@rawMaterial.RawMaterial.Type</td>
-                <td>@rawMaterial.RawMaterial.Color.Name</td>
-                <td>@rawMaterial.Inventory.Name</td>
-                <td>@rawMaterial.Quantity</td>
+                <th>Type</th>
+                <th>Color</th>
+                <th>Inventory name</th>
+                <th>Quantity</th>
             </tr>
-        }
-</table>
+        </thead>
+        <tbody>
+            @foreach (var rawMaterial in Model.RawMaterials)
+            {
+                <tr>
+                    <td>@rawMaterial.RawMaterial.Type</td>
+                    <td>@rawMaterial.RawMaterial.Color.Name</td>
+                    <td>@rawMaterial.Inventory.Name</td>
+                    <td>@rawMaterial.Quantity</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}
+

@@ -32,8 +32,9 @@
                 <input class="form-control" type="password" autocomplete="new-password" aria-required="true" asp-for="@Model.ConfirmPassword" />
                 <span asp-validation-for="@Model.ConfirmPassword" class="text-danger"></span>
             </div>
-            <div class="text-center">
+            <div class="d-flex align-items-center justify-content-between">
                 <button id="registerSubmit" type="submit" class="btn btn-primary">Register</button>
+                <a class="btn btn-primary" href="/User/Login" >Login</a>
             </div>
         </form>
     </div>

@@ -1,13 +1,26 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using CarpetStoreAndManagement.Services.Contracts;
+using CarpetStoreAndManagement.ViewModels;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CarpetStoreAndManagement.Controllers
 {
     public class ErrorController : Controller
     {
-        [Route("Error/{statusCode}")]
-        public IActionResult PageNotFound()
+        private readonly IErrorService errorService;
+        public ErrorController(IErrorService errorService)
         {
-            return View();
+            this.errorService = errorService;
+        }
+        [Route("Error/{statusCode}")]
+        public IActionResult ErrorPage(int statusCode)
+        {
+            var model = new ErrorViewModel()
+            {
+                StatusCode = statusCode,
+                ErrorMessage = errorService.GetError(statusCode)
+
+            };
+            return View(model);
         }
 
         [HttpGet]
