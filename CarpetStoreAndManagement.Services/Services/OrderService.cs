@@ -49,7 +49,8 @@ namespace CarpetStoreAndManagement.Services.Services
 
                 if (curentProd == null || curentProd.Quantity < product.Quantity)
                 {
-                    missingProducts.Add(curentProd.Product);
+                    var productDb = await context.Products.Where(x => x.Id == product.ProductId).FirstOrDefaultAsync();
+                    missingProducts.Add(productDb);
                 }
             }
 
