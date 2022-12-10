@@ -1,0 +1,61 @@
+﻿@using CarpetStoreAndManagement.ViewModels.ProductViewModels
+@model ProductDetailsViewModel
+@{
+    ViewData["Title"] = "Details";
+}
+<body>
+    <div class="border">
+        <div class="d-flex align-items-center justify-content-center">
+            <div class="border">
+                <a><img src="@Model.ImgUrl" style="width: 250px; height: 250px;"> </a>
+            </div>
+            <div class="offset-1">
+                <p>Name: @Model.Name</p>
+                <p>Type: @Model.Type</p>
+                <p>Current price: <span>$ @Model.Price</span></p>
+                <p>
+                    Primary Color:
+                    <span>@Model.Colors.FirstOrDefault().Color.Name</span>
+                </p>
+                @if (Model.Colors.Skip(1).FirstOrDefault() != null)
+                {
+                    <p>
+                        Secondary Color:
+                        <span>@Model.Colors.Skip(1).FirstOrDefault().Color.Name</span>
+                    </p>
+                }
+                <div class="action">
+                    <a class="btn btn-warning my-2" asp-action="EditPage" asp-route-productId="@Model.Id" role="button">Edit</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+
+<hr>
+<h3 class="text-center">Simmilar products</h3>
+<div class="row d-flex align-items-center justify-content-center">
+
+    @if (!Model.Products.Any())
+    {
+        <p class="display-4 text-black text-center">This is the only product from that type !</p>
+    }
+    @foreach (var item in Model.Products)
+    {
+        <div class="col-10 col-sm-10 col-md-5 col-lg-2 col-xl-2 mt-2">
+            <div class="card shadow">
+                <div class="card-body text-center">
+                    <a href="#">
+                        <img class="card-img-top" src="@item.ImgUrl" style="width: 150px; height: 150px;">
+                    </a>
+                    <a class="text-reset"><h3 class="card-title display-8">@item.Name</h3></a>
+                    <a class="btn btn-warning my-2" asp-action="EditPage" asp-route-productId="@item.Id" role="button">Edit</a>
+                    <a class="btn btn-dark my-2" asp-action="Details" asp-route-productId="@item.Id" role="button">Product Details</a>
+                </div>
+            </div>
+        </div>
+    }
+
+</div>

@@ -4,6 +4,7 @@ using CarpetStoreAndManagement.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarpetStoreAndManagement.Data.Migrations
 {
     [DbContext(typeof(CarpetStoreAndManagementDbContext))]
-    partial class CarpetStoreAndManagementDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221210103016_finalTest")]
+    partial class finalTest
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -348,9 +350,6 @@ namespace CarpetStoreAndManagement.Data.Migrations
                     b.Property<int>("ColorId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ColorType")
-                        .HasColumnType("int");
-
                     b.HasKey("ProductId", "ColorId");
 
                     b.HasIndex("ColorId");
@@ -361,104 +360,87 @@ namespace CarpetStoreAndManagement.Data.Migrations
                         new
                         {
                             ProductId = 1,
-                            ColorId = 1,
-                            ColorType = 0
+                            ColorId = 1
                         },
                         new
                         {
                             ProductId = 2,
-                            ColorId = 5,
-                            ColorType = 0
+                            ColorId = 5
                         },
                         new
                         {
                             ProductId = 3,
-                            ColorId = 6,
-                            ColorType = 0
+                            ColorId = 6
                         },
                         new
                         {
                             ProductId = 4,
-                            ColorId = 7,
-                            ColorType = 0
+                            ColorId = 7
                         },
                         new
                         {
                             ProductId = 5,
-                            ColorId = 2,
-                            ColorType = 0
+                            ColorId = 2
                         },
                         new
                         {
                             ProductId = 5,
-                            ColorId = 8,
-                            ColorType = 1
+                            ColorId = 8
                         },
                         new
                         {
                             ProductId = 6,
-                            ColorId = 2,
-                            ColorType = 0
+                            ColorId = 2
                         },
                         new
                         {
                             ProductId = 6,
-                            ColorId = 7,
-                            ColorType = 1
+                            ColorId = 7
                         },
                         new
                         {
                             ProductId = 7,
-                            ColorId = 6,
-                            ColorType = 0
+                            ColorId = 6
                         },
                         new
                         {
                             ProductId = 8,
-                            ColorId = 9,
-                            ColorType = 0
+                            ColorId = 9
                         },
                         new
                         {
                             ProductId = 9,
-                            ColorId = 2,
-                            ColorType = 0
+                            ColorId = 2
                         },
                         new
                         {
                             ProductId = 9,
-                            ColorId = 3,
-                            ColorType = 1
+                            ColorId = 3
                         },
                         new
                         {
                             ProductId = 10,
-                            ColorId = 10,
-                            ColorType = 0
+                            ColorId = 10
                         },
                         new
                         {
                             ProductId = 11,
-                            ColorId = 6,
-                            ColorType = 0
+                            ColorId = 6
                         },
                         new
                         {
                             ProductId = 11,
-                            ColorId = 7,
-                            ColorType = 1
+                            ColorId = 7
                         },
                         new
                         {
                             ProductId = 12,
-                            ColorId = 6,
-                            ColorType = 0
+                            ColorId = 6
                         },
                         new
                         {
                             ProductId = 12,
-                            ColorId = 4,
-                            ColorType = 1
+                            ColorId = 4
                         });
                 });
 
@@ -570,13 +552,13 @@ namespace CarpetStoreAndManagement.Data.Migrations
                         {
                             Id = "41d1aea7-5764-4ebb-8a0d-055594610abb",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "6e135af4-dd89-4d3e-8b2c-8fec18cafc08",
+                            ConcurrencyStamp = "2436f4e6-64a8-424e-9374-87c2b05f63d3",
                             Email = "ivan@abv.bg",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "IVAN@ABV.BG",
                             NormalizedUserName = "IVAN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEOIQTCV/7glPYAGthK6NzSgdj4pd9dJrhQnYzJP78gf3ynnXK6Sy1jB3IEhNzGSq3g==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEE4ND8+J+pXDoyTVEDqOubIzq/r5xhWT2ur2ai9rpVeBIJbo+UoAtLMqSS/6UjHdyw==",
                             PhoneNumber = "+111111111111",
                             PhoneNumberConfirmed = true,
                             SecurityStamp = "41d1aea7-5764-4ebb-8a0d-055594610abb",

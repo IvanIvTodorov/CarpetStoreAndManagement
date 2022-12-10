@@ -163,9 +163,9 @@ namespace CarpetStoreAndManagement.Areas.Admin.Controllers
                 return RedirectToAction(nameof(All));
             }
 
-            await productService.EditProductAsync(model);
+            var id = await productService.EditProductAsync(model);
 
-            return RedirectToAction(nameof(All));
+            return RedirectToAction(nameof(Details), new { productId = id });
         }
 
         [Authorize(Roles = "Admin")]
@@ -182,6 +182,20 @@ namespace CarpetStoreAndManagement.Areas.Admin.Controllers
             };
 
             return View(nameof(Produce), model);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public async Task<IActionResult> Details(int productId)
+        {
+            if (!await productService.ProductIdExist(productId))
+            {
+                TempData["message"] = $"This product do not exist!";
+                return RedirectToAction(nameof(All));
+            }
+            var model = await productService.ProductDetailsAsync(productId);
+
+            return View(model);
         }
     }
 }

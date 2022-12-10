@@ -1,5 +1,6 @@
 ﻿using CarpetStoreAndManagement.Data;
 using CarpetStoreAndManagement.Data.Models;
+using CarpetStoreAndManagement.Data.Models.Enums;
 using CarpetStoreAndManagement.Data.Models.Inventory;
 using CarpetStoreAndManagement.Data.Models.Product;
 using CarpetStoreAndManagement.Data.Models.User;
@@ -19,6 +20,8 @@ namespace CarpetStoreAndManagement.Tests
     public class ProductServiceTests
     {
         private IColorService colorService;
+
+        public ProductColorType ProductColorType { get; private set; }
 
         [Fact]
         public async void TestAddProductAsync()
@@ -663,7 +666,8 @@ namespace CarpetStoreAndManagement.Tests
             var pordColor = new ProductColor()
             {
                 ProductId = product.Id,
-                ColorId = color.Id
+                ColorId = color.Id,
+                ColorType = ProductColorType.PrimaryColor
             };
 
             await dbContext.Products.AddAsync(product);
@@ -679,7 +683,7 @@ namespace CarpetStoreAndManagement.Tests
                 Name = "Test",
                 Price = 1M,
                 Type = "test",
-                PrimaryColor = "Test"
+                PrimaryColor = "test"
             };
 
             await service.EditProductAsync(model);
@@ -722,13 +726,15 @@ namespace CarpetStoreAndManagement.Tests
             var pordColor = new ProductColor()
             {
                 ProductId = product.Id,
-                ColorId = primary.Id
+                ColorId = primary.Id,
+                ColorType = ProductColorType.PrimaryColor
             };
 
             var pordColor2 = new ProductColor()
             {
                 ProductId = product.Id,
-                ColorId = secondary.Id
+                ColorId = secondary.Id,
+                ColorType = ProductColorType.SecondaryColor
             };
 
             await dbContext.Products.AddAsync(product);
@@ -742,8 +748,8 @@ namespace CarpetStoreAndManagement.Tests
             var changePrimary = "Test1";
             var changeSecondary = "Test2";
 
-            await service.EditProductColorAsync(product.Id, changePrimary, changeSecondary);
-            var success = service.EditProductColorAsync(product.Id, changePrimary, changeSecondary).IsCompletedSuccessfully;
+            await service.EditProductColorAsync(changePrimary, changeSecondary, product.Id);
+            var success = service.EditProductColorAsync(changePrimary, changeSecondary, product.Id).IsCompletedSuccessfully;
 
             var primaryExpected = await dbContext.Colors.Where(x => x.Id == primary.Id).FirstOrDefaultAsync();
             var secondaryExpected = await dbContext.Colors.Where(x => x.Id == secondary.Id).FirstOrDefaultAsync();
@@ -752,8 +758,8 @@ namespace CarpetStoreAndManagement.Tests
             Assert.True(secondaryExpected.Name == changeSecondary);
             Assert.True(success);
 
-            await service.EditProductColorAsync(product.Id, changePrimary, "");
-            success = service.EditProductColorAsync(product.Id, changePrimary, "").IsCompletedSuccessfully;
+            await service.EditProductColorAsync(changePrimary, "", product.Id);
+            success = service.EditProductColorAsync(changePrimary, "", product.Id).IsCompletedSuccessfully;
 
             var secondaryExpected2 = await dbContext.Colors.Where(x => x.Id == secondary.Id).FirstOrDefaultAsync();
 

@@ -1,5 +1,6 @@
 ﻿using CarpetStoreAndManagement.Data;
 using CarpetStoreAndManagement.Data.Models;
+using CarpetStoreAndManagement.Data.Models.Enums;
 using CarpetStoreAndManagement.Data.Models.Inventory;
 using CarpetStoreAndManagement.Data.Models.Product;
 using CarpetStoreAndManagement.Data.Models.User;
@@ -27,7 +28,7 @@ namespace CarpetStoreAndManagement.Services.Services
             this.colorService = colorService;
         }
 
-        
+
 
         public async Task AddProductAsync(AddProductViewModel model)
         {
@@ -42,31 +43,43 @@ namespace CarpetStoreAndManagement.Services.Services
             await context.Products.AddAsync(product);
             await context.SaveChangesAsync();
 
-            var colors = new List<string>()
+
+            var primary = sanitizer.Sanitize(model.PrimaryColor);
+            var secondary = sanitizer.Sanitize(model.SecondaryColor);
+
+            if (primary != null && primary != String.Empty)
             {
-                sanitizer.Sanitize(model.PrimaryColor),
-                sanitizer.Sanitize(model.SecondaryColor)
-            };
+                await colorService.AddColorAsync(primary);
 
-
-            foreach (var name in colors)
-            {
-                if (name != null)
-                {
-                    await colorService.AddColorAsync(name);
-
-                    var color = await context.Colors
-                    .Where(x => x.Name == name)
+                var color = await context.Colors
+                    .Where(x => x.Name == primary)
                     .FirstOrDefaultAsync();
 
-                    var productColors = new ProductColor()
-                    {
-                        ColorId = color.Id,
-                        ProductId = product.Id
-                    };
-                    await context.ProductColors.AddAsync(productColors);
+                var productColors = new ProductColor()
+                {
+                    ColorId = color.Id,
+                    ProductId = product.Id,
+                    ColorType = ProductColorType.PrimaryColor
                 };
-            };
+                await context.ProductColors.AddAsync(productColors);
+            }
+
+            if (secondary != null && secondary != String.Empty)
+            {
+                await colorService.AddColorAsync(secondary);
+
+                var color = await context.Colors
+                    .Where(x => x.Name == secondary)
+                    .FirstOrDefaultAsync();
+
+                var productColors = new ProductColor()
+                {
+                    ColorId = color.Id,
+                    ProductId = product.Id,
+                    ColorType = ProductColorType.SecondaryColor
+                };
+                await context.ProductColors.AddAsync(productColors);
+            }
 
             await context.SaveChangesAsync();
         }
@@ -289,10 +302,11 @@ namespace CarpetStoreAndManagement.Services.Services
                     Type = x.Type
                 })
                 .FirstOrDefaultAsync();
+
             return model;
         }
 
-        public async Task EditProductAsync(EditProductViewModel model)
+        public async Task<int> EditProductAsync(EditProductViewModel model)
         {
             var product = await context.Products
                 .Where(x => x.Id == model.Id)
@@ -303,25 +317,31 @@ namespace CarpetStoreAndManagement.Services.Services
             product.Name = sanitizer.Sanitize(model.Name);
             product.Price = model.Price;
 
-            await EditProductColorAsync(model.Id, sanitizer.Sanitize(model.PrimaryColor), sanitizer.Sanitize(model.SecondaryColor));
+
+            await EditProductColorAsync(sanitizer.Sanitize(model.PrimaryColor), sanitizer.Sanitize(model.SecondaryColor), model.Id);
 
             await context.SaveChangesAsync();
+
+            return model.Id;
         }
 
-        public async Task EditProductColorAsync(int productId, string primaryColor, string secondaryColor)
+        public async Task EditProductColorAsync(string primaryColor, string secondaryColor, int modelId)
         {
-            var products = await context.ProductColors
+            var primary = await context.ProductColors
+               .Include(x => x.Color)
+               .Where(x => x.ProductId == modelId)
+               .Where(x => x.ColorType == ProductColorType.PrimaryColor)
+               .FirstOrDefaultAsync();
+
+            primary.Color.Name = primaryColor;
+
+            var secondary = await context.ProductColors
                 .Include(x => x.Color)
-                .Where(x => x.ProductId == productId)
-                .ToArrayAsync();
+                .Where(x => x.ProductId == modelId && x.ColorType == ProductColorType.SecondaryColor)
+                .FirstOrDefaultAsync();
 
-            if (products.Count() > minProduct && (secondaryColor == String.Empty || secondaryColor == null))
-            {
-                context.ProductColors.Remove(products[1]);
-                await context.SaveChangesAsync();
-            }
 
-            if (products.Count() == minProduct && (secondaryColor != String.Empty && secondaryColor != null))
+            if (secondary == null && (secondaryColor != String.Empty))
             {
                 await colorService.AddColorAsync(secondaryColor);
 
@@ -331,18 +351,25 @@ namespace CarpetStoreAndManagement.Services.Services
 
                 context.ProductColors.Add(new ProductColor
                 {
-                    ProductId = productId,
-                    ColorId = color.Id
+                    ProductId = modelId,
+                    ColorId = color.Id,
+                    ColorType = ProductColorType.SecondaryColor
                 });
 
                 await context.SaveChangesAsync();
             }
 
-            if (products.Count() > minProduct && secondaryColor != String.Empty)
+            if (secondary != null && secondaryColor != String.Empty)
             {
-                products[1].Color.Name = sanitizer.Sanitize(secondaryColor);
+                secondary.Color.Name = secondaryColor;
             }
-            products[0].Color.Name = sanitizer.Sanitize(primaryColor);
+
+
+            if (secondary != null && (secondaryColor == String.Empty || secondaryColor == null))
+            {
+                context.ProductColors.Remove(secondary);
+                await context.SaveChangesAsync();
+            }
 
             await context.SaveChangesAsync();
         }
