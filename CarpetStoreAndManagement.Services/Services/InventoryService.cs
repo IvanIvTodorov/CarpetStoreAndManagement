@@ -63,7 +63,9 @@ namespace CarpetStoreAndManagement.Services.Services
 
         public async Task<IEnumerable<Inventory>> GetInventoriesAsync()
         {
-            return await context.Inventories.ToListAsync();
+           var result = await context.Inventories.ToListAsync();
+
+            return result;    
         }
 
         public async Task<bool> CheckRawMaterialsForProduce(List<string> colors, int qty, string inventoryName)

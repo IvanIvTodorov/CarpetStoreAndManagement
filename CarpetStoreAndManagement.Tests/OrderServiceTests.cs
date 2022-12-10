@@ -158,7 +158,7 @@ namespace CarpetStoreAndManagement.Tests
             await dbContext.Orders.AddAsync(order);
             dbContext.Users.Add(user);
             await dbContext.UserOrders.AddAsync(userOrder);
-            
+
             await dbContext.SaveChangesAsync();
 
             var expected = await service.GetAllOrdersAsync();
@@ -211,13 +211,13 @@ namespace CarpetStoreAndManagement.Tests
         }
 
         [Fact]
-         public async void TestMakeOrderAsync()
+        public async void TestMakeOrderAsync()
         {
             var options = new DbContextOptionsBuilder<CarpetStoreAndManagementDbContext>().UseInMemoryDatabase("Database_For_Tests").Options;
             var dbContext = new CarpetStoreAndManagementDbContext(options);
             var service = new OrderService(dbContext, productService, inventoryService);
 
-            
+
             var user = new User
             {
                 Id = "12342141244",
@@ -257,5 +257,6 @@ namespace CarpetStoreAndManagement.Tests
 
             Assert.True(expected);
         }
+
     }
 }

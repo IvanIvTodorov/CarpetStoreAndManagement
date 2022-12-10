@@ -61,7 +61,8 @@ namespace CarpetStoreAndManagement.Tests
 
             var success = service.GetAllColorsAsync().Result;
 
-            Assert.Equal(4, success.Count());
+            Assert.True(success.Any(x => x.Name == color.Name));
+            Assert.True(success.Any(x => x.Name == color2.Name));
         }
 
 

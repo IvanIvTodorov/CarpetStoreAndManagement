@@ -321,7 +321,7 @@ namespace CarpetStoreAndManagement.Services.Services
                 await context.SaveChangesAsync();
             }
 
-            if (products.Count() == minProduct && (secondaryColor != String.Empty || secondaryColor != null))
+            if (products.Count() == minProduct && (secondaryColor != String.Empty && secondaryColor != null))
             {
                 await colorService.AddColorAsync(secondaryColor);
 

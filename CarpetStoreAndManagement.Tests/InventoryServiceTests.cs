@@ -39,7 +39,7 @@ namespace CarpetStoreAndManagement.Tests
             var result = await service.GetInventoriesAsync();
 
 
-            Assert.True(result.Count() == 2);
+            Assert.True(result.Any(x => x.Name == inventory.Name));
         }
         [Fact]
         public async void TestAddInventoryAsync()
@@ -53,10 +53,10 @@ namespace CarpetStoreAndManagement.Tests
 
             await service.AddInventoryAsync(inventoryName);
 
-            var name = dbContext.Inventories.Where(x => x.Name == inventoryName).SingleOrDefault();
+            var expected = await dbContext.Inventories.ToListAsync();
 
-            Assert.True(dbContext.Inventories.Count() == 3);
-            Assert.Equal(inventoryName, name.Name);
+
+            Assert.True(expected.Any(x => x.Name == inventoryName));
         }
 
         [Fact]
