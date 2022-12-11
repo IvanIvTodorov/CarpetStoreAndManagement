@@ -331,6 +331,9 @@ namespace CarpetStoreAndManagement.Services.Services
 
         public async Task EditProductColorAsync(string primaryColor, string secondaryColor, int modelId)
         {
+            await colorService.AddColorAsync(secondaryColor);
+            await colorService.AddColorAsync(primaryColor);
+
             var primary = await context.ProductColors
                .Include(x => x.Color)
                .Where(x => x.ProductId == modelId)
@@ -339,7 +342,6 @@ namespace CarpetStoreAndManagement.Services.Services
 
             context.ProductColors.Remove(primary);
             await context.SaveChangesAsync();
-            await colorService.AddColorAsync(primaryColor);
 
             var color = await context.Colors
                 .Where(x => x.Name == primaryColor)
@@ -365,7 +367,6 @@ namespace CarpetStoreAndManagement.Services.Services
 
             if (secondary == null && (secondaryColor != String.Empty))
             {
-                await colorService.AddColorAsync(secondaryColor);              
 
                 context.ProductColors.Add(new ProductColor
                 {
