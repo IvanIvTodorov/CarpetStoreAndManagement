@@ -14,6 +14,7 @@ namespace CarpetStoreAndManagement.Services.Contracts
         Task AddInventoryAsync(string name);
 
         Task<IEnumerable<Inventory>> GetInventoriesAsync();
+        Task<bool> CheckIfInventoryNameExistAsync(string name);
 
         Task<AllInventoryViewModel> GetAllItemsAsync();
         Task<ProductsInInventoryViewModel> GetInventoryProductAsync();

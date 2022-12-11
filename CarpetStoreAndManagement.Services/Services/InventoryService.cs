@@ -161,5 +161,11 @@ namespace CarpetStoreAndManagement.Services.Services
                 Types = Enum.GetNames(typeof(RawMaterialType)).ToList()
             };
         }
+
+        public async Task<bool> CheckIfInventoryNameExistAsync(string name)
+        {
+            var sanitizedName = sanitizer.Sanitize(name);
+            return await context.Inventories.AnyAsync(x => x.Name == sanitizedName);
+        }
     }
 }

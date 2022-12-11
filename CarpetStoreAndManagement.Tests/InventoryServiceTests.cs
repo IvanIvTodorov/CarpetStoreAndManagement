@@ -262,5 +262,31 @@ namespace CarpetStoreAndManagement.Tests
             Assert.True(expected);
             Assert.False(expectedFalse);
         }
+
+        [Fact]
+        public async void TestCheckIfInventoryNameExistAsync()
+        {
+            var sanitizer = new HtmlSanitizer();
+            var options = new DbContextOptionsBuilder<CarpetStoreAndManagementDbContext>().UseInMemoryDatabase("Database_For_Tests").Options;
+            var dbContext = new CarpetStoreAndManagementDbContext(options);
+            var service = new InventoryService(dbContext, sanitizer, colorService, productService);
+
+            var inventory = new Inventory()
+            {
+                Id = 1249124,
+                Name = "Test"
+            };
+
+            var name = "Wrong test";
+
+            await dbContext.Inventories.AddAsync(inventory);
+            await dbContext.SaveChangesAsync();
+
+            var expected = await service.CheckIfInventoryNameExistAsync(inventory.Name);
+            var expected2 = await service.CheckIfInventoryNameExistAsync(name);
+
+            Assert.True(expected);
+            Assert.False(expected2);
+        }
     }
 }

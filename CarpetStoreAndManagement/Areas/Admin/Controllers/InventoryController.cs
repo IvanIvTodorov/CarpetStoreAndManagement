@@ -17,6 +17,7 @@ namespace CarpetStoreAndManagement.Areas.Admin.Controllers
         private const string InventoryConstraint = "Inventory name should be with minimum length 3 and maximum length 25!";
         private const string InventoryAdded = "You have added new inventory!";
         private const string InvalidSearchParams = "Invalid search parameters!";
+        private const string InventoryAlreadyExists = "Inventory with such name already exists!";
 
         public InventoryController(IInventoryService inventoryService, IProductService productService, IColorService colorService, IRawMaterialService rawMaterialService)
         {
@@ -30,6 +31,13 @@ namespace CarpetStoreAndManagement.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(ProduceViewModel model)
         {
+            var exists = await inventoryService.CheckIfInventoryNameExistAsync(model.InventoryName);
+            if (exists)
+            {
+                TempData["message"] = InventoryAlreadyExists;
+                return RedirectToAction(nameof(All));
+            }
+
             if (model.InventoryName == null || model.InventoryName == "" || model.InventoryName.Length < 3 || model.InventoryName.Length > 25)
             {
                 TempData["message"] = InventoryConstraint;
