@@ -37,10 +37,6 @@ namespace CarpetStoreAndManagement.Services.Services
             {
                 result = "Service Unavailable";
             }
-            else if (statusCode == 503)
-            {
-                result = "Gateway Timeout";
-            }
 
             return result;
         }

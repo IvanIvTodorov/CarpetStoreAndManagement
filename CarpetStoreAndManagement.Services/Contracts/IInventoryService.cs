@@ -19,9 +19,9 @@ namespace CarpetStoreAndManagement.Services.Contracts
         Task<ProductsInInventoryViewModel> GetInventoryProductAsync();
         Task<RawMaterialsInInventoryViewModel> GetInventoryRawMaterialAsync();
 
-        Task<bool> CheckRawMaterialsForProduce(List<string> colors, int qty, string inventoryName);
+        Task<bool> CheckRawMaterialsForProduceAsync(List<string> colors, int qty, string inventoryName);
 
-        Task DecreaseUsedRawMaterialsInInventory(List<string> colors, int qty, string inventoryName);
+        Task DecreaseUsedRawMaterialsInInventoryAsync(List<string> colors, int qty, string inventoryName);
 
     }
 }

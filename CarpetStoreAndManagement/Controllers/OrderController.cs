@@ -12,6 +12,8 @@ namespace CarpetStoreAndManagement.Controllers
     public class OrderController : Controller
     {
         private readonly IOrderService orderService;
+        private const string EmptyCart = "Your cart is empty!";
+        private const string SubmittedOrder = $"Your order has been submitted!";
 
         public OrderController(IOrderService orderService)
         {
@@ -24,13 +26,16 @@ namespace CarpetStoreAndManagement.Controllers
         {
             if (!model)
             {
-                TempData["message"] = $"Your cart is empty!";
+                TempData["message"] = EmptyCart;
 
                 return RedirectToAction("Cart", "Product");
             }
             var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
             await orderService.MakeOrderAsync(userId);
+
+            TempData["message"] = SubmittedOrder;
+
 
             return RedirectToAction("All", "Product");
         }

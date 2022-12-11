@@ -1,31 +1,33 @@
 ﻿@using CarpetStoreAndManagement.ViewModels.FeedbackViewModels
 @model IEnumerable<FeedbackViewModel>
 
-@{
-    ViewBag.Title = "Feedbacks";
+@if (!Model.Any())
+{
+    <div class="d-flex justify-content-center">
+        <h1>There are not any feedbacks yet !</h1>
+    </div>
+}
+else
+{
+    <h1 class="text-center">Feedbacks</h1>
+    <hr>
+    <div class="row">
+        @foreach (var feedback in Model)
+        {
+            <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4 mt-4">
+                <div class="card shadow" style="min-height:415px">
+                    <div class="card-body text-center">
+                        <h6>Name: @feedback.FullName</h6>
+                        <hr>
+                        <h6>Email: @feedback.Email</h6>
+                        <hr>
+                        <h8>Feedback</h8>
+                        <hr>
+                        <p>@feedback.Message</p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
 }
 
-<h1 class="text-center">Feedbacks</h1>
-<div class="container">
-    <div>
-        <table class="table table-striped custab">
-            <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>FullName</th>
-                    <th>Email</th>
-                    <th>Feedback</th>
-                </tr>
-            </thead>
-            @foreach (var feedback in Model)
-            {
-            <tr>
-                <td>@feedback.Id</td>
-                <td>@feedback.FullName</td>
-                <td>@feedback.Email</td>
-                <td>@feedback.Message</td>
-            </tr>
-            }
-        </table>
-    </div>
-</div>

@@ -1,10 +1,6 @@
 ﻿@using CarpetStoreAndManagement.ViewModels.RawMaterialViewModels
 @model AddRawMaterialViewModel
 
-@{
-    ViewBag.Title = "Order raw materials";
-}
-
 @if (TempData["message"] != null)
 {
     <script>alert('@TempData["message"]');</script>

@@ -1,4 +1,4 @@
-﻿@using CarpetStoreAndManagement.ViewModels.ProductViewModels
+﻿    @using CarpetStoreAndManagement.ViewModels.ProductViewModels
 @model IEnumerable<ShowAllProductsViewModel>
 
 @if (TempData["message"] != null)
@@ -6,11 +6,8 @@
     <script>alert('@TempData["message"]');</script>
 }
 
-@{
-    ViewBag.Title = "All products";
-}
 
-<h1 class="text-center">@ViewBag.Title</h1>
+<h1 class="text-center">All products</h1>
 <hr>
 <div class="container mb-4">
     <div class="row">

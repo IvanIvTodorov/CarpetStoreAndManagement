@@ -13,8 +13,10 @@ namespace CarpetStoreAndManagement.Controllers
     {
         private readonly IProductService productService;
         private readonly IInventoryService inventoryService;
-        private const int requiredQuantity = 1;
-        private const int notValidOrderId = 0;
+        private const int RequiredQuantity = 1;
+        private const string TypeDoNotExist = "This type do not exist!";
+        private const string ProductDoNotExist = "This product do not exist!";
+        private const string QuantityConstraint = "Quantity must not be zero or negative number!";
 
         public ProductController(IProductService productService, IInventoryService inventoryService)
         {
@@ -37,7 +39,7 @@ namespace CarpetStoreAndManagement.Controllers
         {
             if (!await productService.CheckIfTypeExistAsync(type))
             {
-                TempData["message"] = $"This type do not exist!";
+                TempData["message"] = TypeDoNotExist;
 
                 return RedirectToAction(nameof(All));
             }
@@ -51,9 +53,9 @@ namespace CarpetStoreAndManagement.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(int productId)
         {
-            if (!await productService.ProductIdExist(productId))
+            if (!await productService.ProductIdExistAsync(productId))
             {
-                TempData["message"] = $"This product do not exist!";
+                TempData["message"] = ProductDoNotExist;
                 return RedirectToAction(nameof(All));
             }
             var model = await productService.ProductDetailsAsync(productId);
@@ -76,9 +78,9 @@ namespace CarpetStoreAndManagement.Controllers
         [HttpGet]
         public async Task<IActionResult> AddToCart(int productId)
         {
-            if (!await productService.ProductIdExist(productId))
+            if (!await productService.ProductIdExistAsync(productId))
             {
-                TempData["message"] = $"This product do not exist!";
+                TempData["message"] = ProductDoNotExist;
                 return RedirectToAction(nameof(All));
             }
             var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
@@ -92,9 +94,9 @@ namespace CarpetStoreAndManagement.Controllers
         [HttpPost]
         public async Task<IActionResult> IncreaseProductQuantityInCart(int productId)
         {
-            if (!await productService.ProductIdExist(productId))
+            if (!await productService.ProductIdExistAsync(productId))
             {
-                TempData["message"] = $"This product do not exist!";
+                TempData["message"] = ProductDoNotExist;
                 return RedirectToAction(nameof(All));
             }
             await productService.IncreaseProductQtyInCartAsync(productId);
@@ -106,17 +108,17 @@ namespace CarpetStoreAndManagement.Controllers
         [HttpPost]
         public async Task<IActionResult> DecreaseProductQuantityInCart(int productId)
         {
-            if (!await productService.ProductIdExist(productId))
+            if (!await productService.ProductIdExistAsync(productId))
             {
-                TempData["message"] = $"This product do not exist!";
+                TempData["message"] = ProductDoNotExist;
                 return RedirectToAction(nameof(All));
             }
 
-            var userProduct = await productService.GetCurrentUserProduct(productId);
+            var userProduct = await productService.GetCurrentUserProductAsync(productId);
 
-            if (userProduct.Quantity <= requiredQuantity)
+            if (userProduct.Quantity <= RequiredQuantity)
             {
-                TempData["message"] = $"Quantity must not be zero or negative number!";
+                TempData["message"] = QuantityConstraint;
                 return RedirectToAction(nameof(Cart));
             }
 
@@ -129,9 +131,9 @@ namespace CarpetStoreAndManagement.Controllers
         [HttpPost]
         public async Task<IActionResult> RemoveFromCart(int productId)
         {
-            if (!await productService.ProductIdExist(productId))
+            if (!await productService.ProductIdExistAsync(productId))
             {
-                TempData["message"] = $"This product do not exist!";
+                TempData["message"] = ProductDoNotExist;
                 return RedirectToAction(nameof(All));
             }
             var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;

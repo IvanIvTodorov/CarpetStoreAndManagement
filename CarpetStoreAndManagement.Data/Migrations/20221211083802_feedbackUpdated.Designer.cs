@@ -4,6 +4,7 @@ using CarpetStoreAndManagement.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarpetStoreAndManagement.Data.Migrations
 {
     [DbContext(typeof(CarpetStoreAndManagementDbContext))]
-    partial class CarpetStoreAndManagementDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221211083802_feedbackUpdated")]
+    partial class feedbackUpdated
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -179,44 +181,6 @@ namespace CarpetStoreAndManagement.Data.Migrations
                     b.HasIndex("RawMaterialId");
 
                     b.ToTable("InventoryRawMaterials");
-
-                    b.HasData(
-                        new
-                        {
-                            InventoryId = 1,
-                            RawMaterialId = 1,
-                            Quantity = 20
-                        },
-                        new
-                        {
-                            InventoryId = 1,
-                            RawMaterialId = 2,
-                            Quantity = 20
-                        },
-                        new
-                        {
-                            InventoryId = 1,
-                            RawMaterialId = 3,
-                            Quantity = 20
-                        },
-                        new
-                        {
-                            InventoryId = 1,
-                            RawMaterialId = 4,
-                            Quantity = 20
-                        },
-                        new
-                        {
-                            InventoryId = 1,
-                            RawMaterialId = 5,
-                            Quantity = 20
-                        },
-                        new
-                        {
-                            InventoryId = 1,
-                            RawMaterialId = 6,
-                            Quantity = 20
-                        });
                 });
 
             modelBuilder.Entity("CarpetStoreAndManagement.Data.Models.Order", b =>
@@ -537,44 +501,6 @@ namespace CarpetStoreAndManagement.Data.Migrations
                     b.HasIndex("ColorId");
 
                     b.ToTable("RawMaterials");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            ColorId = 1,
-                            Type = 0
-                        },
-                        new
-                        {
-                            Id = 2,
-                            ColorId = 1,
-                            Type = 2
-                        },
-                        new
-                        {
-                            Id = 3,
-                            ColorId = 1,
-                            Type = 1
-                        },
-                        new
-                        {
-                            Id = 4,
-                            ColorId = 5,
-                            Type = 0
-                        },
-                        new
-                        {
-                            Id = 5,
-                            ColorId = 5,
-                            Type = 2
-                        },
-                        new
-                        {
-                            Id = 6,
-                            ColorId = 5,
-                            Type = 1
-                        });
                 });
 
             modelBuilder.Entity("CarpetStoreAndManagement.Data.Models.User.User", b =>
@@ -646,13 +572,13 @@ namespace CarpetStoreAndManagement.Data.Migrations
                         {
                             Id = "41d1aea7-5764-4ebb-8a0d-055594610abb",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "43fef9b8-26e0-4ab1-8840-f21509d8387e",
+                            ConcurrencyStamp = "271e7849-bae5-4e19-8231-93e7ef3c77d1",
                             Email = "ivan@abv.bg",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "IVAN@ABV.BG",
                             NormalizedUserName = "IVAN",
-                            PasswordHash = "AQAAAAEAACcQAAAAECa4Oeh6XI6ulnUjBh8+k/aoBr8S1VDL0axkMkqo49KDvktR6x5mqFHz6z4Pm7LsSQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAENKhoOpon5nndcYb06TpQGcc9Rv8ZEDkcplu0ceUn5+LmI6EZ6m4v3JlyGiG2yhVEQ==",
                             PhoneNumber = "+111111111111",
                             PhoneNumberConfirmed = true,
                             SecurityStamp = "41d1aea7-5764-4ebb-8a0d-055594610abb",

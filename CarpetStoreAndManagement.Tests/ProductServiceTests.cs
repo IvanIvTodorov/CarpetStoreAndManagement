@@ -273,7 +273,7 @@ namespace CarpetStoreAndManagement.Tests
             await dbContext.ProductColors.AddAsync(prodColor);
             await dbContext.SaveChangesAsync();
 
-            var expected = await service.GetProductColors(product.Id);
+            var expected = await service.GetProductColorsAsync(product.Id);
 
             Assert.True(expected.Contains(color.Name));
         }
@@ -410,8 +410,8 @@ namespace CarpetStoreAndManagement.Tests
                 InventoryName = inventory.Name
             };
 
-            await service.ProduceProduct(model, product.Id);
-            await service.ProduceProduct(model, product2.Id);
+            await service.ProduceProductAsync(model, product.Id);
+            await service.ProduceProductAsync(model, product2.Id);
 
             var expected = await dbContext.InventoryProducts.Where(x => x.ProductId == product.Id).FirstOrDefaultAsync();
             var expected2 = await dbContext.InventoryProducts.Where(x => x.ProductId == product2.Id).FirstOrDefaultAsync();
@@ -567,7 +567,7 @@ namespace CarpetStoreAndManagement.Tests
             await dbContext.UserProducts.AddAsync(userProd);
             await dbContext.SaveChangesAsync();
 
-            var expected = await service.GetCurrentUserProduct(product.Id);
+            var expected = await service.GetCurrentUserProductAsync(product.Id);
 
             Assert.Equal(expected, userProd);
         }
@@ -788,7 +788,7 @@ namespace CarpetStoreAndManagement.Tests
             await dbContext.Products.AddAsync(product);
             await dbContext.SaveChangesAsync();
 
-            var success = await service.ProductIdExist(product.Id);
+            var success = await service.ProductIdExistAsync(product.Id);
 
             Assert.True(success);
         }

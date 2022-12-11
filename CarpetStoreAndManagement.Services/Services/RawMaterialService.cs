@@ -90,7 +90,7 @@ namespace CarpetStoreAndManagement.Services.Services
             await context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<InventoryRawMaterial>> GetRawMatInInventoryBySearch(RawMaterialsInInventoryViewModel model)
+        public async Task<IEnumerable<InventoryRawMaterial>> GetRawMatInInventoryBySearchAsync(RawMaterialsInInventoryViewModel model)
         {
             var rawMatId = await context.InventoryRawMaterials
                  .Include(x => x.Inventory)

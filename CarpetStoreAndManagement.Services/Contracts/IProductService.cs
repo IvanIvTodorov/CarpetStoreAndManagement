@@ -37,17 +37,17 @@ namespace CarpetStoreAndManagement.Services.Contracts
         Task IncreaseProductQtyInCartAsync(int productId);
         Task RemoveFromCartAsync(int productId, string userId);
 
-        Task ProduceProduct(ProduceViewModel model, int productId);
+        Task ProduceProductAsync(ProduceViewModel model, int productId);
 
-        Task<List<string>> GetProductColors(int productId);
+        Task<List<string>> GetProductColorsAsync(int productId);
 
-        Task<UserProduct> GetCurrentUserProduct(int productId);
+        Task<UserProduct> GetCurrentUserProductAsync(int productId);
 
         Task<IEnumerable<Product>> GetProductsFromOrderAsync(int orderId);
 
-        Task<bool> ProductIdExist(int productId);
+        Task<bool> ProductIdExistAsync(int productId);
 
-        Task<IEnumerable<InventoryProduct>> GetProductsInInventoryBySearch(ProductsInInventoryViewModel model);
+        Task<IEnumerable<InventoryProduct>> GetProductsInInventoryBySearchAsync(ProductsInInventoryViewModel model);
         Task<IEnumerable<Product>> PorductsByTypeAsync(string type);
 
     }

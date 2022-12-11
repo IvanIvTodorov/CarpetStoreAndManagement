@@ -18,7 +18,7 @@ namespace CarpetStoreAndManagement.Data.Models
         [MaxLength(50)]
         public string Email { get; set; } = null!;
         [Required]
-        [MaxLength(2500)]
+        [MaxLength(400)]
         public string Message { get; set; } = null!;
     }
 }

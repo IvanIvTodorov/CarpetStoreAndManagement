@@ -1,8 +1,6 @@
 ﻿@using CarpetStoreAndManagement.ViewModels.ProductViewModels
 @model ProductDetailsViewModel
-@{
-    ViewData["Title"] = "Details";
-}
+
 <body>
     <div class="border">
         <div class="d-flex align-items-center justify-content-center">
@@ -12,7 +10,7 @@
             <div class="offset-1">
                 <p>Name: @Model.Name</p>
                 <p>Type: @Model.Type</p>
-                <p>Current price: <span>$ @Model.Price</span></p>
+                <p>Price: <span>$ @Model.Price</span></p>
                 <p>
                     Primary Color:
                     <span>@Model.Colors.FirstOrDefault().Color.Name</span>

@@ -10,6 +10,7 @@ namespace CarpetStoreAndManagement.Controllers
     public class FeedbackController : Controller
     {
         private readonly IFeedbackService feedbackService;
+        private const string SubmittedFeedback = "Your feedback has been submitted!";
 
         public FeedbackController(IFeedbackService feedbackService)
         {
@@ -29,7 +30,7 @@ namespace CarpetStoreAndManagement.Controllers
         {
             await feedbackService.SubmitFeedbackAsync(model);
 
-            TempData["message"] = $"Your feedback has been submitted!!!";       
+            TempData["message"] = SubmittedFeedback;
 
             return RedirectToAction("Index", "Home");
         }

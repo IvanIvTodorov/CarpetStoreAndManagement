@@ -14,6 +14,9 @@ namespace CarpetStoreAndManagement.Areas.Admin.Controllers
         private readonly IProductService productService;
         private readonly IColorService colorService;
         private readonly IRawMaterialService rawMaterialService;
+        private const string InventoryConstraint = "Inventory name should be with minimum length 3 and maximum length 25!";
+        private const string InventoryAdded = "You have added new inventory!";
+        private const string InvalidSearchParams = "Invalid search parameters!";
 
         public InventoryController(IInventoryService inventoryService, IProductService productService, IColorService colorService, IRawMaterialService rawMaterialService)
         {
@@ -29,10 +32,12 @@ namespace CarpetStoreAndManagement.Areas.Admin.Controllers
         {
             if (model.InventoryName == null || model.InventoryName == "" || model.InventoryName.Length < 3 || model.InventoryName.Length > 25)
             {
-                TempData["message"] = "Inventory name should be with minimum length 3 and maximum length 25!";
+                TempData["message"] = InventoryConstraint;
             }
             else
             {
+                TempData["message"] = InventoryAdded;
+
                 await inventoryService.AddInventoryAsync(model.InventoryName);
             }
             
@@ -68,11 +73,11 @@ namespace CarpetStoreAndManagement.Areas.Admin.Controllers
         {
             if (!ModelState.IsValid)
             {
-                TempData["message"] = "Invalid search parameters!";
+                TempData["message"] = InvalidSearchParams;
 
             }
 
-            var passModel = await productService.GetProductsInInventoryBySearch(model);
+            var passModel = await productService.GetProductsInInventoryBySearchAsync(model);
 
             var passModell = new ProductsInInventoryViewModel()
             {
@@ -90,10 +95,10 @@ namespace CarpetStoreAndManagement.Areas.Admin.Controllers
         {
             if (!ModelState.IsValid)
             {
-                TempData["message"] = "Invalid search parameters!";
+                TempData["message"] = InvalidSearchParams;
 
             }
-            var passModel = await rawMaterialService.GetRawMatInInventoryBySearch(model);
+            var passModel = await rawMaterialService.GetRawMatInInventoryBySearchAsync(model);
 
             var passModell = new RawMaterialsInInventoryViewModel()
             {

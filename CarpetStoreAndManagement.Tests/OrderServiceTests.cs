@@ -36,7 +36,7 @@ namespace CarpetStoreAndManagement.Tests
             await dbContext.Orders.AddAsync(order);
             await dbContext.SaveChangesAsync();
 
-            var expected = await service.CheckIfOrderExist(order.Id);
+            var expected = await service.CheckIfOrderExistAsync(order.Id);
 
             Assert.True(expected);
         }

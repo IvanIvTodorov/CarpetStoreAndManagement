@@ -142,7 +142,7 @@ namespace CarpetStoreAndManagement.Tests
                 Color = color.Name
             };
 
-            var expected = await service.GetRawMatInInventoryBySearch(model);
+            var expected = await service.GetRawMatInInventoryBySearchAsync(model);
 
             Assert.True(expected.Any(x => x.RawMaterialId == rawMaterial.Id));
         }

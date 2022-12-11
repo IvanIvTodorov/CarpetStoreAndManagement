@@ -26,7 +26,7 @@ namespace CarpetStoreAndManagement.Services.Services
             this.inventoryService = inventoryService;
         }
 
-        public async Task<bool> CheckIfOrderExist(int orderId)
+        public async Task<bool> CheckIfOrderExistAsync(int orderId)
         {
             return await context.Orders.AnyAsync(x => x.Id == orderId);
 

@@ -9,15 +9,14 @@
 
 @if (Model.FirstOrDefault().Type == "Carpet")
 {
-    ViewBag.Title = "Carpets";
-}else
+    <h1 class="text-center">Carpets</h1>
+
+}
+else if (Model.FirstOrDefault().Type == "Path")
 {
-    ViewBag.Title = "Paths";
-        
+    <h1 class="text-center">Paths</h1>
 }
 
-
-<h1 class="text-center">@ViewBag.Title</h1>
 <hr>
 <div class="container mb-4">
     <div class="row">

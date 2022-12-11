@@ -11,8 +11,12 @@ namespace CarpetStoreAndManagement.Areas.Admin.Controllers
     {
         private readonly IProductService productService;
         private readonly IInventoryService inventoryService;
-        private const int requiredQuantity = 1;
-        private const int notValidOrderId = 0;
+        private const int RequiredQuantity = 1;
+        private const string TypeDoNotExist = "This type do not exist!";
+        private const string InvalidProduct = "Invalid product!";
+        private const string QuantityConstraint = "Quantity should be higher than 0!";
+        private const string ProductDoNotExist = "This product do not exist!";
+        private const string ColorsShouldBeDifferent = "Primary and Secondary color should be different!";
 
         public ProductController(IProductService productService, IInventoryService inventoryService)
         {
@@ -35,7 +39,7 @@ namespace CarpetStoreAndManagement.Areas.Admin.Controllers
         {
             if (!await productService.CheckIfTypeExistAsync(type))
             {
-                TempData["message"] = $"This type do not exist!";
+                TempData["message"] = TypeDoNotExist;
 
                 return RedirectToAction(nameof(All));
             }
@@ -63,6 +67,12 @@ namespace CarpetStoreAndManagement.Areas.Admin.Controllers
                 return View(model);
             }
 
+            if (model.PrimaryColor == model.SecondaryColor)
+            {
+                TempData["message"] = ColorsShouldBeDifferent;
+                return View(model);
+            }
+
             try
             {
                 await productService.AddProductAsync(model);
@@ -81,9 +91,9 @@ namespace CarpetStoreAndManagement.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> DeleteProduct(int productId)
         {
-            if (!await productService.ProductIdExist(productId))
+            if (!await productService.ProductIdExistAsync(productId))
             {
-                TempData["message"] = "Invalid product!";
+                TempData["message"] = InvalidProduct;
                 return RedirectToAction(nameof(All));
             }
 
@@ -112,30 +122,31 @@ namespace CarpetStoreAndManagement.Areas.Admin.Controllers
 
             if (!ModelState.IsValid)
             {
-                if (model.Quantity < requiredQuantity)
+                if (model.Quantity < RequiredQuantity)
                 {
-                    TempData["message"] = "Quantity should be higher than 0!";
+                    TempData["message"] = QuantityConstraint;
                     return RedirectToAction(nameof(Produce));
                 }
             };
 
-            if (!await productService.ProductIdExist(productId))
+            if (!await productService.ProductIdExistAsync(productId))
             {
-                TempData["message"] = "Invalid product!";
+                TempData["message"] = InvalidProduct;
                 return RedirectToAction(nameof(Produce));
             }
 
-            var productColors = await productService.GetProductColors(productId);
+            var productColors = await productService.GetProductColorsAsync(productId);
 
-            if (!await inventoryService.CheckRawMaterialsForProduce(productColors, model.Quantity, model.InventoryName))
+            if (!await inventoryService.CheckRawMaterialsForProduceAsync(productColors, model.Quantity, model.InventoryName))
             {
                 TempData["message"] = $"You do not have enough raw materials in {model.InventoryName} inventory! You need to order {String.Join(" ", productColors)} raw materials!";
 
                 return RedirectToAction("Show", "RawMaterial");
             }
 
-            await productService.ProduceProduct(model, productId);
-            await inventoryService.DecreaseUsedRawMaterialsInInventory(productColors, model.Quantity, model.InventoryName);
+            await productService.ProduceProductAsync(model, productId);
+            await inventoryService.DecreaseUsedRawMaterialsInInventoryAsync(productColors, model.Quantity, model.InventoryName);
+            TempData["message"] = $"{model.Quantity} pieces are added in {model.InventoryName} inventory!";
 
             return RedirectToAction("Products", "Inventory");
         }
@@ -143,9 +154,9 @@ namespace CarpetStoreAndManagement.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> EditPage(int productId)
         {
-            if (!await productService.ProductIdExist(productId))
+            if (!await productService.ProductIdExistAsync(productId))
             {
-                TempData["message"] = "Invalid product!";
+                TempData["message"] = InvalidProduct;
 
                 return RedirectToAction(nameof(All));
             }
@@ -160,10 +171,20 @@ namespace CarpetStoreAndManagement.Areas.Admin.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return RedirectToAction(nameof(All));
+                return View("EditPage", model);
+            }
+
+            if (model.PrimaryColor == model.SecondaryColor)
+            {
+                TempData["message"] = ColorsShouldBeDifferent;
+                model.SecondaryColor = String.Empty;
+                return View("EditPage", model);
             }
 
             var id = await productService.EditProductAsync(model);
+
+            TempData["message"] = $"You have successfully eddited product {model.Name}!";
+
 
             return RedirectToAction(nameof(Details), new { productId = id });
         }
@@ -188,9 +209,9 @@ namespace CarpetStoreAndManagement.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(int productId)
         {
-            if (!await productService.ProductIdExist(productId))
+            if (!await productService.ProductIdExistAsync(productId))
             {
-                TempData["message"] = $"This product do not exist!";
+                TempData["message"] = ProductDoNotExist;
                 return RedirectToAction(nameof(All));
             }
             var model = await productService.ProductDetailsAsync(productId);

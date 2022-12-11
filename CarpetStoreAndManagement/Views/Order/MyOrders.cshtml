@@ -1,106 +1,114 @@
 ﻿@using CarpetStoreAndManagement.ViewModels.OrderViewModels
 @model IEnumerable<MyOrdersViewModel>
 
-@{
-    ViewData["Title"] = "My orders";
-}
-
 @if (TempData["message"] != null)
 {
     <script>alert('@TempData["message"]');</script>
 }
 
-
-<body>
-    <div class="container">
-        <div class="table-wrapper">
-            <div class="table-title">
-                <div class="row">
-                    <h2 class="text-center">Orders</h2>
-                </div>
-            </div>
-            <table style="border:1px solid black;" class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>Id</th>
-                        <th>Product name</th>
-                        <th>Type</th>
-                        <th>Colors</th>
-                        <th>Quantity</th>
-                        <th>Total price</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @{
-                        var id = 1;
-                    }
-                    @foreach (var order in Model)
-                    {
-                        <tr>
-                            <td>@(id++) </td>
-                            @if (order.ProductName.Count() == 1)
-                            {
-                                <td>
-
-                                    <td2>@order.ProductName[0]</td2>
-                                </td>
-                                <td>
-
-                                    <td2>@order.ProductType[0]</td2>
-                                </td>
-                                <td>
-
-                                    <td2>@order.ProductColors[0]</td2>
-                                </td>
-                                <td>
-                                    <td2>@order.ProductQuantity[0]</td2>
-                                </td>
-                            }
-                            else
-                            {
-                                <td>
-                                    @foreach (var name in order.ProductName)
-                                    {
-                                        <td2>@name</td2>
-                                        <hr>
-                                    }
-                                </td>
-                                <td>
-                                    @foreach (var type in order.ProductType)
-                                    {
-                                        <td2>@type</td2>
-                                        <hr>
-                                    }
-                                </td>
-                                <td>
-                                    @foreach (var colors in order.ProductColors)
-                                    {
-                                        <td2>@colors</td2>
-                                        <hr>
-                                    }
-                                </td>
-                                <td>
-                                    @foreach (var qty in order.ProductQuantity)
-                                    {
-                                        <td2>@qty</td2>
-                                        <hr>
-                                    }
-                                </td>
-                            }
-                            <td align="center">@order.TotalPrice</td>
-                            @if (order.IsCompleted)
-                            {
-                                <td>Completed</td>
-                            }
-                            else
-                            {
-                                <td>In process...</td>
-                            }
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
+@if (!Model.Any())
+{
+    <div class="d-flex justify-content-center">
+        <h1>You do not have any orders yet !</h1>
     </div>
-</body>
+    <div class="d-flex justify-content-center">
+        <a href="/Product/All">Back to products</a>
+
+    </div>
+}
+else
+{
+    <body>
+        <div class="container">
+            <div class="table-wrapper">
+                <div class="table-title">
+                    <div class="row">
+                        <h2 class="text-center">Orders</h2>
+                    </div>
+                </div>
+                <table style="border:1px solid black;" class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Product name</th>
+                            <th>Type</th>
+                            <th>Colors</th>
+                            <th>Quantity</th>
+                            <th>Total price</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            var id = 1;
+                        }
+                        @foreach (var order in Model)
+                        {
+                            <tr>
+                                <td>@(id++) </td>
+                                @if (order.ProductName.Count() == 1)
+                                {
+                                    <td>
+
+                                        <td2>@order.ProductName[0]</td2>
+                                    </td>
+                                    <td>
+
+                                        <td2>@order.ProductType[0]</td2>
+                                    </td>
+                                    <td>
+
+                                        <td2>@order.ProductColors[0]</td2>
+                                    </td>
+                                    <td>
+                                        <td2>@order.ProductQuantity[0]</td2>
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td>
+                                        @foreach (var name in order.ProductName)
+                                        {
+                                            <td2>@name</td2>
+                                            <hr>
+                                        }
+                                    </td>
+                                    <td>
+                                        @foreach (var type in order.ProductType)
+                                        {
+                                            <td2>@type</td2>
+                                            <hr>
+                                        }
+                                    </td>
+                                    <td>
+                                        @foreach (var colors in order.ProductColors)
+                                        {
+                                            <td2>@colors</td2>
+                                            <hr>
+                                        }
+                                    </td>
+                                    <td>
+                                        @foreach (var qty in order.ProductQuantity)
+                                        {
+                                            <td2>@qty</td2>
+                                            <hr>
+                                        }
+                                    </td>
+                                }
+                                <td align="center">@order.TotalPrice</td>
+                                @if (order.IsCompleted)
+                                {
+                                    <td>Completed</td>
+                                }
+                                else
+                                {
+                                    <td>In process...</td>
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </body>
+}

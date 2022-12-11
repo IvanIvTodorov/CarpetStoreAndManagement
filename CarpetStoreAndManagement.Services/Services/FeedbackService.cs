@@ -33,7 +33,6 @@ namespace CarpetStoreAndManagement.Services.Services
             {
                 feedbacksViewModel.Add(new FeedbackViewModel
                 {
-                    Id = feedback.Id,
                     Email = feedback.Email,
                     FullName = feedback.FullName,
                     Message = feedback.Message

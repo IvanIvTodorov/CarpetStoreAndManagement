@@ -20,6 +20,6 @@ namespace CarpetStoreAndManagement.Services.Contracts
 
         Task<ProduceFromOrderViewModel> SetProduceFromOrderViewModelAsync(int orderid);
 
-        Task<bool> CheckIfOrderExist(int orderId);
+        Task<bool> CheckIfOrderExistAsync(int orderId);
     }
 }

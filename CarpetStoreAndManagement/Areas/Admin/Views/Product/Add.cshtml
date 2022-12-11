@@ -1,11 +1,12 @@
 ﻿@using CarpetStoreAndManagement.ViewModels.ProductViewModels
 @model AddProductViewModel
  
-@{
-    ViewData["Title"] = "Add design";
+@if (TempData["message"] != null)
+{
+    <script>alert('@TempData["message"]');</script>
 }
 
-<h2 class="text-center">@ViewBag.Title</h2>
+<h2 class="text-center">Add new design</h2>
 <hr />
 
 <div class="row">

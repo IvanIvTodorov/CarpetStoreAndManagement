@@ -4,6 +4,7 @@ using CarpetStoreAndManagement.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarpetStoreAndManagement.Data.Migrations
 {
     [DbContext(typeof(CarpetStoreAndManagementDbContext))]
-    partial class CarpetStoreAndManagementDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221211095401_rawMaterialSeedUpdate")]
+    partial class rawMaterialSeedUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -197,24 +199,6 @@ namespace CarpetStoreAndManagement.Data.Migrations
                         {
                             InventoryId = 1,
                             RawMaterialId = 3,
-                            Quantity = 20
-                        },
-                        new
-                        {
-                            InventoryId = 1,
-                            RawMaterialId = 4,
-                            Quantity = 20
-                        },
-                        new
-                        {
-                            InventoryId = 1,
-                            RawMaterialId = 5,
-                            Quantity = 20
-                        },
-                        new
-                        {
-                            InventoryId = 1,
-                            RawMaterialId = 6,
                             Quantity = 20
                         });
                 });
@@ -556,24 +540,6 @@ namespace CarpetStoreAndManagement.Data.Migrations
                             Id = 3,
                             ColorId = 1,
                             Type = 1
-                        },
-                        new
-                        {
-                            Id = 4,
-                            ColorId = 5,
-                            Type = 0
-                        },
-                        new
-                        {
-                            Id = 5,
-                            ColorId = 5,
-                            Type = 2
-                        },
-                        new
-                        {
-                            Id = 6,
-                            ColorId = 5,
-                            Type = 1
                         });
                 });
 
@@ -646,13 +612,13 @@ namespace CarpetStoreAndManagement.Data.Migrations
                         {
                             Id = "41d1aea7-5764-4ebb-8a0d-055594610abb",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "43fef9b8-26e0-4ab1-8840-f21509d8387e",
+                            ConcurrencyStamp = "899ac3de-0fd1-4354-87c7-71a66e26cc88",
                             Email = "ivan@abv.bg",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "IVAN@ABV.BG",
                             NormalizedUserName = "IVAN",
-                            PasswordHash = "AQAAAAEAACcQAAAAECa4Oeh6XI6ulnUjBh8+k/aoBr8S1VDL0axkMkqo49KDvktR6x5mqFHz6z4Pm7LsSQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEDp3pqieChA0dULkus9aIM2yLo/bCVVYA3xaLk68lVWdTl5t9HDS/HdB0uhxEQ/f0w==",
                             PhoneNumber = "+111111111111",
                             PhoneNumberConfirmed = true,
                             SecurityStamp = "41d1aea7-5764-4ebb-8a0d-055594610abb",

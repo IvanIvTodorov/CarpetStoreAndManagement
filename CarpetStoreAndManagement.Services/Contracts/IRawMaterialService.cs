@@ -13,7 +13,7 @@ namespace CarpetStoreAndManagement.Services.Contracts
 
         Task AddToInventoryAsync(int id, string name, int qty);
 
-        Task<IEnumerable<InventoryRawMaterial>> GetRawMatInInventoryBySearch(RawMaterialsInInventoryViewModel model);
+        Task<IEnumerable<InventoryRawMaterial>> GetRawMatInInventoryBySearchAsync(RawMaterialsInInventoryViewModel model);
 
     }
 }

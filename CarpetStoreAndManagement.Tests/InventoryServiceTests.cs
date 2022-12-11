@@ -171,7 +171,7 @@ namespace CarpetStoreAndManagement.Tests
 
             await dbContext.SaveChangesAsync();
 
-            await service.DecreaseUsedRawMaterialsInInventory(listColors, qty, inventory.Name);
+            await service.DecreaseUsedRawMaterialsInInventoryAsync(listColors, qty, inventory.Name);
 
             var expected = await dbContext.InventoryRawMaterials.Where(x => x.RawMaterialId == rawMat.Id).FirstOrDefaultAsync();
 
@@ -243,7 +243,7 @@ namespace CarpetStoreAndManagement.Tests
                 Quantity = 2
             };
 
-            var expectedFalse = await service.CheckRawMaterialsForProduce(listColors, qty, inventory.Name);
+            var expectedFalse = await service.CheckRawMaterialsForProduceAsync(listColors, qty, inventory.Name);
 
             await dbContext.Colors.AddAsync(color);
             await dbContext.Inventories.AddAsync(inventory);
@@ -257,7 +257,7 @@ namespace CarpetStoreAndManagement.Tests
             await dbContext.SaveChangesAsync();
 
 
-            var expected = await service.CheckRawMaterialsForProduce(listColors, qty, inventory.Name);
+            var expected = await service.CheckRawMaterialsForProduceAsync(listColors, qty, inventory.Name);
 
             Assert.True(expected);
             Assert.False(expectedFalse);

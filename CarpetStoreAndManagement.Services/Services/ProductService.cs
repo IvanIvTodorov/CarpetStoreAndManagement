@@ -156,7 +156,7 @@ namespace CarpetStoreAndManagement.Services.Services
                 });
         }
 
-        public async Task<List<string>> GetProductColors(int productId)
+        public async Task<List<string>> GetProductColorsAsync(int productId)
         {
             return await context.ProductColors
                 .Include(x => x.Color)
@@ -181,7 +181,7 @@ namespace CarpetStoreAndManagement.Services.Services
             await context.SaveChangesAsync();
         }
 
-        public async Task ProduceProduct(ProduceViewModel model, int productId)
+        public async Task ProduceProductAsync(ProduceViewModel model, int productId)
         {
 
             if (await context.InventoryProducts
@@ -259,7 +259,7 @@ namespace CarpetStoreAndManagement.Services.Services
             await context.SaveChangesAsync();
         }
 
-        public async Task<UserProduct> GetCurrentUserProduct(int productId)
+        public async Task<UserProduct> GetCurrentUserProductAsync(int productId)
         {
             var userProduct = await context.UserProducts
                 .Where(x => x.ProductId == productId)
@@ -374,7 +374,7 @@ namespace CarpetStoreAndManagement.Services.Services
             await context.SaveChangesAsync();
         }
 
-        public async Task<bool> ProductIdExist(int productId)
+        public async Task<bool> ProductIdExistAsync(int productId)
         {
             var flag = await context.Products.AnyAsync(x => x.Id == productId);
 
@@ -416,7 +416,7 @@ namespace CarpetStoreAndManagement.Services.Services
             return types;
         }
 
-        public async Task<IEnumerable<InventoryProduct>> GetProductsInInventoryBySearch(ProductsInInventoryViewModel model)
+        public async Task<IEnumerable<InventoryProduct>> GetProductsInInventoryBySearchAsync(ProductsInInventoryViewModel model)
         {
             var productsId = await context.InventoryProducts
                 .Include(x => x.Inventory)

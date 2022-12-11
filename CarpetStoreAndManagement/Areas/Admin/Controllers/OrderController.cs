@@ -11,7 +11,12 @@ namespace CarpetStoreAndManagement.Areas.Admin.Controllers
         private readonly IOrderService orderService;
         private readonly IProductService productService;
         private readonly IInventoryService inventoryService;
-        private const int requiredQuantity = 1;
+        private const int RequiredQuantity = 1;
+        private const int MinimumQuantity = 0;
+        private const string InvalidOrder = "Invalid order!";
+        private const string InvalidProduct = "Invalid product!";
+        private const string OrderSent = "Order has been sent !";
+        private const string QuantityConstraint = "Quantity should be higher than 0!";
 
         public OrderController(IOrderService orderService, IProductService productService, IInventoryService inventoryService)
         {
@@ -31,21 +36,22 @@ namespace CarpetStoreAndManagement.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> CompleteOrder(int orderId)
         {
-            if (!await orderService.CheckIfOrderExist(orderId))
+            if (!await orderService.CheckIfOrderExistAsync(orderId))
             {
-                TempData["message"] = "Invalid order!";
+                TempData["message"] = InvalidOrder;
 
                 return RedirectToAction(nameof(Orders));
             }
-            var orders = await orderService.CompleteOrderAsync(orderId);
+            var missingProducts = await orderService.CompleteOrderAsync(orderId);
 
-            if (orders.Count() > 0)
+            if (missingProducts.Count() > MinimumQuantity)
             {
-                TempData["message"] = $"You need to produce more from {String.Join(", ", orders.Select(x => x.Name).ToArray())}";
+                TempData["message"] = $"You need to produce more from {String.Join(", ", missingProducts.Select(x => x.Name).ToArray())}";
 
                 return RedirectToAction(nameof(Orders));
             }
 
+            TempData["message"] = OrderSent;
 
             return RedirectToAction(nameof(Orders));
         }
@@ -53,9 +59,9 @@ namespace CarpetStoreAndManagement.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> ProduceFromOrder(int orderId)
         {
-            if (!await orderService.CheckIfOrderExist(orderId))
+            if (!await orderService.CheckIfOrderExistAsync(orderId))
             {
-                TempData["message"] = "Invalid order!";
+                TempData["message"] = InvalidOrder;
                 return RedirectToAction(nameof(Orders));
 
             }
@@ -72,31 +78,31 @@ namespace CarpetStoreAndManagement.Areas.Admin.Controllers
 
             if (!ModelState.IsValid)
             {
-                if (model.Quantity < requiredQuantity)
+                if (model.Quantity < RequiredQuantity)
                 {
-                    TempData["message"] = "Quantity should be higher than 0!";
+                    TempData["message"] = QuantityConstraint;
                     return RedirectToAction(nameof(Produce));
                 }
             };
 
-            if (!await productService.ProductIdExist(productId))
+            if (!await productService.ProductIdExistAsync(productId))
             {
-                TempData["message"] = "Invalid product!";
+                TempData["message"] = InvalidProduct;
                 return RedirectToAction(nameof(Produce));
 
             }
 
-            var productColors = await productService.GetProductColors(productId);
+            var productColors = await productService.GetProductColorsAsync(productId);
 
-            if (!await inventoryService.CheckRawMaterialsForProduce(productColors, model.Quantity, model.InventoryName))
+            if (!await inventoryService.CheckRawMaterialsForProduceAsync(productColors, model.Quantity, model.InventoryName))
             {
                 TempData["message"] = $"You do not have enough raw materials in {model.InventoryName} inventory! You need to order {String.Join(" ", productColors)} raw materials!";
 
                 return RedirectToAction("Show", "RawMaterial");
             }
 
-            await productService.ProduceProduct(model, productId);
-            await inventoryService.DecreaseUsedRawMaterialsInInventory(productColors, model.Quantity, model.InventoryName);
+            await productService.ProduceProductAsync(model, productId);
+            await inventoryService.DecreaseUsedRawMaterialsInInventoryAsync(productColors, model.Quantity, model.InventoryName);
 
             return RedirectToAction(nameof(Orders));
         }

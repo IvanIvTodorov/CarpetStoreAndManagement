@@ -68,7 +68,7 @@ namespace CarpetStoreAndManagement.Services.Services
             return result;    
         }
 
-        public async Task<bool> CheckRawMaterialsForProduce(List<string> colors, int qty, string inventoryName)
+        public async Task<bool> CheckRawMaterialsForProduceAsync(List<string> colors, int qty, string inventoryName)
         {
             var flag = false;
 
@@ -93,17 +93,19 @@ namespace CarpetStoreAndManagement.Services.Services
                     if (rawMaterial == null || rawMaterial.Quantity < qty)
                     {
                         flag = false;
+                        break;
                     }
                 }
-                if (!flag)
+                else
                 {
+                    flag = false;
                     break;
                 }
             }
             return flag;
         }
 
-        public async Task DecreaseUsedRawMaterialsInInventory(List<string> colors, int qty, string inventoryName)
+        public async Task DecreaseUsedRawMaterialsInInventoryAsync(List<string> colors, int qty, string inventoryName)
         {
             foreach (var color in colors)
             {
