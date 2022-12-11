@@ -19,7 +19,8 @@ namespace CarpetStoreAndManagement.ViewModels.ProductViewModels
 
         public string ImgUrl { get; set; }
 
-        public IEnumerable<ProductColor> Colors { get; set; }
+        public string PrimaryColor { get; set; }
+        public string? SecondaryColor { get; set; }
          
         public IEnumerable<Product> Products { get; set; }
     }

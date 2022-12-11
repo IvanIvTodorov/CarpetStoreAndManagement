@@ -227,6 +227,9 @@ namespace CarpetStoreAndManagement.Services.Services
                 .Take(maxProduct)
                 .ToListAsync();
 
+            var primary = product.ProductColors.Where(x => x.ColorType == ProductColorType.PrimaryColor).FirstOrDefault();
+            var secondary = product.ProductColors.Where(x => x.ColorType == ProductColorType.SecondaryColor).FirstOrDefault();
+
             return new ProductDetailsViewModel
             {
                 Id = product.Id,
@@ -234,7 +237,8 @@ namespace CarpetStoreAndManagement.Services.Services
                 Price = product.Price,
                 Type = product.Type,
                 Name = product.Name,
-                Colors = product.ProductColors,
+                PrimaryColor = primary.Color.Name,
+                SecondaryColor = secondary != null ? secondary.Color.Name : null,
                 Products = products
             };
         }
@@ -297,8 +301,8 @@ namespace CarpetStoreAndManagement.Services.Services
                     ImgUrl = x.ImgUrl,
                     Name = x.Name,
                     Price = x.Price,
-                    PrimaryColor = x.ProductColors.FirstOrDefault(x => x.ProductId == productId).Color.Name,
-                    SecondaryColor = x.ProductColors.ToList().Skip(1).FirstOrDefault().Color.Name,
+                    PrimaryColor = x.ProductColors.Where(x => x.ColorType == ProductColorType.PrimaryColor).FirstOrDefault().Color.Name,
+                    SecondaryColor = x.ProductColors.Where(x => x.ColorType == ProductColorType.SecondaryColor).FirstOrDefault().Color.Name,
                     Type = x.Type
                 })
                 .FirstOrDefaultAsync();
@@ -333,26 +337,40 @@ namespace CarpetStoreAndManagement.Services.Services
                .Where(x => x.ColorType == ProductColorType.PrimaryColor)
                .FirstOrDefaultAsync();
 
-            primary.Color.Name = primaryColor;
+            context.ProductColors.Remove(primary);
+            await context.SaveChangesAsync();
+            await colorService.AddColorAsync(primaryColor);
+
+            var color = await context.Colors
+                .Where(x => x.Name == primaryColor)
+                .FirstOrDefaultAsync();
+
+            var productColor = new ProductColor()
+            {
+                ProductId = modelId,
+                ColorId = color.Id
+
+            };
+
+            await context.ProductColors.AddAsync(productColor);
 
             var secondary = await context.ProductColors
                 .Include(x => x.Color)
                 .Where(x => x.ProductId == modelId && x.ColorType == ProductColorType.SecondaryColor)
                 .FirstOrDefaultAsync();
 
+            var color2 = await context.Colors
+                   .Where(x => x.Name == secondaryColor)
+                   .FirstOrDefaultAsync();
 
             if (secondary == null && (secondaryColor != String.Empty))
             {
-                await colorService.AddColorAsync(secondaryColor);
-
-                var color = await context.Colors
-                    .Where(x => x.Name == secondaryColor)
-                    .FirstOrDefaultAsync();
+                await colorService.AddColorAsync(secondaryColor);              
 
                 context.ProductColors.Add(new ProductColor
                 {
                     ProductId = modelId,
-                    ColorId = color.Id,
+                    ColorId = color2.Id,
                     ColorType = ProductColorType.SecondaryColor
                 });
 
@@ -361,14 +379,23 @@ namespace CarpetStoreAndManagement.Services.Services
 
             if (secondary != null && secondaryColor != String.Empty)
             {
-                secondary.Color.Name = secondaryColor;
+                context.ProductColors.Remove(secondary);
+                await context.SaveChangesAsync();
+
+                var productColor2 = new ProductColor()
+                {
+                    ProductId = modelId,
+                    ColorId = color2.Id
+
+                };
+
+                await context.ProductColors.AddAsync(productColor2);
             }
 
 
             if (secondary != null && (secondaryColor == String.Empty || secondaryColor == null))
             {
                 context.ProductColors.Remove(secondary);
-                await context.SaveChangesAsync();
             }
 
             await context.SaveChangesAsync();

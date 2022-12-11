@@ -18,13 +18,13 @@
                 <p>Price: <span>$ @Model.Price</span></p>
                 <p>
                     Primary Color:
-                    <span>@Model.Colors.FirstOrDefault().Color.Name</span>
+                    <span>@Model.PrimaryColor</span>
                 </p>
-                @if (Model.Colors.Skip(1).FirstOrDefault() != null)
+                @if (Model.SecondaryColor != null)
                 {
                     <p>
                         Secondary Color:
-                        <span>@Model.Colors.Skip(1).FirstOrDefault().Color.Name</span>
+                        <span>@Model.SecondaryColor</span>
                     </p>
                 }
                 <div class="action">
