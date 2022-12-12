@@ -1,0 +1,15 @@
+{
+  "dependencies": {
+    "mssql1": {
+      "ignored": "true",
+      "type": "mssql",
+      "connectionId": "ConnectionStrings:DefaultConnection"
+    },
+    "mssql2": {
+      "secretStore": "AzureAppSettings",
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/carpetstoreandmanagementdbserversoftuni/databases/CarpetStoreAndManagement",
+      "type": "mssql.azure",
+      "connectionId": "CarpetStoreAndManagment"
+    }
+  }
+}
