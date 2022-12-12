@@ -17,6 +17,7 @@ namespace CarpetStoreAndManagement.Controllers
         private const string TypeDoNotExist = "This type do not exist!";
         private const string ProductDoNotExist = "This product do not exist!";
         private const string QuantityConstraint = "Quantity must not be zero or negative number!";
+        private const string SuccessfullAdd = "Successfully added to shoping cart!";
 
         public ProductController(IProductService productService, IInventoryService inventoryService)
         {
@@ -86,6 +87,7 @@ namespace CarpetStoreAndManagement.Controllers
             var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
             await productService.AddProductToCartAsync(productId, userId);
+            TempData["message"] = SuccessfullAdd;
 
             return RedirectToAction(nameof(All));
         }
