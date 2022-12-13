@@ -6,6 +6,7 @@ using CarpetStoreAndManagement.Data.Models.User;
 using CarpetStoreAndManagement.Services.Contracts;
 using CarpetStoreAndManagement.Services.Services;
 using Microsoft.EntityFrameworkCore;
+using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -256,6 +257,48 @@ namespace CarpetStoreAndManagement.Tests
             var expected = await dbContext.UserOrders.AnyAsync(x => x.UserId == user.Id);
 
             Assert.True(expected);
+        }
+
+        [Fact]
+        public async void TestSetProduceFromOrderViewModelAsync()
+        {
+            var options = new DbContextOptionsBuilder<CarpetStoreAndManagementDbContext>().UseInMemoryDatabase("Database_For_Tests").Options;
+            var dbContext = new CarpetStoreAndManagementDbContext(options);
+            var prodService = new Mock<IProductService>();
+
+            var product = new Product()
+            {
+                Id = 11421123,
+                ImgUrl = "asf",
+                IsDeleted = false,
+                Name = "Test",
+                Price = 1M,
+                Type = "test"
+            };
+
+            var list = new List<Product> { product };
+            prodService.Setup(x => x.GetProductsFromOrderAsync(5)).Returns(Task.FromResult<IEnumerable<Product>>(list));
+
+            var repo = prodService.Object;
+
+            var invService = new Mock<IInventoryService>();
+
+            var invent = new Inventory()
+            {
+                Id = 214124,
+                Name = "test"
+
+            };
+
+            var invList = new List<Inventory> { invent };
+            invService.Setup(x => x.GetInventoriesAsync()).Returns(Task.FromResult<IEnumerable<Inventory>>(invList));
+            var invRepo = invService.Object;
+
+            var service = new OrderService(dbContext, repo, invRepo);
+
+            var expected = await service.SetProduceFromOrderViewModelAsync(5);
+
+            Assert.Equal(expected.Products.FirstOrDefault(), product);
         }
 
     }
