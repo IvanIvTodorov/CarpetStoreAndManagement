@@ -30,16 +30,19 @@ namespace CarpetStoreAndManagement.Services.Services
         public async Task AddColorAsync(string name)
         {
             var sanitizedName = sanitizer.Sanitize(name);
-            if (!context.Colors.Any(x => x.Name == sanitizedName))
+            if (sanitizedName != null && sanitizedName != String.Empty)
             {
-                var color = new Color()
+                if (!context.Colors.Any(x => x.Name == sanitizedName))
                 {
-                    Name = sanitizedName
-                };
+                    var color = new Color()
+                    {
+                        Name = sanitizedName
+                    };
 
-                await context.Colors.AddAsync(color);
-                await context.SaveChangesAsync();
-            }
+                    await context.Colors.AddAsync(color);
+                    await context.SaveChangesAsync();
+                }
+            }          
         }
     }
 }

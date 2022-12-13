@@ -15,7 +15,7 @@
 else
 {
     <body>
-        <div class="container" style="min-height:500px">
+        <div class="container" style="min-height:530px">
             <div class="table-wrapper">
                 <div class="table-title">
                     <div class="row">
@@ -28,7 +28,8 @@ else
                             <th>Client name</th>
                             <th>Product name</th>
                             <th>Type</th>
-                            <th>Colors</th>
+                            <th>Primary color</th>
+                            <th>Secondary color</th>
                             <th>Quantity</th>
                             <th>Total price</th>
                             <th>Actions</th>
@@ -39,7 +40,7 @@ else
                         {
                             <tr>
                                 <td align="center">@order.ClientName</td>
-                                @if (order.ProductName.Count() == 1)
+                                @if (order.ProductName.Count == 1)
                                 {
                                     <td>
 
@@ -51,7 +52,18 @@ else
                                     </td>
                                     <td>
 
-                                        <td2>@order.ProductColors[0]</td2>
+                                        <td2>@order.PrimaryColor[0]</td2>
+                                    </td>
+                                    <td>
+                                        @if (order.SecondaryColor[0] == "")
+                                        {
+                                            <td2>N/A </td2>
+                                        }
+                                        else
+                                        {
+                                            <td2>@order.PrimaryColor[0]</td2>
+                                        }
+
                                     </td>
                                     <td>
                                         <td2>@order.ProductQuantity[0]</td2>
@@ -59,6 +71,7 @@ else
                                 }
                                 else
                                 {
+
                                     <td>
                                         @foreach (var name in order.ProductName)
                                         {
@@ -74,10 +87,25 @@ else
                                         }
                                     </td>
                                     <td>
-                                        @foreach (var colors in order.ProductColors)
+                                        @foreach (var color in order.PrimaryColor)
                                         {
-                                            <td2>@colors</td2>
+                                            <td2>@color</td2>
                                             <hr>
+                                        }
+                                    </td>
+                                    <td>
+                                        @foreach (var color in order.SecondaryColor)
+                                        {
+                                            if (color == "")
+                                            {
+                                                <td2>N/A</td2>
+                                                <hr>
+                                            }
+                                            else
+                                            {
+                                                <td2>@color</td2>
+                                                <hr>
+                                            }
                                         }
                                     </td>
                                     <td>
@@ -90,12 +118,14 @@ else
                                 }
                                 <td align="center">@order.TotalPrice</td>
                                 <td>
-                                    <form asp-action="CompleteOrder" asp-route-orderId="@order.OrderId">
-                                        <button class="btn-success float-end" type="submit">Complete order</button>
-                                    </form>
-                                    <form asp-action="ProduceFromOrder" asp-route-orderId="@order.OrderId">
-                                        <button class="btn-info" type="submit">Produce</button>
-                                    </form>
+                                    <div class="d-flex justify-content-between">
+                                        <form asp-action="ProduceFromOrder" asp-route-orderId="@order.OrderId">
+                                            <button class="btn-info" type="submit">Produce</button>
+                                        </form>
+                                        <form asp-action="CompleteOrder" asp-route-orderId="@order.OrderId">
+                                            <button class="btn-success float-end" type="submit">Complete order</button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
                         }

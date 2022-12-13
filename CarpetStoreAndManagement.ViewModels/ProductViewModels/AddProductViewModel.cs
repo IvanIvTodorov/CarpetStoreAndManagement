@@ -18,7 +18,7 @@ namespace CarpetStoreAndManagement.ViewModels.ProductViewModels
         [Required]
         [MinLength(1)]
         public string? ImgUrl { get; set; }
-        [Required]
+        [Required(AllowEmptyStrings = false)]
         [StringLength(20, MinimumLength = 1)]
         public string PrimaryColor { get; set; } = null!;
         [StringLength(20, MinimumLength = 1)]

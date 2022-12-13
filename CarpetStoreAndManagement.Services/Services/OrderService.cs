@@ -1,5 +1,6 @@
 ﻿using CarpetStoreAndManagement.Data;
 using CarpetStoreAndManagement.Data.Models;
+using CarpetStoreAndManagement.Data.Models.Enums;
 using CarpetStoreAndManagement.Data.Models.Product;
 using CarpetStoreAndManagement.Data.Models.User;
 using CarpetStoreAndManagement.Services.Contracts;
@@ -95,7 +96,8 @@ namespace CarpetStoreAndManagement.Services.Services
             {
                 var productName = new List<string>();
                 var productType = new List<string>();
-                var productColors = new List<string>();
+                var primaryColors = new List<string>();
+                var secondaryColors = new List<string>();
                 var productQty = new List<int>();
 
                 foreach (var product in order.Order.ProductOrders)
@@ -103,14 +105,18 @@ namespace CarpetStoreAndManagement.Services.Services
                     productName.Add(product.Product.Name);
                     productType.Add(product.Product.Type);
                     productQty.Add(product.Quantity);
+                    var primary = product.Product.ProductColors.Where(x => x.ColorType == ProductColorType.PrimaryColor).FirstOrDefault().Color.Name;
+                    primaryColors.Add(primary);
+                    var secondary = product.Product.ProductColors.Where(x => x.ColorType == ProductColorType.SecondaryColor).FirstOrDefault();
 
-                    var colors = new List<string>();
-                    foreach (var color in product.Product.ProductColors)
+                    if (secondary == null)
                     {
-                        colors.Add(color.Color.Name);
+                        secondaryColors.Add("");
                     }
-
-                    productColors.Add(String.Join(" ", colors));
+                    else
+                    {
+                        secondaryColors.Add(secondary.Color.Name); 
+                    }
                 }
 
                 var curentOrder = new OrdersViewModel()
@@ -119,7 +125,8 @@ namespace CarpetStoreAndManagement.Services.Services
                     ClientName = order.User.UserName,
                     ProductName = productName,
                     ProductType = productType,
-                    ProductColors = productColors,
+                    PrimaryColor = primaryColors,
+                    SecondaryColor = secondaryColors,
                     ProductQuantity = productQty,
                     TotalPrice = order.Order.TotalPrice
                 };

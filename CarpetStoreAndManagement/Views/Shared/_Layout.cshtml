@@ -7,14 +7,13 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/CarpetStoreAndManagment.styles.css" asp-append-version="true" />
-    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 </head>
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">CarpetStoreAndManagment</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">CarpetStoreAndManagement</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -51,12 +50,12 @@
             </div>
         </nav>
     </header>
-    <div class="container" style="min-height:500px">
+    <div class="container" style="min-height:580px">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
-    <footer class="border-top footer text-muted" style="height:100px">
+    <footer class="border-top footer text-muted" style="height:50px">
         <partial name="_UserFooterPartial" />
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
