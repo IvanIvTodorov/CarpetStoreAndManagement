@@ -1,5 +1,4 @@
-﻿using CarpetStoreAndManagement.Data.Models.Product;
-using CarpetStoreAndManagement.Services.Contracts;
+﻿using CarpetStoreAndManagement.Services.Contracts;
 using CarpetStoreAndManagement.ViewModels.ProductViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

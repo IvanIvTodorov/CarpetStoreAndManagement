@@ -1,7 +1,5 @@
-﻿using CarpetStoreAndManagement.ViewModels;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
 
 namespace CarpetStoreAndManagement.Areas.Admin.Controllers
 {

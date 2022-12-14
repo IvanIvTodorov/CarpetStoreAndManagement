@@ -1,14 +1,8 @@
 ﻿using CarpetStoreAndManagement.Data;
+using CarpetStoreAndManagement.Data.Models;
 using CarpetStoreAndManagement.Services.Services;
 using Ganss.Xss;
 using Microsoft.EntityFrameworkCore;
-using Xunit;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CarpetStoreAndManagement.Data.Models;
 
 namespace CarpetStoreAndManagement.Tests
 {

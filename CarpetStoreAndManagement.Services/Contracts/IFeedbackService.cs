@@ -1,10 +1,4 @@
-﻿using CarpetStoreAndManagement.Data.Models;
-using CarpetStoreAndManagement.ViewModels.FeedbackViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CarpetStoreAndManagement.ViewModels.FeedbackViewModels;
 
 namespace CarpetStoreAndManagement.Services.Contracts
 {

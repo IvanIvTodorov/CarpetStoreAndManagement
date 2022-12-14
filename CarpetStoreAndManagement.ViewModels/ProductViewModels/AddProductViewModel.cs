@@ -1,5 +1,4 @@
-﻿using CarpetStoreAndManagement.Data.Models.Inventory;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 
 namespace CarpetStoreAndManagement.ViewModels.ProductViewModels

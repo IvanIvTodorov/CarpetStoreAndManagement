@@ -5,15 +5,9 @@ using CarpetStoreAndManagement.Data.Models.Inventory;
 using CarpetStoreAndManagement.Data.Models.Product;
 using CarpetStoreAndManagement.Services.Contracts;
 using CarpetStoreAndManagement.Services.Services;
-using CarpetStoreAndManagement.ViewModels.InventoryViewModels;
 using Ganss.Xss;
 using Microsoft.EntityFrameworkCore;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CarpetStoreAndManagement.Tests
 {

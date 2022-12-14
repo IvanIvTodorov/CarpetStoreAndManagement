@@ -1,10 +1,7 @@
 ﻿using CarpetStoreAndManagement.Data.Models.User;
-using CarpetStoreAndManagement.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
-using System.Security.Claims;
 
 namespace CarpetStoreAndManagement.Controllers
 {

@@ -1,5 +1,4 @@
 ﻿using CarpetStoreAndManagement.Data;
-using CarpetStoreAndManagement.Data.Models;
 using CarpetStoreAndManagement.Data.Models.Enums;
 using CarpetStoreAndManagement.Data.Models.Inventory;
 using CarpetStoreAndManagement.Data.Models.Product;

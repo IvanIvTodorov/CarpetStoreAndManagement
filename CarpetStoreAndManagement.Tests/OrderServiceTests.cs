@@ -8,11 +8,6 @@ using CarpetStoreAndManagement.Services.Contracts;
 using CarpetStoreAndManagement.Services.Services;
 using Microsoft.EntityFrameworkCore;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CarpetStoreAndManagement.Tests
 {

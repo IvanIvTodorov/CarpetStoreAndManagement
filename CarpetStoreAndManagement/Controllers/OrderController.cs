@@ -1,7 +1,5 @@
 ﻿using CarpetStoreAndManagement.CustomRoles;
 using CarpetStoreAndManagement.Services.Contracts;
-using CarpetStoreAndManagement.ViewModels.OrderViewModels;
-using CarpetStoreAndManagement.ViewModels.ProductViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
