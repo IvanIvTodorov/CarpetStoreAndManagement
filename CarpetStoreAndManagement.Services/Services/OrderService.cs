@@ -43,16 +43,18 @@ namespace CarpetStoreAndManagement.Services.Services
 
             foreach (var product in products)
             {
-                var curentProd = await context.InventoryProducts
+                var curentProds = await context.InventoryProducts
                     .Include(x => x.Product)
                     .Where(x => x.ProductId == product.ProductId)
-                    .FirstOrDefaultAsync();
+                    .ToListAsync();
 
-                if (curentProd == null || curentProd.Quantity < product.Quantity)
+                var sumQty = curentProds.Sum(x => x.Quantity);
+
+                if (curentProds == null || sumQty < product.Quantity)
                 {
                     var productDb = await context.Products.Where(x => x.Id == product.ProductId).FirstOrDefaultAsync();
                     missingProducts.Add(productDb);
-                }
+                }          
             }
 
             if (missingProducts.Count == 0)
@@ -65,11 +67,22 @@ namespace CarpetStoreAndManagement.Services.Services
 
                 foreach (var product in products)
                 {
-                    var inventoryProduct = context.InventoryProducts
+                    var inventoryProduct = await context.InventoryProducts
                         .Where(x => x.ProductId == product.ProductId)
-                        .FirstOrDefault();
+                        .ToListAsync();
 
-                    inventoryProduct.Quantity -= product.Quantity;
+                    foreach (var item in inventoryProduct)
+                    {
+                        if (item.Quantity >= product.Quantity)
+                        {
+                            item.Quantity -= product.Quantity;
+                            break;
+                        }else
+                        {
+                            item.Quantity -= item.Quantity;
+                        }
+                    }
+                                    
                 }
 
                 await context.SaveChangesAsync();

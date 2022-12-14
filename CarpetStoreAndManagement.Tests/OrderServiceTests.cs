@@ -1,5 +1,6 @@
 ﻿using CarpetStoreAndManagement.Data;
 using CarpetStoreAndManagement.Data.Models;
+using CarpetStoreAndManagement.Data.Models.Enums;
 using CarpetStoreAndManagement.Data.Models.Inventory;
 using CarpetStoreAndManagement.Data.Models.Product;
 using CarpetStoreAndManagement.Data.Models.User;
@@ -156,15 +157,63 @@ namespace CarpetStoreAndManagement.Tests
                 OrderId = order.Id
             };
 
+            var product = new Product()
+            {
+                Id = 333232,
+                ImgUrl = "asf",
+                IsDeleted = false,
+                Name = "Test",
+                Price = 1M,
+                Type = "test"
+            };
+
+            var primary = new Color()
+            {
+                Id = 33232,
+                Name = "test"
+            };
+
+            var secondary = new Color()
+            {
+                Id = 123414,
+                Name = "test"
+            };
+
+            var prodColor = new ProductColor()
+            {
+                ProductId = product.Id,
+                ColorId = primary.Id,
+                ColorType = ProductColorType.PrimaryColor
+            };
+
+            var prodColor2 = new ProductColor()
+            {
+                ProductId = product.Id,
+                ColorId = secondary.Id,
+                ColorType = ProductColorType.SecondaryColor
+            };
+
+            var prodOrder = new ProductOrder()
+            {
+                ProductId = product.Id,
+                OrderId = order.Id
+            };
+
             await dbContext.Orders.AddAsync(order);
+            await dbContext.Products.AddAsync(product);
+            await dbContext.Colors.AddAsync(primary);
+            await dbContext.Colors.AddAsync(secondary);
             dbContext.Users.Add(user);
             await dbContext.UserOrders.AddAsync(userOrder);
+            await dbContext.ProductColors.AddAsync(prodColor2);
+            await dbContext.ProductColors.AddAsync(prodColor);
+            await dbContext.ProductOrders.AddAsync(prodOrder);
 
             await dbContext.SaveChangesAsync();
 
             var expected = await service.GetAllOrdersAsync();
 
-            Assert.True(expected.Count() == 3);
+            Assert.True(expected.Where(x => x.OrderId == order.Id).FirstOrDefault().OrderId == order.Id);
         }
 
         [Fact]
@@ -199,16 +248,63 @@ namespace CarpetStoreAndManagement.Tests
                 UserId = user.Id,
                 OrderId = order.Id
             };
+            var product = new Product()
+            {
+                Id = 11155243,
+                ImgUrl = "asf",
+                IsDeleted = false,
+                Name = "Test",
+                Price = 1M,
+                Type = "test"
+            };
+
+            var primary = new Color()
+            {
+                Id = 1114423,
+                Name = "test"
+            };
+
+            var secondary = new Color()
+            {
+                Id = 1115312,
+                Name = "test"
+            };
+
+            var prodColor = new ProductColor()
+            {
+                ProductId = product.Id,
+                ColorId = primary.Id,
+                ColorType = ProductColorType.PrimaryColor
+            };
+
+            var prodColor2 = new ProductColor()
+            {
+                ProductId = product.Id,
+                ColorId = secondary.Id,
+                ColorType = ProductColorType.SecondaryColor
+            };
+
+            var prodOrder = new ProductOrder()
+            {
+                ProductId = product.Id,
+                OrderId = order.Id
+            };
 
             await dbContext.Orders.AddAsync(order);
+            await dbContext.Products.AddAsync(product);
+            await dbContext.Colors.AddAsync(primary);
+            await dbContext.Colors.AddAsync(secondary);
             dbContext.Users.Add(user);
             await dbContext.UserOrders.AddAsync(userOrder);
+            await dbContext.ProductColors.AddAsync(prodColor2);
+            await dbContext.ProductColors.AddAsync(prodColor);
+            await dbContext.ProductOrders.AddAsync(prodOrder);
 
             await dbContext.SaveChangesAsync();
 
             var expected = await service.GetMyOrdersAsync(user.Id);
 
-            Assert.True(expected.Any(x => x.OrderId == order.Id));
+            Assert.True(expected.Where(x => x.OrderId == order.Id).FirstOrDefault().OrderId == order.Id);
         }
 
         [Fact]
@@ -242,6 +338,18 @@ namespace CarpetStoreAndManagement.Tests
                 Type = "test"
             };
 
+            var color = new Color()
+            {
+                Id = 123123123,
+                Name = "Test",
+            };
+
+            var prodColor = new ProductColor()
+            {
+                ColorId = color.Id,
+                ProductId = product.Id,
+            };
+
             var userProd = new UserProduct()
             {
                 ProductId = product.Id,
@@ -250,6 +358,9 @@ namespace CarpetStoreAndManagement.Tests
 
             dbContext.Users.Add(user);
             await dbContext.Products.AddAsync(product);
+            await dbContext.Colors.AddAsync(color);
+            await dbContext.ProductColors.AddAsync(prodColor);
+            await dbContext.UserProducts.AddAsync(userProd);
             await dbContext.SaveChangesAsync();
 
             await service.MakeOrderAsync(user.Id);

@@ -50,9 +50,25 @@ namespace CarpetStoreAndManagement.Tests
                 Quantity = 1
             };
 
+          
             await service.AddRawMaterialAsync(model, type);
 
             var expected = await dbContext.RawMaterials.AnyAsync(x => x.Color.Name == model.Color);
+
+            Assert.True(expected);
+
+            var rawMat = new RawMaterial()
+            {
+                ColorId = color.Id,
+                Id = 1244232,
+                Type = type
+            };
+
+            await dbContext.RawMaterials.AddAsync(rawMat);
+
+            await dbContext.SaveChangesAsync();
+
+            await service.AddRawMaterialAsync(model, type);
 
             Assert.True(expected);
         }

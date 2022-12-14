@@ -8,6 +8,7 @@ using CarpetStoreAndManagement.Services.Services;
 using CarpetStoreAndManagement.ViewModels.InventoryViewModels;
 using Ganss.Xss;
 using Microsoft.EntityFrameworkCore;
+using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -287,6 +288,126 @@ namespace CarpetStoreAndManagement.Tests
 
             Assert.True(expected);
             Assert.False(expected2);
+        }
+
+        [Fact]
+        public async void TestGetInventoryProductAsync()
+        {
+            var sanitizer = new HtmlSanitizer();
+            var options = new DbContextOptionsBuilder<CarpetStoreAndManagementDbContext>().UseInMemoryDatabase("Database_For_Tests").Options;
+            var dbContext = new CarpetStoreAndManagementDbContext(options);
+
+            var colorRepo = new Mock<IColorService>();
+
+            var list = new List<Color>
+            {
+                new Color
+                {
+                    Id = 12312498,
+                    Name = "test"
+                }
+            };
+            colorRepo.Setup(x => x.GetAllColorsAsync()).Returns(Task.FromResult<IEnumerable<Color>>(list));
+            var colorObject = colorRepo.Object;
+
+            var productRepo = new Mock<IProductService>();
+
+            var list2 = new List<string>();
+            list2.Add("test");
+            productRepo.Setup(x => x.GetAllProductTypesAsync()).Returns(Task.FromResult<List<string>>(list2));
+
+            var productObject = productRepo.Object;
+
+            var service = new InventoryService(dbContext, sanitizer, colorObject, productObject);
+
+            var inventory = new Inventory()
+            {
+                Id = 1245124,
+                Name = "Test"
+            };
+
+            var product = new Product()
+            {
+                Id = 21541243,
+                ImgUrl = "asf",
+                IsDeleted = false,
+                Name = "Test",
+                Price = 1M,
+                Type = "test"
+            };
+
+            var inventProduct = new InventoryProduct()
+            {
+                ProductId = product.Id,
+                InventoryId = inventory.Id
+            };
+
+            await dbContext.Inventories.AddAsync(inventory);
+            await dbContext.Products.AddAsync(product);
+            await dbContext.InventoryProducts.AddAsync(inventProduct);
+            await dbContext.SaveChangesAsync();
+
+
+            var expected = await service.GetInventoryProductAsync();
+
+
+            Assert.Equal(expected.Products.Where(x => x.ProductId == product.Id).FirstOrDefault(), inventProduct);
+        }
+
+        [Fact]
+        public async void TestGetInventoryRawMaterialAsync()
+        {
+            var sanitizer = new HtmlSanitizer();
+            var options = new DbContextOptionsBuilder<CarpetStoreAndManagementDbContext>().UseInMemoryDatabase("Database_For_Tests").Options;
+            var dbContext = new CarpetStoreAndManagementDbContext(options);
+
+            var colorRepo = new Mock<IColorService>();
+
+            var list = new List<Color>
+            {
+                new Color
+                {
+                    Id = 12312498,
+                    Name = "test"
+                }
+            };
+            colorRepo.Setup(x => x.GetAllColorsAsync()).Returns(Task.FromResult<IEnumerable<Color>>(list));
+            var colorObject = colorRepo.Object;
+            var service = new InventoryService(dbContext, sanitizer, colorObject, productService);
+
+            var inventory = new Inventory()
+            {
+                Id = 8898323,
+                Name = "Test"
+            };
+            var color = new Color()
+            {
+                Id = 99898213,
+                Name = "test"
+            };
+
+            var rawMaterial = new RawMaterial()
+            {
+                Id = 99980098,
+                ColorId = color.Id,
+                Type = RawMaterialType.Warp,
+            };
+
+            var inventRawMat = new InventoryRawMaterial()
+            {
+                RawMaterialId = rawMaterial.Id,
+                InventoryId = inventory.Id
+            };
+
+            await dbContext.Inventories.AddAsync(inventory);
+            await dbContext.Colors.AddAsync(color);
+            await dbContext.RawMaterials.AddAsync(rawMaterial);
+            await dbContext.InventoryRawMaterials.AddAsync(inventRawMat);
+            await dbContext.SaveChangesAsync();
+
+            var expected = await service.GetInventoryRawMaterialAsync();
+
+            Assert.True(expected.RawMaterials.Where(x => x.InventoryId == inventory.Id).FirstOrDefault() == inventRawMat);
         }
     }
 }

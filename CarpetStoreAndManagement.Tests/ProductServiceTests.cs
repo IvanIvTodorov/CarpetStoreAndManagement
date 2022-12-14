@@ -6,14 +6,17 @@ using CarpetStoreAndManagement.Data.Models.Product;
 using CarpetStoreAndManagement.Data.Models.User;
 using CarpetStoreAndManagement.Services.Contracts;
 using CarpetStoreAndManagement.Services.Services;
+using CarpetStoreAndManagement.ViewModels.InventoryViewModels;
 using CarpetStoreAndManagement.ViewModels.ProductViewModels;
 using Ganss.Xss;
 using Microsoft.EntityFrameworkCore;
+using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace CarpetStoreAndManagement.Tests
 {
@@ -29,7 +32,11 @@ namespace CarpetStoreAndManagement.Tests
             var sanitizer = new HtmlSanitizer();
             var options = new DbContextOptionsBuilder<CarpetStoreAndManagementDbContext>().UseInMemoryDatabase("Database_For_Tests").Options;
             var dbContext = new CarpetStoreAndManagementDbContext(options);
-            var service = new ProductService(dbContext, sanitizer, colorService);
+
+            var colorRepo = new Mock<IColorService>();
+            colorRepo.Setup(x => x.AddColorAsync("Test"));
+            var colorObject = colorRepo.Object;
+            var service = new ProductService(dbContext, sanitizer, colorObject);
 
             var model = new AddProductViewModel()
             {
@@ -38,14 +45,31 @@ namespace CarpetStoreAndManagement.Tests
                 Price = 1M,
                 Type = "test",
                 PrimaryColor = "test",
-                SecondaryColor = "test"               
+                SecondaryColor = "test2"               
             };
+
+            var color = new Color()
+            {
+                Id = 99193,
+                Name = "test"
+            };
+
+            var color2 = new Color()
+            {
+                Id = 9919394,
+                Name = "test2"
+            };
+
+            await dbContext.Colors.AddAsync(color);
+            await dbContext.Colors.AddAsync(color2);
+            await dbContext.SaveChangesAsync();
 
             var success = service.AddProductAsync(model).IsCompletedSuccessfully;
 
             var expected = await dbContext.Products.ToListAsync();
 
-            Assert.True(expected.Any(x => x.Name == model.Name));
+            Assert.True(expected.FirstOrDefault().Price == model.Price);
+            Assert.True(success);
         }
 
         [Fact]
@@ -662,7 +686,7 @@ namespace CarpetStoreAndManagement.Tests
 
             var expected = await service.GetProductsByTypeAsync(product.Type);
 
-            Assert.True(expected.Any(x => x.Type == product.Type));
+            Assert.True(expected.Where(x => x.Id == product.Id).FirstOrDefault().Id == product.Id);
         }
 
         [Fact]
@@ -742,6 +766,285 @@ namespace CarpetStoreAndManagement.Tests
             var expected = await service.PorductsByTypeAsync(product.Type);
 
             Assert.True(expected.Any(x => x.Id == product.Id));
+        }
+
+        [Fact]
+        public async void TestProductDetailsAsync()
+        {
+            var sanitizer = new HtmlSanitizer();
+            var options = new DbContextOptionsBuilder<CarpetStoreAndManagementDbContext>().UseInMemoryDatabase("Database_For_Tests").Options;
+            var dbContext = new CarpetStoreAndManagementDbContext(options);
+
+            var colorRepo = new Mock<IColorService>();
+            colorRepo.Setup(x => x.AddColorAsync("yellow"));
+
+            var colorRepoObject = colorRepo.Object;
+            
+            var service = new ProductService(dbContext, sanitizer, colorRepoObject);
+
+            var product = new Product()
+            {
+                Id = 122141125,
+                ImgUrl = "asf",
+                IsDeleted = false,
+                Name = "Test",
+                Price = 1M,
+                Type = "test"
+            };
+
+            var primary = new Color()
+            {
+                Id = 1212455241,
+                Name = "test"
+            };
+
+            var secondary = new Color()
+            {
+                Id = 545412517,
+                Name = "teest"
+            };
+
+            var pordColor = new ProductColor()
+            {
+                ProductId = product.Id,
+                ColorId = primary.Id,
+                ColorType = ProductColorType.PrimaryColor
+            };
+
+            var pordColor2 = new ProductColor()
+            {
+                ProductId = product.Id,
+                ColorId = secondary.Id,
+                ColorType = ProductColorType.SecondaryColor
+            };
+
+            await dbContext.Products.AddAsync(product);
+            await dbContext.Colors.AddAsync(primary);
+            await dbContext.Colors.AddAsync(secondary);
+            await dbContext.ProductColors.AddAsync(pordColor);
+            await dbContext.ProductColors.AddAsync(pordColor2);
+            await dbContext.SaveChangesAsync();
+
+            var expected = await service.ProductDetailsAsync(product.Id);
+
+            Assert.True(expected.Id == product.Id);
+        }
+
+        [Fact]
+        public async void TestEditProductAsyncAfterSubmit()
+        {
+            var sanitizer = new HtmlSanitizer();
+            var options = new DbContextOptionsBuilder<CarpetStoreAndManagementDbContext>().UseInMemoryDatabase("Database_For_Tests").Options;
+            var colorRepo = new Mock<IColorService>();
+            colorRepo.Setup(x => x.AddColorAsync("yellow"));
+
+            var colorRepoObject = colorRepo.Object;
+
+            var dbContext = new CarpetStoreAndManagementDbContext(options);
+            var service = new ProductService(dbContext, sanitizer, colorRepoObject);
+
+            var product = new Product()
+            {
+                Id = 124421412,
+                ImgUrl = "asf",
+                IsDeleted = false,
+                Name = "Test",
+                Price = 1M,
+                Type = "test"
+            };
+
+            var color = new Color()
+            {
+                Id = 12499741,
+                Name = "test"
+            };
+
+            var pordColor = new ProductColor()
+            {
+                ProductId = product.Id,
+                ColorId = color.Id,
+                ColorType = ProductColorType.PrimaryColor
+            };
+
+            await dbContext.Products.AddAsync(product);
+            await dbContext.Colors.AddAsync(color);
+            await dbContext.ProductColors.AddAsync(pordColor);
+
+            await dbContext.SaveChangesAsync();
+
+            var model = new EditProductViewModel()
+            {
+                Id = 124421412,
+                ImgUrl = "changed",
+                Name = "Test",
+                Price = 1M,
+                Type = "test",
+                PrimaryColor = "test"
+            };
+
+            await service.EditProductAsync(model);
+
+            var expected = await dbContext.Products.Where(x => x.Id == product.Id).FirstOrDefaultAsync();
+
+            Assert.True(expected.ImgUrl == model.ImgUrl);
+        }
+
+        [Fact]
+        public async void TestEditProductColorAsync()
+        {
+            var sanitizer = new HtmlSanitizer();
+            var options = new DbContextOptionsBuilder<CarpetStoreAndManagementDbContext>().UseInMemoryDatabase("Database_For_Tests").Options;
+            var colorRepo = new Mock<IColorService>();
+
+            var colorRepoObject = colorRepo.Object;
+
+
+            var dbContext = new CarpetStoreAndManagementDbContext(options);
+            var service = new ProductService(dbContext, sanitizer, colorRepoObject);
+
+            var product = new Product()
+            {
+                Id = 12992312,
+                ImgUrl = "asf",
+                IsDeleted = false,
+                Name = "Test",
+                Price = 1M,
+                Type = "test"
+            };
+
+            var primary = new Color()
+            {
+                Id = 125123,
+                Name = "test"
+            };
+
+            var test = new Color()
+            {
+                Id = 1241243,
+                Name = "Test1"
+            };
+
+            var test2 = new Color()
+            {
+                Id = 3232514,
+                Name = "Test2"
+            };
+
+            var secondary = new Color()
+            {
+                Id = 942747,
+                Name = "teest"
+            };
+
+            var pordColor = new ProductColor()
+            {
+                ProductId = product.Id,
+                ColorId = primary.Id,
+                ColorType = ProductColorType.PrimaryColor
+            };
+
+            var pordColor2 = new ProductColor()
+            {
+                ProductId = product.Id,
+                ColorId = secondary.Id,
+                ColorType = ProductColorType.SecondaryColor
+            };
+
+            await dbContext.Products.AddAsync(product);
+            await dbContext.Colors.AddAsync(primary);
+            await dbContext.Colors.AddAsync(test);
+            await dbContext.Colors.AddAsync(test2);
+            await dbContext.Colors.AddAsync(secondary);
+            await dbContext.ProductColors.AddAsync(pordColor);
+            await dbContext.ProductColors.AddAsync(pordColor2);
+
+            await dbContext.SaveChangesAsync();
+
+            var changePrimary = "Test1";
+            var changeSecondary = "Test2";
+
+            var success = service.EditProductColorAsync(changePrimary, changeSecondary, product.Id).IsCompletedSuccessfully;
+
+            Assert.True(success);
+
+        }
+
+        [Fact]
+        public async void TestGetProductsInInventoryBySearchAsync()
+        {
+            var sanitizer = new HtmlSanitizer();
+            var options = new DbContextOptionsBuilder<CarpetStoreAndManagementDbContext>().UseInMemoryDatabase("Database_For_Tests").Options;
+            var dbContext = new CarpetStoreAndManagementDbContext(options);
+            var service = new ProductService(dbContext, sanitizer, colorService);
+            var product = new Product()
+            {
+                Id = 231298,
+                ImgUrl = "asf",
+                IsDeleted = false,
+                Name = "Test",
+                Price = 1M,
+                Type = "test"
+            };
+
+            var primary = new Color()
+            {
+                Id = 125398,
+                Name = "test"
+            };
+
+            var secondary = new Color()
+            {
+                Id = 974798,
+                Name = "teest"
+            };
+
+            var pordColor = new ProductColor()
+            {
+                ProductId = product.Id,
+                ColorId = primary.Id,
+                ColorType = ProductColorType.PrimaryColor
+            };
+
+            var pordColor2 = new ProductColor()
+            {
+                ProductId = product.Id,
+                ColorId = secondary.Id,
+                ColorType = ProductColorType.SecondaryColor
+            };
+
+
+            var invent = new Inventory()
+            {
+                Id = 991991,
+                Name = "Test"
+            };
+
+            var inventProduct = new InventoryProduct()
+            {
+                ProductId = product.Id,
+                InventoryId = invent.Id
+            };
+
+            await dbContext.Products.AddAsync(product);
+            await dbContext.Inventories.AddAsync(invent);
+            await dbContext.Colors.AddAsync(primary);
+            await dbContext.Colors.AddAsync(secondary);
+            await dbContext.ProductColors.AddAsync(pordColor);
+            await dbContext.ProductColors.AddAsync(pordColor2);
+            await dbContext.InventoryProducts.AddAsync(inventProduct);
+
+            await dbContext.SaveChangesAsync();
+
+            var model = new ProductsInInventoryViewModel()
+            {
+                InventoryName = invent.Name,
+                Type = product.Type,
+                Color = primary.Name
+            };
+
+            var expected = await service.GetProductsInInventoryBySearchAsync(model);
+            var list = new List<InventoryProduct> { inventProduct };
+            Assert.Equal(expected, list);
         }
 
     }
