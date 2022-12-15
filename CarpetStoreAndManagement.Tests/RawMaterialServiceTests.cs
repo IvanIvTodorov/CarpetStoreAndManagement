@@ -13,6 +13,54 @@ namespace CarpetStoreAndManagement.Tests
     public class RawMaterialServiceTests
     {
         [Fact]
+        public async void TestAddRawMaterialAsyncExisting()
+        {
+            var sanitizer = new HtmlSanitizer();
+            var options = new DbContextOptionsBuilder<CarpetStoreAndManagementDbContext>().UseInMemoryDatabase("Database_For_Tests").Options;
+            var dbContext = new CarpetStoreAndManagementDbContext(options);
+            var service = new RawMaterialService(dbContext, sanitizer);
+
+            var type = RawMaterialType.Yarn;
+
+            var color = new Color()
+            {
+                Id = 12399134,
+                Name = "Test"
+            };
+
+            var inventory = new Inventory()
+            {
+                Id = 1235634124,
+                Name = "test"
+            };
+
+            var rawMat = new RawMaterial()
+            {
+                ColorId = color.Id,
+                Id = 43123399,
+                Type = type
+            };
+
+            await dbContext.RawMaterials.AddAsync(rawMat);
+            await dbContext.Inventories.AddAsync(inventory);
+            await dbContext.Colors.AddAsync(color);
+            await dbContext.SaveChangesAsync();
+
+            var model = new AddRawMaterialViewModel()
+            {
+                Color = "Test",
+                InventoryName = "test",
+                Quantity = 1
+            };
+
+            await service.AddRawMaterialAsync(model, type);
+
+            var expected = await dbContext.RawMaterials.AnyAsync(x => x.Color.Name == model.Color);
+
+            Assert.True(expected);
+        }
+
+        [Fact]
         public async void TestAddRawMaterialAsync()
         {
             var sanitizer = new HtmlSanitizer();
