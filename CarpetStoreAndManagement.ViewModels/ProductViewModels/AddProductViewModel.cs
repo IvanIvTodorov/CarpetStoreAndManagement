@@ -12,7 +12,6 @@ namespace CarpetStoreAndManagement.ViewModels.ProductViewModels
         [StringLength(10, MinimumLength = 3)]
         public string? Type { get; set; }
         [Required]
-        [Range(0.0, double.MaxValue, ErrorMessage = "The field {0} must be greater than {1}.")]
         public decimal Price { get; set; }
         [Required]
         [MinLength(1)]

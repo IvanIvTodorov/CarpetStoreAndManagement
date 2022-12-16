@@ -11,11 +11,14 @@ namespace CarpetStoreAndManagement.Areas.Admin.Controllers
         private readonly IProductService productService;
         private readonly IInventoryService inventoryService;
         private const int RequiredQuantity = 1;
+        private const int MinimumPrice = 0;
         private const string TypeDoNotExist = "This type do not exist!";
         private const string InvalidProduct = "Invalid product!";
         private const string QuantityConstraint = "Quantity should be higher than 0!";
         private const string ProductDoNotExist = "This product do not exist!";
         private const string ColorsShouldBeDifferent = "Primary and Secondary color should be different!";
+        private const string PositivePrice = "Price should be greater than 0 !";
+        
 
         public ProductController(IProductService productService, IInventoryService inventoryService)
         {
@@ -63,6 +66,12 @@ namespace CarpetStoreAndManagement.Areas.Admin.Controllers
         {
             if (!ModelState.IsValid)
             {
+                return View(model);
+            }
+
+            if (model.Price <= MinimumPrice)
+            {
+                TempData["message"] = PositivePrice;
                 return View(model);
             }
 
@@ -170,6 +179,12 @@ namespace CarpetStoreAndManagement.Areas.Admin.Controllers
         {
             if (!ModelState.IsValid)
             {
+                return View("EditPage", model);
+            }
+
+            if (model.Price <= MinimumPrice)
+            {
+                TempData["message"] = PositivePrice;
                 return View("EditPage", model);
             }
 
