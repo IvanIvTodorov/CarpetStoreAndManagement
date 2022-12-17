@@ -1,6 +1,7 @@
 using CarpetStoreAndManagement.Data;
 using CarpetStoreAndManagement.Data.Models.User;
 using CarpetStoreAndManagement.ModelBinders;
+using CarpetStoreAndManagement.Services.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

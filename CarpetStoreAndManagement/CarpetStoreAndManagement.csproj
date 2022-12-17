@@ -11,18 +11,23 @@
     <Compile Remove="Areas\Identity\**" />
     <Compile Remove="Views\Inventory\**" />
     <Compile Remove="Views\RawMaterial\**" />
+    <Compile Remove="wwwroot\microsoft\**" />
     <Content Remove="Areas\Identity\**" />
     <Content Remove="Views\Inventory\**" />
     <Content Remove="Views\RawMaterial\**" />
+    <Content Remove="wwwroot\microsoft\**" />
     <EmbeddedResource Remove="Areas\Identity\**" />
     <EmbeddedResource Remove="Views\Inventory\**" />
     <EmbeddedResource Remove="Views\RawMaterial\**" />
+    <EmbeddedResource Remove="wwwroot\microsoft\**" />
     <None Remove="Areas\Identity\**" />
     <None Remove="Views\Inventory\**" />
     <None Remove="Views\RawMaterial\**" />
+    <None Remove="wwwroot\microsoft\**" />
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Areas\Admin\Controllers\HubController.cs" />
     <Compile Remove="Areas\Admin\Controllers\UserController.cs" />
     <Compile Remove="Controllers\InventoryController.cs" />
     <Compile Remove="Controllers\RawMaterialController.cs" />
