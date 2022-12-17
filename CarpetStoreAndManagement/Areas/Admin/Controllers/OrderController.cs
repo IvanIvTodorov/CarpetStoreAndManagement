@@ -101,6 +101,8 @@ namespace CarpetStoreAndManagement.Areas.Admin.Controllers
                 return RedirectToAction("Show", "RawMaterial");
             }
 
+            TempData["message"] = $"{model.Quantity} pieces are added in {model.InventoryName} inventory!";
+
             await productService.ProduceProductAsync(model, productId);
             await inventoryService.DecreaseUsedRawMaterialsInInventoryAsync(productColors, model.Quantity, model.InventoryName);
 
